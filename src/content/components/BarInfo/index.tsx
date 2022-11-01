@@ -1,21 +1,24 @@
+import { defaultCompanies } from '../../../data/static/companies';
 import { TickerItem, TickerWrap, Ticker } from './style';
 
-const BarInfo = () => {
+type Props = {
+  chosenSymbolsList: any;
+};
+
+const BarInfo = ({ chosenSymbolsList }: Props) => {
   return (
     <TickerWrap>
       <Ticker>
-        <TickerItem>Letterpress chambray brunch.</TickerItem>
-        <TickerItem>
-          Vice mlkshk crucifix beard chillwave meditation hoodie asymmetrical
-          Helvetica.
-        </TickerItem>
-        <TickerItem>Ugh PBR&B kale chips Echo Park.</TickerItem>
-        <TickerItem>
-          Gluten-free mumblecore chambray mixtape food truck.
-        </TickerItem>
+        {chosenSymbolsList.map((ticker: string) => (
+          <TickerItem>{ticker} 302 12%</TickerItem>
+        ))}
       </Ticker>
     </TickerWrap>
   );
+};
+
+BarInfo.defaultProps = {
+  chosenSymbolsList: defaultCompanies,
 };
 
 export default BarInfo;

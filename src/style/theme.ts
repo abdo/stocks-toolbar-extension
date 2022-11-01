@@ -1,6 +1,7 @@
 const theme = {
   colors: {
-    background: '#666666',
+    background: '#fbeaea',
+    toolbarBackground: '#666666',
   }
 };
 

@@ -5,12 +5,13 @@ import App from './App';
 const body = document.querySelector('body')!;
 
 // Creating the content to be injected
-const injectedContent = document.createElement('div');
+const injectedContent = document.createElement('container');
 injectedContent.id = 'root';
 injectedContent.style.position = 'fixed';
 injectedContent.style.top = '0';
 injectedContent.style.zIndex = '1000000000000';
 injectedContent.style.overflow = 'hidden';
+injectedContent.style.height = 'fit-content';
 
 // Make sure the element that you want to mount the injectedContent to has loaded. You can
 // also use `append` or insert the injectedContent using another method:
