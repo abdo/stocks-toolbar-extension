@@ -7,9 +7,6 @@
     "default_popup": "index.html#popup",
     "default_icon": "logo.png"
   },
-  "chrome_url_overrides": {
-    "newtab": "index.html#newtab"
-  },
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
