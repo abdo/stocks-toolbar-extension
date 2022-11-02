@@ -3,8 +3,9 @@
 
 import 'antd/dist/antd.css';
 import { useEffect, useState } from 'react';
-import storageKeys from '../data/constants/storageKeys';
-import { defaultCompanies } from '../data/static/companies';
+import StorageKeys, {
+  defaultStorageValues,
+} from '../data/constants/storageKeys';
 import parseStorageValues from '../utils/parseStorageValues';
 import Options from './components/Options';
 import { AppStyled } from './style';
@@ -12,7 +13,7 @@ import { AppStyled } from './style';
 function App() {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
     [key: string]: any;
-  }>({});
+  }>(defaultStorageValues);
 
   useEffect(() => {
     // get storage values in the beginning
@@ -28,15 +29,19 @@ function App() {
   };
 
   const {
-    [storageKeys.chosenSymbolsList]: chosenSymbolsList,
-    [storageKeys.toolbarVisible]: toolbarVisible,
+    [StorageKeys.chosenSymbolsList]: chosenSymbolsList,
+    [StorageKeys.toolbarVisible]: toolbarVisible,
+    [StorageKeys.websiteVisibility]: websiteVisibility,
+    [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
   } = currentStorageValues;
 
   return (
     <AppStyled>
       <Options
-        chosenSymbolsList={chosenSymbolsList || defaultCompanies}
+        chosenSymbolsList={chosenSymbolsList}
         toolbarVisible={toolbarVisible}
+        websiteVisibility={websiteVisibility}
+        selectedWebsitesList={selectedWebsitesList}
       />
     </AppStyled>
   );

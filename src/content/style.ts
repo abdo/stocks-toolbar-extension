@@ -8,6 +8,6 @@ export const AppStyled = styled.div<{ $height: string, $hidden: boolean }>`
   width: 100vw;
 
   * {
-  font- family: 'Lexend Tera', sans - serif;
+  font-family: 'Press Start 2P', sans-serif;
   }
 `;

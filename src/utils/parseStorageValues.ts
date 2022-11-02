@@ -1,7 +1,8 @@
 const parseStorageValues = (changes: chrome.storage.StorageChange) => {
   const parsedChanges = Object.entries(changes).reduce(
     (acc: any, [key, complexValue]) => {
-      const newValueExists = complexValue.newValue || complexValue.newValue === null || complexValue.newValue === false;
+      const newValue = complexValue.newValue;
+      const newValueExists = newValue || newValue === null || newValue === false || newValue === 0;
       const value = newValueExists ? complexValue.newValue : complexValue;
       let parsedValue;
       try {

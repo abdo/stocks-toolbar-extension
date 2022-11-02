@@ -38,6 +38,6 @@ link.setAttribute('rel', 'stylesheet');
 link.setAttribute('type', 'text/css');
 link.setAttribute(
   'href',
-  'https://fonts.googleapis.com/css2?family=Lexend+Tera:wght@500&display=swap',
+  'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap',
 );
 document.head.appendChild(link);
