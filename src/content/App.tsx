@@ -46,14 +46,17 @@ const App = () => {
 
   const parseAndSetStorageValues = (values: chrome.storage.StorageChange) => {
     const parsedValues = parseStorageValues(values);
-    setCurrentStorageValues({ ...currentStorageValues, ...parsedValues });
+    setCurrentStorageValues((values) => ({ ...values, ...parsedValues }));
   };
 
+  const {
+    [storageKeys.chosenSymbolsList]: chosenSymbolsList,
+    [storageKeys.toolbarVisible]: toolbarVisible,
+  } = currentStorageValues;
+
   return (
-    <AppStyled $height={elementHeight}>
-      <BarInfo
-        chosenSymbolsList={currentStorageValues[storageKeys.chosenSymbolsList]}
-      />
+    <AppStyled $height={elementHeight} $hidden={!toolbarVisible}>
+      <BarInfo chosenSymbolsList={chosenSymbolsList} />
     </AppStyled>
   );
 };

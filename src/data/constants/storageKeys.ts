@@ -1,5 +1,6 @@
 const storageKeys = {
-  chosenSymbolsList: 'chosenSymbolsList'
+  chosenSymbolsList: 'chosenSymbolsList',
+  toolbarVisible: 'toolbarVisible',
 };
 
 export default storageKeys;
