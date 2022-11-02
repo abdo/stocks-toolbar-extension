@@ -6,7 +6,7 @@ import storageKeys from '../data/constants/storageKeys';
 import parseStorageValues from '../utils/parseStorageValues';
 import BarInfo from './components/BarInfo';
 import { AppStyled } from './style';
-const elementHeight = '28px';
+const elementHeight = '30px';
 
 const App = () => {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
@@ -50,7 +50,7 @@ const App = () => {
   };
 
   return (
-    <AppStyled>
+    <AppStyled $height={elementHeight}>
       <BarInfo
         chosenSymbolsList={currentStorageValues[storageKeys.chosenSymbolsList]}
       />

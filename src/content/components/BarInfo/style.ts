@@ -23,12 +23,14 @@ export const Ticker = styled.div`
   white-space: nowrap;
   padding-right: 100%;
   box-sizing: content-box;
-  animation: ${ticker} 19s linear infinite;
+  animation: ${ticker} 14s linear infinite;
+  margin-top: 5px;
 `;
 
 export const TickerItem = styled.div`
   display: inline-block;
   padding: 0 10px;
-  font-size: 20px;
+  font-size: 15px;
+  font-weight: bold;
   color: white;
 `;

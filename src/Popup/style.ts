@@ -5,5 +5,10 @@ export const AppStyled = styled.div`
   background-color: ${theme.colors.background};
   min-height: 400px;
   width: 400px;
-  padding: 15px;
+  padding: 25px;
+
+  p, b {
+    color: ${theme.colors.main};
+    font-family: 'Poppins', sans-serif;
+  }
 `;

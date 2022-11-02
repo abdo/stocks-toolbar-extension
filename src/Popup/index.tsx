@@ -1,7 +1,6 @@
 /// <reference types="chrome" />
 /// <reference types="vite-plugin-svgr/client" />
 
-import { Button } from 'antd';
 import { Select } from 'antd';
 import 'antd/dist/antd.css';
 import { useEffect, useState } from 'react';
@@ -40,7 +39,12 @@ function App() {
       <b>Stocks:</b>
       <Select
         mode='multiple'
-        style={{ width: '100%' }}
+        style={{
+          width: '100%',
+          boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)',
+          borderRadius: '25px',
+          margin: '10px 0',
+        }}
         placeholder='Select symbols'
         value={
           currentStorageValues[storageKeys.chosenSymbolsList] ||
@@ -59,8 +63,6 @@ function App() {
         }
         notFoundContent={null}
       ></Select>
-      <Button type='ghost'>Button</Button>
-      <Button type='primary'>Button</Button>
     </AppStyled>
   );
 }
