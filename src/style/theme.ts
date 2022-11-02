@@ -1,6 +1,7 @@
 const theme = {
   colors: {
-    main: 'rgb(87 0 53)',
+    primary: 'rgb(87 0 53)',
+    secondary: '#108ee9',
     background: '#F8F7F2',
     toolbarBackground: '#111',
   }

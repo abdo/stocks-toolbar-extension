@@ -1,8 +1,9 @@
-import { Select, Switch } from 'antd';
+import { Tag, Select, Switch } from 'antd';
 import storageKeys from '../../../data/constants/storageKeys';
 import { useState } from 'react';
 import { popularCompanies } from '../../../data/static/companies';
 import { Option } from './style';
+import theme from '../../../style/theme';
 
 type Props = {
   chosenSymbolsList: string[];
@@ -65,6 +66,16 @@ const Options = ({ chosenSymbolsList, toolbarVisible }: Props) => {
           }
           notFoundContent={null}
         ></Select>
+      </Option>
+
+      <Option>
+        <b>All websites:</b>
+        <Tag
+          color={theme.colors.secondary}
+          style={{ display: 'block', margin: '5px 0', borderRadius: '5px' }}
+        >
+          www.google.com
+        </Tag>
       </Option>
     </>
   );

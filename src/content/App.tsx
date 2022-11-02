@@ -13,30 +13,63 @@ const App = () => {
     [key: string]: any;
   }>({});
 
+  const {
+    [storageKeys.chosenSymbolsList]: chosenSymbolsList,
+    [storageKeys.toolbarVisible]: toolbarVisible,
+  } = currentStorageValues;
+
+  // Adjusting the page for when the header is on or off
   useEffect(() => {
     const body = document.querySelector('body');
-    body?.style.setProperty('margin-top', elementHeight, 'important');
 
-    // Configuring the page header (for pages that have header)
-    // to suit the content to be injected
     const documentHeader = document.querySelector<HTMLElement>(
       'header, #topnav, #masthead-container',
     );
-    if (documentHeader) {
-      const headerTopAttribute =
-        getComputedStyle(documentHeader).top.toString();
-      if (headerTopAttribute.startsWith('0')) {
-        documentHeader.style.setProperty('top', elementHeight, 'important');
-      }
-    }
+    const headerTopAttribute =
+      documentHeader && getComputedStyle(documentHeader).top.toString();
+    const headerPositionAttribute =
+      documentHeader && getComputedStyle(documentHeader).position.toString();
 
     // Configuring the page header specifically for google pages
     const currentUrl = window.location.href;
-    if (currentUrl.includes('google.com') && !currentUrl.includes('mail')) {
-      const googleHeader = document.querySelector<HTMLElement>('form#tsf');
-      googleHeader?.style.setProperty('margin-top', elementHeight, 'important');
-    }
+    const isGoogleUrl =
+      currentUrl.includes('google.com') && !currentUrl.includes('mail');
 
+    if (toolbarVisible) {
+      body?.style.setProperty('margin-top', elementHeight, 'important');
+
+      if (
+        headerTopAttribute?.startsWith('0') &&
+        ['absolute', 'fixed'].includes(headerPositionAttribute as string)
+      ) {
+        // Configuring the page header (for pages that have header)
+        // to suit the content to be injected
+        documentHeader?.style.setProperty('top', elementHeight, 'important');
+      }
+      if (isGoogleUrl) {
+        const googleHeader = document.querySelector<HTMLElement>('form#tsf');
+        googleHeader?.style.setProperty(
+          'margin-top',
+          elementHeight,
+          'important',
+        );
+      }
+    } else {
+      body?.style.setProperty('margin-top', '0px', 'important');
+
+      if (headerTopAttribute?.includes(elementHeight)) {
+        // Configuring the page header (for pages that have header)
+        // to suit the content to be injected
+        documentHeader?.style.setProperty('top', '0px', 'important');
+      }
+      if (isGoogleUrl) {
+        const googleHeader = document.querySelector<HTMLElement>('form#tsf');
+        googleHeader?.style.setProperty('margin-top', '0px', 'important');
+      }
+    }
+  }, [toolbarVisible]);
+
+  useEffect(() => {
     // get storage values in the beginning
     chrome.storage.sync.get(null, parseAndSetStorageValues);
 
@@ -48,11 +81,6 @@ const App = () => {
     const parsedValues = parseStorageValues(values);
     setCurrentStorageValues((values) => ({ ...values, ...parsedValues }));
   };
-
-  const {
-    [storageKeys.chosenSymbolsList]: chosenSymbolsList,
-    [storageKeys.toolbarVisible]: toolbarVisible,
-  } = currentStorageValues;
 
   return (
     <AppStyled $height={elementHeight} $hidden={!toolbarVisible}>
