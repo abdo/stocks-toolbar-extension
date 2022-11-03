@@ -9,7 +9,8 @@ import WebsiteVisibilityOptions from '../data/constants/websiteVisibilityOptions
 import parseStorageValues from '../utils/parseStorageValues';
 import BarInfo from './components/BarInfo';
 import { AppStyled } from './style';
-const elementHeight = '30px';
+
+export const contentHeight = '30px';
 
 const App = () => {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
@@ -39,7 +40,7 @@ const App = () => {
     const body = document.querySelector('body');
 
     const documentHeader = document.querySelector<HTMLElement>(
-      'header, #topnav, #masthead-container',
+      'header, nav, #topnav, #masthead-container',
     );
     const headerTopAttribute =
       documentHeader && getComputedStyle(documentHeader).top.toString();
@@ -51,7 +52,7 @@ const App = () => {
       currentUrl.includes('google.com') && !currentUrl.includes('mail');
 
     if (toolbarVisible) {
-      body?.style.setProperty('margin-top', elementHeight, 'important');
+      body?.style.setProperty('margin-top', contentHeight, 'important');
 
       if (
         headerTopAttribute?.startsWith('0') &&
@@ -59,20 +60,20 @@ const App = () => {
       ) {
         // Configuring the page header (for pages that have header)
         // to suit the content to be injected
-        documentHeader?.style.setProperty('top', elementHeight, 'important');
+        documentHeader?.style.setProperty('top', contentHeight, 'important');
       }
       if (isGoogleUrl) {
         const googleHeader = document.querySelector<HTMLElement>('form#tsf');
         googleHeader?.style.setProperty(
           'margin-top',
-          elementHeight,
+          contentHeight,
           'important',
         );
       }
     } else {
       body?.style.setProperty('margin-top', '0px', 'important');
 
-      if (headerTopAttribute?.includes(elementHeight)) {
+      if (headerTopAttribute?.includes(contentHeight)) {
         // Configuring the page header (for pages that have header)
         // to suit the content to be injected
         documentHeader?.style.setProperty('top', '0px', 'important');
@@ -102,7 +103,7 @@ const App = () => {
   };
 
   return (
-    <AppStyled $height={elementHeight} $hidden={!toolbarVisible}>
+    <AppStyled $height={contentHeight} $hidden={!toolbarVisible}>
       <BarInfo chosenSymbolsList={chosenSymbolsList} />
     </AppStyled>
   );

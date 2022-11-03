@@ -10,4 +10,8 @@ export const AppStyled = styled.div<{ $height: string, $hidden: boolean }>`
   * {
   font-family: 'Press Start 2P', sans-serif;
   }
+
+  &:hover #ticker-bar {
+    animation-play-state: paused;
+  }
 `;

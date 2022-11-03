@@ -75,6 +75,7 @@ const Options = ({
           checked={toolbarVisible}
           onChange={onToolbarVisibleToggle}
           style={{
+            boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)',
             display: 'block',
             margin: '10px 0',
           }}
