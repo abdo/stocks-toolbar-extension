@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components';
+import theme from '../../../style/theme';
 
 const ticker = keyframes`
   0% {
@@ -56,14 +57,21 @@ const flicker = keyframes`
 	}
 `;
 
-export const TickerWrap = styled.div`
+export const BarIcon = styled.img`
   width: 100%;
-  overflow: hidden;
+  height: 100%;
+  animation: ${flicker} 10s infinite linear;
+  z-index: 1;
+  background-color: ${theme.colors.black};
+`;
+
+export const TickersWrap = styled.div`
+  width: 100%;
   padding-left: 100%;
   box-sizing: content-box;
 `;
 
-export const Ticker = styled.div`
+export const Tickers = styled.div`
   display: inline-block;
   white-space: nowrap;
   padding-right: 100%;
@@ -71,15 +79,59 @@ export const Ticker = styled.div`
   animation: ${ticker} 35s linear infinite;
 `;
 
-export const TickerItem = styled.div`
+export const Ticker = styled.div`
   display: inline-block;
   padding: 0 10px;
   font-size: 12px;
   color: white;
+  position: relative;
+
+  & .tooltip {
+    visibility: hidden;
+    color: ${theme.colors.background};
+    background-color: ${theme.colors.black};
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid ${theme.colors.background};
+    top: 140%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    position: absolute;
+    transition: all 0s ease 0.4s;
+    cursor: default;
+    max-width: 60%;
+    white-space: break-spaces;
+
+    &:hover {
+      transition-delay: 0s;
+      visibility: visible;
+    }
+
+    & .special-info {
+      color: ${theme.colors.gray};
+    }
+
+    & .last-trade {
+      border-radius: 6px;
+      border: 1px solid ${theme.colors.background};
+      padding: 8px;
+      margin: 4px 0 0;
+    }
+  }
+
+  &:hover .tooltip {
+    transition-delay: 0s;
+    visibility: visible;
+  }
 `;
 
-export const BarIcon = styled.img`
-  width: 100%;
-  height: 100%;
-  animation: ${flicker} 10s infinite linear;
+export const DataItem = styled.span<{ $isNegative?: boolean, $isPositive?: boolean }>`
+  padding: 0 5px;
+  cursor: pointer;
+  color: ${({ $isPositive, $isNegative }) => $isPositive ? theme.colors.positive : $isNegative ? theme.colors.negative : theme.colors.white};
+  font-family: 'Press Start 2P', sans-serif;
+
+  &:hover {
+    opacity: 0.7;
+  }
 `;

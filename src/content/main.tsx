@@ -10,7 +10,6 @@ injectedContent.id = 'root';
 injectedContent.style.position = 'fixed';
 injectedContent.style.top = '0';
 injectedContent.style.zIndex = '1000000000000';
-injectedContent.style.overflow = 'hidden';
 injectedContent.style.height = 'fit-content';
 
 // Make sure the element that you want to mount the injectedContent to has loaded. You can

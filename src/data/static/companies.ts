@@ -474,7 +474,6 @@ export const popularCompanies = [
   "FANG",
   "FAST",
   "FATE",
-  "FB",
   "FBC",
   "FBHS",
   "FCFS",

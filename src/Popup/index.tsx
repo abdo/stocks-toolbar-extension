@@ -33,6 +33,7 @@ function App() {
     [StorageKeys.toolbarVisible]: toolbarVisible,
     [StorageKeys.websiteVisibility]: websiteVisibility,
     [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
+    [StorageKeys.switchIndicationColors]: switchIndicationColors,
   } = currentStorageValues;
 
   return (
@@ -42,6 +43,7 @@ function App() {
         toolbarVisible={toolbarVisible}
         websiteVisibility={websiteVisibility}
         selectedWebsitesList={selectedWebsitesList}
+        switchIndicationColors={switchIndicationColors}
       />
     </AppStyled>
   );

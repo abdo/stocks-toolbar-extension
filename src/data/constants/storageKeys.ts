@@ -6,6 +6,7 @@ enum StorageKeys {
   toolbarVisible,
   websiteVisibility,
   selectedWebsitesList,
+  switchIndicationColors,
 };
 
 export default StorageKeys;
@@ -15,4 +16,5 @@ export const defaultStorageValues = {
   [StorageKeys.toolbarVisible]: true,
   [StorageKeys.websiteVisibility]: WebsiteVisibilityOptions.All,
   [StorageKeys.selectedWebsitesList]: [],
+  [StorageKeys.switchIndicationColors]: false,
 };

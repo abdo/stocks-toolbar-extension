@@ -1,15 +1,10 @@
 import styled from 'styled-components';
 import theme from '../style/theme';
 
-export const AppStyled = styled.div<{ $height: string, $hidden: boolean }>`
-  background-color: ${theme.colors.toolbarBackground};
+export const AppStyled = styled.div<{ $height: string }>`
+  background-color: ${theme.colors.black};
   height: ${({ $height }) => $height};
-  display: ${({ $hidden }) => $hidden && 'none'};
   width: 100vw;
-
-  * {
-  font-family: 'Press Start 2P', sans-serif;
-  }
 
   &:hover #ticker-bar {
     animation-play-state: paused;

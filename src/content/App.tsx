@@ -7,6 +7,7 @@ import StorageKeys, {
 } from '../data/constants/storageKeys';
 import WebsiteVisibilityOptions from '../data/constants/websiteVisibilityOptions';
 import parseStorageValues from '../utils/parseStorageValues';
+import getStocksSnapshot from '../utils/requests/getStocksSnapshot';
 import BarInfo from './components/BarInfo';
 import { AppStyled } from './style';
 
@@ -22,6 +23,7 @@ const App = () => {
     [StorageKeys.toolbarVisible]: toolbarVisibleStoredValue,
     [StorageKeys.websiteVisibility]: websiteVisibility,
     [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
+    [StorageKeys.switchIndicationColors]: switchIndicationColors,
   } = currentStorageValues;
 
   const currentUrl = window.location.href;
@@ -102,9 +104,16 @@ const App = () => {
     }));
   };
 
+  if (!toolbarVisible) {
+    return null;
+  }
+
   return (
-    <AppStyled $height={contentHeight} $hidden={!toolbarVisible}>
-      <BarInfo chosenSymbolsList={chosenSymbolsList} />
+    <AppStyled $height={contentHeight}>
+      <BarInfo
+        chosenSymbolsList={chosenSymbolsList}
+        switchIndicationColors={switchIndicationColors}
+      />
     </AppStyled>
   );
 };

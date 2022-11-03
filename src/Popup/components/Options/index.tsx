@@ -1,4 +1,4 @@
-import { Tag, Select, Switch } from 'antd';
+import { Checkbox, Select, Switch, Tag } from 'antd';
 import StorageKeys from '../../../data/constants/storageKeys';
 import { useState } from 'react';
 import { popularCompanies } from '../../../data/static/companies';
@@ -7,12 +7,15 @@ import theme from '../../../style/theme';
 import { Input, Radio, Space } from 'antd';
 import WebsiteVisibilityOptions from '../../../data/constants/websiteVisibilityOptions';
 import type { RadioChangeEvent } from 'antd';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import Box from '../../../components/Box';
 
 type Props = {
   chosenSymbolsList: string[];
   toolbarVisible: boolean;
   websiteVisibility: WebsiteVisibilityOptions;
   selectedWebsitesList: string[];
+  switchIndicationColors: boolean;
 };
 
 const Options = ({
@@ -20,6 +23,7 @@ const Options = ({
   toolbarVisible,
   websiteVisibility,
   selectedWebsitesList,
+  switchIndicationColors,
 }: Props) => {
   const [typedSymbol, setTypedSymbol] = useState('');
   const [typedWebsite, setTypedWebsite] = useState('');
@@ -30,7 +34,7 @@ const Options = ({
     });
   };
 
-  const onToolbarVisibleToggle = (visible: Boolean) => {
+  const onToolbarVisibleToggle = (visible: boolean) => {
     chrome.storage.sync.set({
       [StorageKeys.toolbarVisible]: visible,
     });
@@ -62,6 +66,12 @@ const Options = ({
       [StorageKeys.selectedWebsitesList]: JSON.stringify(
         selectedWebsitesList.filter((website) => website !== removedWebsite),
       ),
+    });
+  };
+
+  const onCheckSwitchIndicationColors = (e: CheckboxChangeEvent) => {
+    chrome.storage.sync.set({
+      [StorageKeys.switchIndicationColors]: e.target.checked,
     });
   };
 
@@ -158,6 +168,22 @@ const Options = ({
             </Space>
           </Radio.Group>
         </Space>
+      </Option>
+      <Option>
+        <Checkbox
+          onChange={onCheckSwitchIndicationColors}
+          checked={switchIndicationColors}
+        >
+          Invert{' '}
+          <Box span color={theme.colors.negative} display='inline-block'>
+            red
+          </Box>{' '}
+          /{' '}
+          <Box span color={theme.colors.positive} display='inline-block'>
+            green
+          </Box>{' '}
+          colors
+        </Checkbox>
       </Option>
     </>
   );
