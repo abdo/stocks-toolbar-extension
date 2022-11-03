@@ -54,6 +54,15 @@ const Options = ({
         ...selectedWebsitesList,
       ]),
     });
+    setTypedWebsite('');
+  };
+
+  const onRemoveSelectedWebsite = (removedWebsite: string) => {
+    chrome.storage.sync.set({
+      [StorageKeys.selectedWebsitesList]: JSON.stringify(
+        selectedWebsitesList.filter((website) => website !== removedWebsite),
+      ),
+    });
   };
 
   return (
@@ -110,10 +119,10 @@ const Options = ({
           >
             <Space direction='vertical'>
               <Radio value={WebsiteVisibilityOptions.All}>
-                Visible on all websites
+                Shown on all websites
               </Radio>
               <Radio value={WebsiteVisibilityOptions.Selected}>
-                Only visible on selected websites
+                Only shown on selected websites
               </Radio>
               {websiteVisibility === WebsiteVisibilityOptions.Selected ? (
                 <Space direction='vertical'>
@@ -123,13 +132,18 @@ const Options = ({
                       placeholder='google.com'
                       onChange={(e) => setTypedWebsite(e.target.value)}
                       onKeyDown={onAddSelectedWebsite}
+                      value={typedWebsite}
                     />
                     {selectedWebsitesList.map((website) => (
                       <Tag
                         key={website}
                         color={theme.colors.secondary}
+                        closable
+                        onClose={(e) => {
+                          e.preventDefault();
+                          onRemoveSelectedWebsite(website);
+                        }}
                         style={{
-                          display: 'block',
                           margin: '3px 0 0',
                           borderRadius: '5px',
                         }}
