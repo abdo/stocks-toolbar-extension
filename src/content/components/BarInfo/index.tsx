@@ -11,6 +11,8 @@ import formatTickersData, {
 } from '../../../utils/helpers/formatTickersData';
 import goToStockPage from '../../../utils/helpers/goToStockPage';
 
+let refreshInterval: NodeJS.Timer;
+
 type Props = {
   chosenSymbolsList: string[];
   switchIndicationColors: boolean;
@@ -41,6 +43,21 @@ const BarInfo = ({
 
     setChosenSymbolsList(passedChosenSymbolsList);
   }, [passedChosenSymbolsList]);
+
+  const refreshStockDataInterval = 60;
+
+  useEffect(() => {
+    clearInterval(refreshInterval);
+    refreshInterval = setInterval(() => {
+      getStocksSnapshot({ chosenSymbolsList }).then((details) =>
+        setStocksData(formatTickersData(details.tickers)),
+      );
+    }, refreshStockDataInterval * 1000);
+
+    return () => {
+      clearInterval(refreshInterval);
+    };
+  }, [refreshStockDataInterval]);
 
   const isPositive = (value: number) => {
     const positive = value > 0;
@@ -93,7 +110,7 @@ const BarInfo = ({
                         <span className='special-info'>
                           {stockData.lastTrade.size}
                         </span>{' '}
-                        stocks were traded
+                        stocks were sold
                       </div>
                       <div>
                         Each for{' '}
