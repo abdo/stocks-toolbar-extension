@@ -1,5 +1,7 @@
-import { Checkbox, Select, Switch, Tag } from 'antd';
-import StorageKeys from '../../../data/constants/storageKeys';
+import { Checkbox, Divider, Select, Switch, Tag } from 'antd';
+import StorageKeys, {
+  ToolbarPositionOptions,
+} from '../../../data/constants/storageKeys';
 import { useState } from 'react';
 import { popularCompanies } from '../../../data/static/companies';
 import { Option } from './style';
@@ -17,6 +19,7 @@ type Props = {
   selectedWebsitesList: string[];
   switchIndicationColors: boolean;
   refreshStockDataInterval: number;
+  toolbarPosition: ToolbarPositionOptions;
 };
 
 const Options = ({
@@ -26,6 +29,7 @@ const Options = ({
   selectedWebsitesList,
   switchIndicationColors,
   refreshStockDataInterval,
+  toolbarPosition,
 }: Props) => {
   const [typedSymbol, setTypedSymbol] = useState('');
   const [typedWebsite, setTypedWebsite] = useState('');
@@ -85,6 +89,12 @@ const Options = ({
     }
   };
 
+  const onChangeToolbarPosition = (e: RadioChangeEvent) => {
+    chrome.storage.sync.set({
+      [StorageKeys.toolbarPosition]: e.target.value,
+    });
+  };
+
   return (
     <>
       <Option>
@@ -101,6 +111,8 @@ const Options = ({
           }}
         />
       </Option>
+
+      <Divider />
 
       <Option>
         <b>Stocks:</b>
@@ -130,6 +142,8 @@ const Options = ({
           listHeight={100}
         ></Select>
       </Option>
+
+      <Divider />
 
       <Option>
         <Space direction='vertical'>
@@ -179,6 +193,9 @@ const Options = ({
           </Radio.Group>
         </Space>
       </Option>
+
+      <Divider />
+
       <Option>
         <Space direction='vertical'>
           <b>Color indications:</b>
@@ -199,6 +216,9 @@ const Options = ({
           </Checkbox>
         </Space>
       </Option>
+
+      <Divider />
+
       <Option>
         <Space direction='vertical'>
           <b>Data refresh rate:</b>
@@ -209,8 +229,6 @@ const Options = ({
             onChange={onChangeRefreshStockDataInterval}
             style={{
               boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)',
-              display: 'block',
-              margin: '10px 0',
             }}
           />
           <Box fz='11px' fw='bold' color={theme.colors.primary}>
@@ -226,6 +244,39 @@ const Options = ({
                   : '')
               : `${refreshStockDataInterval} seconds`}
           </Box>
+        </Space>
+      </Option>
+
+      <Divider />
+
+      <Option>
+        <Space direction='vertical'>
+          <b>Toolbar position:</b>
+
+          <Radio.Group
+            buttonStyle='solid'
+            onChange={onChangeToolbarPosition}
+            value={toolbarPosition}
+          >
+            <Radio.Button
+              value={ToolbarPositionOptions.top}
+              style={{
+                minWidth: '80px',
+                textAlign: 'center',
+              }}
+            >
+              Top
+            </Radio.Button>
+            <Radio.Button
+              value={ToolbarPositionOptions.bottom}
+              style={{
+                minWidth: '80px',
+                textAlign: 'center',
+              }}
+            >
+              Bottom
+            </Radio.Button>
+          </Radio.Group>
         </Space>
       </Option>
     </>

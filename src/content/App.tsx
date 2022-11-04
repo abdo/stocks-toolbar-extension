@@ -4,10 +4,10 @@
 import { useEffect, useState } from 'react';
 import StorageKeys, {
   defaultStorageValues,
+  ToolbarPositionOptions,
 } from '../data/constants/storageKeys';
 import WebsiteVisibilityOptions from '../data/constants/websiteVisibilityOptions';
 import parseStorageValues from '../utils/parseStorageValues';
-import getStocksSnapshot from '../utils/requests/getStocksSnapshot';
 import BarInfo from './components/BarInfo';
 import { AppStyled } from './style';
 
@@ -25,6 +25,7 @@ const App = () => {
     [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
     [StorageKeys.switchIndicationColors]: switchIndicationColors,
     [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
+    [StorageKeys.toolbarPosition]: toolbarPosition,
   } = currentStorageValues;
 
   const currentUrl = window.location.href;
@@ -38,7 +39,8 @@ const App = () => {
       selectedWebsitesList.some((website: string) =>
         currentUrl.includes(website),
       ));
-  // Adjusting the page for when the header is on or off
+
+  // Adjusting the page to suit the header when it is -visible & at the top-
   useEffect(() => {
     const body = document.querySelector('body');
 
@@ -54,7 +56,10 @@ const App = () => {
     const isGoogleUrl =
       currentUrl.includes('google.com') && !currentUrl.includes('mail');
 
-    if (toolbarVisible) {
+    const shouldModifyPage =
+      toolbarVisible && toolbarPosition === ToolbarPositionOptions.top;
+
+    if (shouldModifyPage) {
       body?.style.setProperty('margin-top', contentHeight, 'important');
 
       if (
@@ -86,7 +91,7 @@ const App = () => {
         googleHeader?.style.setProperty('margin-top', '0px', 'important');
       }
     }
-  }, [toolbarVisible]);
+  }, [toolbarVisible, toolbarPosition]);
 
   useEffect(() => {
     // get storage values in the beginning
@@ -110,7 +115,7 @@ const App = () => {
   }
 
   return (
-    <AppStyled $height={contentHeight}>
+    <AppStyled $height={contentHeight} $position={toolbarPosition}>
       <BarInfo
         chosenSymbolsList={chosenSymbolsList}
         switchIndicationColors={switchIndicationColors}

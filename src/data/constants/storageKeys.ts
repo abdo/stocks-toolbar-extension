@@ -7,10 +7,16 @@ enum StorageKeys {
   websiteVisibility,
   selectedWebsitesList,
   switchIndicationColors,
-  refreshStockDataInterval
+  refreshStockDataInterval,
+  toolbarPosition,
 };
 
 export default StorageKeys;
+
+export enum ToolbarPositionOptions {
+  top,
+  bottom
+};
 
 export const defaultStorageValues = {
   [StorageKeys.chosenSymbolsList]: defaultCompanies,
@@ -19,4 +25,5 @@ export const defaultStorageValues = {
   [StorageKeys.selectedWebsitesList]: [],
   [StorageKeys.switchIndicationColors]: false,
   [StorageKeys.refreshStockDataInterval]: 60,
+  [StorageKeys.toolbarPosition]: ToolbarPositionOptions.top,
 };
