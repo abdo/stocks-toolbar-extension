@@ -80,7 +80,6 @@ export const Tickers = styled.div`
 export const Ticker = styled.div`
   display: inline-block;
   padding: 0 10px;
-  font-size: 12px;
   color: white;
   position: relative;
 
@@ -127,7 +126,8 @@ export const DataItem = styled.span<{ $isNegative?: boolean, $isPositive?: boole
   padding: 0 5px;
   cursor: pointer;
   color: ${({ $isPositive, $isNegative }) => $isPositive ? theme.colors.positive : $isNegative ? theme.colors.negative : theme.colors.white};
-  font-family: 'Press Start 2P', sans-serif;
+  font-family: 'Lato', sans-serif;
+  font-size: 17px;
 
   &:hover {
     opacity: 0.7;
