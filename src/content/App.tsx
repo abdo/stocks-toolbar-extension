@@ -24,6 +24,7 @@ const App = () => {
     [StorageKeys.websiteVisibility]: websiteVisibility,
     [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
     [StorageKeys.switchIndicationColors]: switchIndicationColors,
+    [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
   } = currentStorageValues;
 
   const currentUrl = window.location.href;
@@ -113,6 +114,7 @@ const App = () => {
       <BarInfo
         chosenSymbolsList={chosenSymbolsList}
         switchIndicationColors={switchIndicationColors}
+        refreshStockDataInterval={refreshStockDataInterval}
       />
     </AppStyled>
   );

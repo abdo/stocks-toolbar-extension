@@ -34,6 +34,7 @@ function App() {
     [StorageKeys.websiteVisibility]: websiteVisibility,
     [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
     [StorageKeys.switchIndicationColors]: switchIndicationColors,
+    [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
   } = currentStorageValues;
 
   return (
@@ -44,6 +45,7 @@ function App() {
         websiteVisibility={websiteVisibility}
         selectedWebsitesList={selectedWebsitesList}
         switchIndicationColors={switchIndicationColors}
+        refreshStockDataInterval={refreshStockDataInterval}
       />
     </AppStyled>
   );

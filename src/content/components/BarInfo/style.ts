@@ -61,8 +61,6 @@ export const BarIcon = styled.img`
   width: 100%;
   height: 100%;
   animation: ${flicker} 10s infinite linear;
-  z-index: 1;
-  background-color: ${theme.colors.black};
 `;
 
 export const TickersWrap = styled.div`

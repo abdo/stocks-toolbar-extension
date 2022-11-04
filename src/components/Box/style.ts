@@ -47,6 +47,8 @@ const BoxStyled = styled.div`
   z-index: ${({ zIndex }) => zIndex};
   letter-spacing: ${({ ls }) => ls};
   font-family: ${({ fontFamily }) => fontFamily};
+  font-size: ${({ fz }) => fz};
+  font-weight: ${({ fw }) => fw};
   user-select: ${({ noSelect }) => noSelect && 'none'};
 
   grid-template-columns: ${({ gridTemplateColumns }) => gridTemplateColumns};

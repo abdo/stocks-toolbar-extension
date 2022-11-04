@@ -7,6 +7,7 @@ enum StorageKeys {
   websiteVisibility,
   selectedWebsitesList,
   switchIndicationColors,
+  refreshStockDataInterval
 };
 
 export default StorageKeys;
@@ -17,4 +18,5 @@ export const defaultStorageValues = {
   [StorageKeys.websiteVisibility]: WebsiteVisibilityOptions.All,
   [StorageKeys.selectedWebsitesList]: [],
   [StorageKeys.switchIndicationColors]: false,
+  [StorageKeys.refreshStockDataInterval]: 60,
 };

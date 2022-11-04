@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { popularCompanies } from '../../../data/static/companies';
 import { Option } from './style';
 import theme from '../../../style/theme';
-import { Input, Radio, Space } from 'antd';
+import { Input, InputNumber, Radio, Space } from 'antd';
 import WebsiteVisibilityOptions from '../../../data/constants/websiteVisibilityOptions';
 import type { RadioChangeEvent } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -16,6 +16,7 @@ type Props = {
   websiteVisibility: WebsiteVisibilityOptions;
   selectedWebsitesList: string[];
   switchIndicationColors: boolean;
+  refreshStockDataInterval: number;
 };
 
 const Options = ({
@@ -24,6 +25,7 @@ const Options = ({
   websiteVisibility,
   selectedWebsitesList,
   switchIndicationColors,
+  refreshStockDataInterval,
 }: Props) => {
   const [typedSymbol, setTypedSymbol] = useState('');
   const [typedWebsite, setTypedWebsite] = useState('');
@@ -73,6 +75,14 @@ const Options = ({
     chrome.storage.sync.set({
       [StorageKeys.switchIndicationColors]: e.target.checked,
     });
+  };
+
+  const onChangeRefreshStockDataInterval = (value: number | null) => {
+    if (value) {
+      chrome.storage.sync.set({
+        [StorageKeys.refreshStockDataInterval]: value,
+      });
+    }
   };
 
   return (
@@ -170,20 +180,53 @@ const Options = ({
         </Space>
       </Option>
       <Option>
-        <Checkbox
-          onChange={onCheckSwitchIndicationColors}
-          checked={switchIndicationColors}
-        >
-          Invert{' '}
-          <Box span color={theme.colors.negative} display='inline-block'>
-            red
-          </Box>{' '}
-          /{' '}
-          <Box span color={theme.colors.positive} display='inline-block'>
-            green
-          </Box>{' '}
-          colors
-        </Checkbox>
+        <Space direction='vertical'>
+          <b>Color indications:</b>
+
+          <Checkbox
+            onChange={onCheckSwitchIndicationColors}
+            checked={switchIndicationColors}
+          >
+            Invert{' '}
+            <Box span color={theme.colors.negative} display='inline-block'>
+              red
+            </Box>{' '}
+            /{' '}
+            <Box span color={theme.colors.positive} display='inline-block'>
+              green
+            </Box>{' '}
+            colors
+          </Checkbox>
+        </Space>
+      </Option>
+      <Option>
+        <Space direction='vertical'>
+          <b>Data refresh rate:</b>
+          <InputNumber
+            min={10}
+            max={600}
+            value={refreshStockDataInterval}
+            onChange={onChangeRefreshStockDataInterval}
+            style={{
+              boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)',
+              display: 'block',
+              margin: '10px 0',
+            }}
+          />
+          <Box fz='11px' fw='bold' color={theme.colors.primary}>
+            Stock market information will refresh every{' '}
+            {refreshStockDataInterval >= 60
+              ? `${Math.floor(refreshStockDataInterval / 60)} ${
+                  Math.floor(refreshStockDataInterval / 60) > 1
+                    ? 'minutes'
+                    : 'minute'
+                }` +
+                (refreshStockDataInterval % 60
+                  ? ` and ${refreshStockDataInterval % 60} seconds`
+                  : '')
+              : `${refreshStockDataInterval} seconds`}
+          </Box>
+        </Space>
       </Option>
     </>
   );

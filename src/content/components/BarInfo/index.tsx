@@ -10,17 +10,20 @@ import formatTickersData, {
   StockData,
 } from '../../../utils/helpers/formatTickersData';
 import goToStockPage from '../../../utils/helpers/goToStockPage';
+import theme from '../../../style/theme';
 
 let refreshInterval: NodeJS.Timer;
 
 type Props = {
   chosenSymbolsList: string[];
   switchIndicationColors: boolean;
+  refreshStockDataInterval: number;
 };
 
 const BarInfo = ({
   chosenSymbolsList: passedChosenSymbolsList,
   switchIndicationColors,
+  refreshStockDataInterval,
 }: Props) => {
   const [stocksData, setStocksData] = useState<StockData[]>([]);
 
@@ -44,8 +47,6 @@ const BarInfo = ({
     setChosenSymbolsList(passedChosenSymbolsList);
   }, [passedChosenSymbolsList]);
 
-  const refreshStockDataInterval = 60;
-
   useEffect(() => {
     clearInterval(refreshInterval);
     refreshInterval = setInterval(() => {
@@ -57,7 +58,7 @@ const BarInfo = ({
     return () => {
       clearInterval(refreshInterval);
     };
-  }, [refreshStockDataInterval]);
+  }, [refreshStockDataInterval, chosenSymbolsList]);
 
   const isPositive = (value: number) => {
     const positive = value > 0;
@@ -72,7 +73,12 @@ const BarInfo = ({
 
   return (
     <Box display='flex' alignItems='center' h='100%'>
-      <Box h={`calc(${contentHeight} - 4px)`} m='0 0 0 2px'>
+      <Box
+        h={`calc(${contentHeight} - 4px)`}
+        m='0 0 0 2px'
+        zIndex={1}
+        bgc={theme.colors.black}
+      >
         <BarIcon src={`${getMediaUrl(world)}`} alt='stocks-world' />
       </Box>
       <Box w='95%'>
