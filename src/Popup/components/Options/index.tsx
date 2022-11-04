@@ -38,6 +38,26 @@ const Options = ({
     chrome.storage.sync.set({
       [StorageKeys.chosenSymbolsList]: JSON.stringify(list),
     });
+    setTypedSymbol('');
+  };
+
+  const onAddNewSymbolByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const typedSymbolAdjusted = typedSymbol.toUpperCase();
+    const canAddWebsite =
+      e.code === 'Enter' &&
+      typedSymbolAdjusted &&
+      !chosenSymbolsList.includes(typedSymbolAdjusted) &&
+      !popularCompanies.includes(typedSymbolAdjusted);
+
+    if (!canAddWebsite) return;
+
+    chrome.storage.sync.set({
+      [StorageKeys.chosenSymbolsList]: JSON.stringify([
+        ...chosenSymbolsList,
+        typedSymbolAdjusted,
+      ]),
+    });
+    setTypedSymbol('');
   };
 
   const onToolbarVisibleToggle = (visible: boolean) => {
@@ -52,15 +72,18 @@ const Options = ({
     });
   };
 
-  const onAddSelectedWebsite = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onAddSelectedWebsiteByEnter = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    const typedWebsiteAdjusted = typedWebsite.toLowerCase();
     const canAddWebsite =
       e.code === 'Enter' &&
-      typedWebsite.includes('.') &&
-      !selectedWebsitesList.includes(typedWebsite);
+      typedWebsiteAdjusted.includes('.') &&
+      !selectedWebsitesList.includes(typedWebsiteAdjusted);
     if (!canAddWebsite) return;
     chrome.storage.sync.set({
       [StorageKeys.selectedWebsitesList]: JSON.stringify([
-        typedWebsite,
+        typedWebsiteAdjusted,
         ...selectedWebsitesList,
       ]),
     });
@@ -127,8 +150,10 @@ const Options = ({
           placeholder='Select symbols'
           value={chosenSymbolsList}
           showSearch
+          searchValue={typedSymbol}
           onSearch={(s) => setTypedSymbol(s)}
           onChange={onSymbolsListChange}
+          onKeyDown={onAddNewSymbolByEnter}
           optionLabelProp='label'
           options={
             typedSymbol
@@ -166,7 +191,7 @@ const Options = ({
                       addonBefore='https://www.'
                       placeholder='google.com'
                       onChange={(e) => setTypedWebsite(e.target.value)}
-                      onKeyDown={onAddSelectedWebsite}
+                      onKeyDown={onAddSelectedWebsiteByEnter}
                       value={typedWebsite}
                     />
                     {selectedWebsitesList.map((website) => (

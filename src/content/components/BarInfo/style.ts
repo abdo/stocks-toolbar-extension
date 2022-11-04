@@ -96,7 +96,7 @@ export const Ticker = styled.div`
     position: absolute;
     transition: all 0s ease 0.4s;
     cursor: default;
-    max-width: 60%;
+    width: 60%;
     white-space: break-spaces;
 
     &:hover {
