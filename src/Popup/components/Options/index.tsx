@@ -282,6 +282,9 @@ const Options = ({
             buttonStyle='solid'
             onChange={onChangeToolbarPosition}
             value={toolbarPosition}
+            style={{
+              boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)',
+            }}
           >
             <Radio.Button
               value={ToolbarPositionOptions.top}

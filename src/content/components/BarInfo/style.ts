@@ -94,9 +94,9 @@ export const Ticker = styled.div`
     left: 50%;
     transform: translate(-50%, 0);
     position: absolute;
-    transition: all 0s ease 0.4s;
+    transition: all 0s ease 0.2s;
     cursor: default;
-    width: 60%;
+    width: 80%;
     white-space: break-spaces;
 
     &:hover {

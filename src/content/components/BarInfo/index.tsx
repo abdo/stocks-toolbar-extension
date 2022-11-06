@@ -110,20 +110,24 @@ const BarInfo = ({
                   <div className='tooltip' onClick={(e) => e.stopPropagation()}>
                     <b className='special-info'>BID price:</b>{' '}
                     {stockData.bidPrice}
+                    <br />
                     <div className='last-trade'>
-                      <b className='special-info'>Last trade:</b>
-                      <div>
+                      <b className='special-info'>Last trade info:</b>
+                      <br />
+                      <Box hidden={stockData.lastTrade.size === 0}>
                         <span className='special-info'>
                           {stockData.lastTrade.size}
                         </span>{' '}
                         stocks were sold
-                      </div>
+                      </Box>
+                      <br />
                       <div>
-                        Each for{' '}
                         <span className='special-info'>
                           ${stockData.lastTrade.pricePerStock}
-                        </span>
+                        </span>{' '}
+                        per stock
                       </div>
+                      <br />
                       <div>
                         Trade id:{' '}
                         <span className='special-info'>
