@@ -10,6 +10,7 @@ enum StorageKeys {
   refreshStockDataInterval,
   toolbarPosition,
   showGainersBar,
+  toolbarMotionType,
 };
 
 export default StorageKeys;
@@ -17,6 +18,11 @@ export default StorageKeys;
 export enum ToolbarPositionOptions {
   top,
   bottom
+};
+
+export enum ToolbarMotionTypeOptions {
+  scrolling,
+  static
 };
 
 export const defaultStorageValues = {
@@ -28,4 +34,5 @@ export const defaultStorageValues = {
   [StorageKeys.refreshStockDataInterval]: 60,
   [StorageKeys.toolbarPosition]: ToolbarPositionOptions.top,
   [StorageKeys.showGainersBar]: false,
+  [StorageKeys.toolbarMotionType]: ToolbarMotionTypeOptions.scrolling,
 };

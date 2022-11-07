@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import theme from '../../../style/theme';
 
 const ticker = keyframes`
@@ -63,29 +63,50 @@ export const BarIcon = styled.img`
   animation: ${flicker} 10s infinite linear;
 `;
 
-export const TickersWrap = styled.div`
+export const TickersWrap = styled.div<{ $isStaticBar: boolean }>`
   width: 100%;
-  padding-left: 100%;
+  box-sizing: content-box;
+  padding-left: ${({ $isStaticBar }) => !$isStaticBar && '100%'};
+  overflow-x: ${({ $isStaticBar }) => $isStaticBar && 'auto'};
+
+  &::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    -webkit-appearance: none;
+  }
+`;
+
+const baseTickerStyles = css<{ $isStaticBar: boolean, $animationDuration?: string }>`
+  display: inline-block;
+  white-space: nowrap;
+  padding-right: ${({ $isStaticBar }) => !$isStaticBar && '100%'};
   box-sizing: content-box;
 `;
 
 export const Tickers = styled.div`
-  display: inline-block;
-  white-space: nowrap;
-  padding-right: 100%;
-  box-sizing: content-box;
-  animation: ${ticker} 35s linear infinite;
+  ${baseTickerStyles}
 `;
 
-export const SlowTickers = styled(Tickers)`
-  animation: ${ticker} 55s linear infinite;
+export const AnimatedTickers = styled.div`
+  ${baseTickerStyles}
+  animation-name: ${ticker};
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: ${({ $animationDuration }) => $animationDuration};
 `;
 
-export const Ticker = styled.div<{ $highToolbarTop: boolean }>`
+export const Ticker = styled.div<{ $highToolbarTop: boolean, $barHeight: string, $tickerLeftPosition: number, $isStaticBar: boolean }>`
   display: inline-block;
   padding: 0 10px;
   color: white;
   position: relative;
+
+  & .tooltipWrapper {
+    position: fixed;
+    margin-top: ${({ $highToolbarTop, $barHeight }) => $highToolbarTop ? `calc(${$barHeight} + 10px)` : '10px'};
+    left: ${({ $tickerLeftPosition, $isStaticBar }) => $isStaticBar && `${$tickerLeftPosition}px`};
+    margin-left: ${({ $isStaticBar }) => !$isStaticBar && '100px'};
+  }
 
   & .tooltip {
     visibility: hidden;
@@ -94,14 +115,11 @@ export const Ticker = styled.div<{ $highToolbarTop: boolean }>`
     padding: 8px;
     border-radius: 8px;
     border: 1px solid ${theme.colors.background};
-    top: ${({ $highToolbarTop }) => $highToolbarTop ? '280%' : '140%'};
-    left: 50%;
     transform: translate(-50%, 0);
     position: absolute;
     transition: all 0s ease 0.2s;
     cursor: default;
-    width: 80%;
-    min-width: 150px;
+    min-width: 200px;
     white-space: break-spaces;
 
     &:hover {

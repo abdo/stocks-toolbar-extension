@@ -37,6 +37,7 @@ function App() {
     [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
     [StorageKeys.toolbarPosition]: toolbarPosition,
     [StorageKeys.showGainersBar]: showGainersBar,
+    [StorageKeys.toolbarMotionType]: toolbarMotionType,
   } = currentStorageValues;
 
   return (
@@ -50,6 +51,7 @@ function App() {
         switchIndicationColors={switchIndicationColors}
         refreshStockDataInterval={refreshStockDataInterval}
         toolbarPosition={toolbarPosition}
+        toolbarMotionType={toolbarMotionType}
       />
     </AppStyled>
   );

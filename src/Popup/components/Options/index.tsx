@@ -1,5 +1,6 @@
 import { Checkbox, Divider, Select, Switch, Tag } from 'antd';
 import StorageKeys, {
+  ToolbarMotionTypeOptions,
   ToolbarPositionOptions,
 } from '../../../data/constants/storageKeys';
 import { useState } from 'react';
@@ -21,6 +22,7 @@ type Props = {
   switchIndicationColors: boolean;
   refreshStockDataInterval: number;
   toolbarPosition: ToolbarPositionOptions;
+  toolbarMotionType: ToolbarMotionTypeOptions;
 };
 
 const Options = ({
@@ -32,6 +34,7 @@ const Options = ({
   switchIndicationColors,
   refreshStockDataInterval,
   toolbarPosition,
+  toolbarMotionType,
 }: Props) => {
   const [typedSymbol, setTypedSymbol] = useState('');
   const [typedWebsite, setTypedWebsite] = useState('');
@@ -118,6 +121,12 @@ const Options = ({
         [StorageKeys.refreshStockDataInterval]: value,
       });
     }
+  };
+
+  const onChangeToolbarMotionType = (e: RadioChangeEvent) => {
+    chrome.storage.sync.set({
+      [StorageKeys.toolbarMotionType]: e.target.value,
+    });
   };
 
   const onChangeToolbarPosition = (e: RadioChangeEvent) => {
@@ -234,7 +243,7 @@ const Options = ({
           <b>Gainers toolbar:</b>
 
           <Checkbox onChange={onCheckShowGainersBar} checked={showGainersBar}>
-            Show a bar for the current top gainers of the day
+            Show the current top gainers of the day
           </Checkbox>
         </Space>
       </Option>
@@ -289,6 +298,42 @@ const Options = ({
                   : '')
               : `${refreshStockDataInterval} seconds`}
           </Box>
+        </Space>
+      </Option>
+
+      <Divider />
+
+      <Option>
+        <Space direction='vertical'>
+          <b>Toolbar position:</b>
+
+          <Radio.Group
+            buttonStyle='solid'
+            onChange={onChangeToolbarMotionType}
+            value={toolbarMotionType}
+            style={{
+              boxShadow: '0 3px 10px rgb(0 0 0 / 0.2)',
+            }}
+          >
+            <Radio.Button
+              value={ToolbarMotionTypeOptions.scrolling}
+              style={{
+                minWidth: '80px',
+                textAlign: 'center',
+              }}
+            >
+              Scrolling
+            </Radio.Button>
+            <Radio.Button
+              value={ToolbarMotionTypeOptions.static}
+              style={{
+                minWidth: '80px',
+                textAlign: 'center',
+              }}
+            >
+              Static
+            </Radio.Button>
+          </Radio.Group>
         </Space>
       </Option>
 

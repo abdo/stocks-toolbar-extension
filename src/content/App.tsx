@@ -25,6 +25,7 @@ const App = () => {
     [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
     [StorageKeys.toolbarPosition]: toolbarPosition,
     [StorageKeys.showGainersBar]: showGainersBar,
+    [StorageKeys.toolbarMotionType]: toolbarMotionType,
   } = currentStorageValues;
 
   const currentUrl = window.location.href;
@@ -126,6 +127,7 @@ const App = () => {
         isGainersBar={false}
         numberOfBars={numberOfBars}
         barHeight={barHeight}
+        toolbarMotionType={toolbarMotionType}
       />
       <BarInfo
         switchIndicationColors={switchIndicationColors}
@@ -134,6 +136,7 @@ const App = () => {
         numberOfBars={numberOfBars}
         barHeight={barHeight}
         hidden={!showGainersBar}
+        toolbarMotionType={toolbarMotionType}
       />
     </AppStyled>
   );
