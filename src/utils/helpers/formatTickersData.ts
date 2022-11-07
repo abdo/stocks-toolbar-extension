@@ -17,12 +17,12 @@ const formatTickersData = (data: Object[]): StockData[] => data.map((ticker: {
   [key: string]: any;
 }) => ({
   name: ticker.ticker,
-  price: Number((ticker.day.c || ticker.lastQuote.P || ticker.min.o || ticker.lastTrade.p || ticker.prevDay.o).toFixed(5)),
+  price: Number((ticker.day.c || ticker.prevDay.c || ticker.lastQuote.P || ticker.min.o || ticker.lastTrade.p).toFixed(5)),
   askPrice: Number(ticker.lastQuote.P.toFixed(5)),
   bidPrice: Number(ticker.lastQuote.p.toFixed(5)),
   todaysChange: Number(ticker.todaysChange.toFixed(4)),
   todaysChangePerc: Number(ticker.todaysChangePerc.toFixed(4)),
-  isMarketClosed: !ticker.updated,
+  isMarketClosed: !ticker.day.c,
   lastTrade: {
     id: ticker.lastTrade?.i,
     pricePerStock: Number(ticker.lastTrade?.p.toFixed(4)),

@@ -127,10 +127,11 @@ export const Ticker = styled.div<{ $highToolbarTop: boolean }>`
   }
 `;
 
-export const DataItem = styled.span<{ $isNegative?: boolean, $isPositive?: boolean }>`
+export const DataItem = styled.span<{ $isNegative?: boolean, $isPositive?: boolean, $hidden?: boolean }>`
   padding: 0 5px;
   cursor: pointer;
   color: ${({ $isPositive, $isNegative }) => $isPositive ? theme.colors.positive : $isNegative ? theme.colors.negative : theme.colors.white};
+  display: ${({ $hidden }) => $hidden && 'none'};
   font-family: 'Lato', sans-serif;
   font-size: 17px;
 

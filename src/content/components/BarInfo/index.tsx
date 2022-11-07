@@ -150,6 +150,22 @@ const BarInfo = ({
                 >
                   <DataItem>{stockData.name}</DataItem>
                   <DataItem title='Current price'>{stockData?.price}</DataItem>
+                  <DataItem
+                    title="Today's change"
+                    $isPositive={isPositive(stockData?.todaysChange)}
+                    $isNegative={isNegative(stockData?.todaysChange)}
+                    $hidden={!stockData?.todaysChange}
+                  >
+                    {stockData?.todaysChange}
+                  </DataItem>
+                  <DataItem
+                    title="Today's change percentage"
+                    $isPositive={isPositive(stockData?.todaysChangePerc)}
+                    $isNegative={isNegative(stockData?.todaysChangePerc)}
+                    $hidden={!stockData?.todaysChangePerc}
+                  >
+                    ({stockData?.todaysChangePerc}%)
+                  </DataItem>
                   {stockData?.isMarketClosed ? (
                     <small
                       title='Market is now closed'
@@ -157,24 +173,7 @@ const BarInfo = ({
                     >
                       🔒
                     </small>
-                  ) : (
-                    <>
-                      <DataItem
-                        title="Today's change"
-                        $isPositive={isPositive(stockData?.todaysChange)}
-                        $isNegative={isNegative(stockData?.todaysChange)}
-                      >
-                        {stockData?.todaysChange}
-                      </DataItem>
-                      <DataItem
-                        title="Today's change percentage"
-                        $isPositive={isPositive(stockData?.todaysChangePerc)}
-                        $isNegative={isNegative(stockData?.todaysChangePerc)}
-                      >
-                        ({stockData?.todaysChangePerc}%)
-                      </DataItem>
-                    </>
-                  )}
+                  ) : null}
                   <div className='tooltip' onClick={(e) => e.stopPropagation()}>
                     {stockData.isMarketClosed ? (
                       <>
