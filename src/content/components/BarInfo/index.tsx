@@ -18,7 +18,10 @@ import formatTickersData, {
 import goToStockPage from '../../../utils/helpers/goToStockPage';
 import theme from '../../../style/theme';
 import getCurrentGainers from '../../../utils/requests/getCurrentGainers';
-import { ToolbarMotionTypeOptions } from '../../../data/constants/storageKeys';
+import {
+  ToolbarMotionTypeOptions,
+  ToolbarPositionOptions,
+} from '../../../data/constants/storageKeys';
 
 let refreshInterval: NodeJS.Timer;
 
@@ -31,6 +34,7 @@ type Props = {
   barHeight: string;
   hidden?: boolean;
   toolbarMotionType: ToolbarMotionTypeOptions;
+  toolbarPosition: ToolbarPositionOptions;
 };
 
 const BarInfo = ({
@@ -42,6 +46,7 @@ const BarInfo = ({
   barHeight,
   hidden,
   toolbarMotionType,
+  toolbarPosition,
 }: Props) => {
   if (hidden) return null;
 
@@ -83,6 +88,11 @@ const BarInfo = ({
       clearInterval(refreshInterval);
     };
   }, [refreshStockDataInterval, chosenSymbolsList, isGainersBar]);
+
+  // Remove saved ticker positions when toolbar position changes
+  useEffect(() => {
+    setTickersPositions({});
+  }, [toolbarPosition]);
 
   // Request done for gainers bar only
   useEffect(() => {
@@ -179,6 +189,7 @@ const BarInfo = ({
                   onMouseOver={(e) => handleTickerMouseOver(e, i)}
                   $tickerLeftPosition={tickersPositions[i]}
                   $isStaticBar={isStaticBar}
+                  $toolbarPosition={toolbarPosition}
                 >
                   <DataItem>{stockData.name}</DataItem>
                   <DataItem title='Current price'>{stockData?.price}</DataItem>

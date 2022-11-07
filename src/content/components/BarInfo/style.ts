@@ -1,3 +1,4 @@
+import { ToolbarPositionOptions } from './../../../data/constants/storageKeys';
 import styled, { css, keyframes } from 'styled-components';
 import theme from '../../../style/theme';
 
@@ -95,7 +96,7 @@ export const AnimatedTickers = styled.div`
   animation-duration: ${({ $animationDuration }) => $animationDuration};
 `;
 
-export const Ticker = styled.div<{ $highToolbarTop: boolean, $barHeight: string, $tickerLeftPosition: number, $isStaticBar: boolean }>`
+export const Ticker = styled.div<{ $highToolbarTop: boolean, $barHeight: string, $tickerLeftPosition: number, $isStaticBar: boolean, $toolbarPosition: ToolbarPositionOptions }>`
   display: inline-block;
   padding: 0 10px;
   color: white;
@@ -103,7 +104,7 @@ export const Ticker = styled.div<{ $highToolbarTop: boolean, $barHeight: string,
 
   & .tooltipWrapper {
     position: fixed;
-    margin-top: ${({ $highToolbarTop, $barHeight }) => $highToolbarTop ? `calc(${$barHeight} + 10px)` : '10px'};
+    margin-top: ${({ $highToolbarTop, $barHeight, $toolbarPosition, $isStaticBar }) => $toolbarPosition === ToolbarPositionOptions.bottom ? '-200px' : $highToolbarTop ? `calc(${$barHeight} + 10px)` : '10px'};
     left: ${({ $tickerLeftPosition, $isStaticBar }) => $isStaticBar && `${$tickerLeftPosition}px`};
     margin-left: ${({ $isStaticBar }) => !$isStaticBar && '100px'};
   }

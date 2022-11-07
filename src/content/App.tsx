@@ -128,6 +128,7 @@ const App = () => {
         numberOfBars={numberOfBars}
         barHeight={barHeight}
         toolbarMotionType={toolbarMotionType}
+        toolbarPosition={toolbarPosition}
       />
       <BarInfo
         switchIndicationColors={switchIndicationColors}
@@ -137,6 +138,7 @@ const App = () => {
         barHeight={barHeight}
         hidden={!showGainersBar}
         toolbarMotionType={toolbarMotionType}
+        toolbarPosition={toolbarPosition}
       />
     </AppStyled>
   );
