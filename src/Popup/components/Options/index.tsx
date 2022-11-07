@@ -305,7 +305,7 @@ const Options = ({
 
       <Option>
         <Space direction='vertical'>
-          <b>Toolbar position:</b>
+          <b>Toolbar type:</b>
 
           <Radio.Group
             buttonStyle='solid'

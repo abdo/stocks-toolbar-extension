@@ -26,6 +26,7 @@ const App = () => {
     [StorageKeys.toolbarPosition]: toolbarPosition,
     [StorageKeys.showGainersBar]: showGainersBar,
     [StorageKeys.toolbarMotionType]: toolbarMotionType,
+    [StorageKeys.isOnline]: isOnline,
   } = currentStorageValues;
 
   const currentUrl = window.location.href;
@@ -38,7 +39,9 @@ const App = () => {
     (websiteVisibility === WebsiteVisibilityOptions.All ||
       selectedWebsitesList.some((website: string) =>
         currentUrl.includes(website),
-      ));
+      )) &&
+    // internet is on
+    isOnline;
 
   const numberOfBars = showGainersBar ? 2 : 1;
   const contentHeight = `${numberOfBars * 30}px`;
@@ -97,13 +100,28 @@ const App = () => {
     }
   }, [toolbarVisible, toolbarPosition, contentHeight]);
 
+  const onChangeOnlineState = (value: boolean) => {
+    chrome.storage.sync.set({
+      [StorageKeys.isOnline]: value,
+    });
+  };
+
   useEffect(() => {
     // get storage values in the beginning
     chrome.storage.sync.get(null, parseAndSetStorageValues);
 
     // listener for storage values
     chrome.storage.onChanged.addListener(parseAndSetStorageValues);
+
+    // Detect when offline
+    window.addEventListener('offline', () => onChangeOnlineState(false));
+    window.addEventListener('online', () => onChangeOnlineState(true));
   }, []);
+
+  // Detect when offline
+  useEffect(() => {
+    onChangeOnlineState(navigator.onLine);
+  }, [navigator.onLine]);
 
   const parseAndSetStorageValues = (values: chrome.storage.StorageChange) => {
     const parsedValues = parseStorageValues(values);

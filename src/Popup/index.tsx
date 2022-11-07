@@ -38,21 +38,26 @@ function App() {
     [StorageKeys.toolbarPosition]: toolbarPosition,
     [StorageKeys.showGainersBar]: showGainersBar,
     [StorageKeys.toolbarMotionType]: toolbarMotionType,
+    [StorageKeys.isOnline]: isOnline,
   } = currentStorageValues;
 
   return (
     <AppStyled>
-      <Options
-        chosenSymbolsList={chosenSymbolsList}
-        toolbarVisible={toolbarVisible}
-        websiteVisibility={websiteVisibility}
-        selectedWebsitesList={selectedWebsitesList}
-        showGainersBar={showGainersBar}
-        switchIndicationColors={switchIndicationColors}
-        refreshStockDataInterval={refreshStockDataInterval}
-        toolbarPosition={toolbarPosition}
-        toolbarMotionType={toolbarMotionType}
-      />
+      {isOnline ? (
+        <Options
+          chosenSymbolsList={chosenSymbolsList}
+          toolbarVisible={toolbarVisible}
+          websiteVisibility={websiteVisibility}
+          selectedWebsitesList={selectedWebsitesList}
+          showGainersBar={showGainersBar}
+          switchIndicationColors={switchIndicationColors}
+          refreshStockDataInterval={refreshStockDataInterval}
+          toolbarPosition={toolbarPosition}
+          toolbarMotionType={toolbarMotionType}
+        />
+      ) : (
+        <b>Please make sure you have an internet connection.</b>
+      )}
     </AppStyled>
   );
 }

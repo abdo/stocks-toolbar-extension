@@ -11,6 +11,7 @@ enum StorageKeys {
   toolbarPosition,
   showGainersBar,
   toolbarMotionType,
+  isOnline,
 };
 
 export default StorageKeys;
@@ -35,4 +36,5 @@ export const defaultStorageValues = {
   [StorageKeys.toolbarPosition]: ToolbarPositionOptions.top,
   [StorageKeys.showGainersBar]: false,
   [StorageKeys.toolbarMotionType]: ToolbarMotionTypeOptions.scrolling,
+  [StorageKeys.isOnline]: true,
 };
