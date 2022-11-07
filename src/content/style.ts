@@ -11,7 +11,7 @@ export const AppStyled = styled.div<{ $height: string, $position: ToolbarPositio
   bottom: ${({ $position }) => $position === ToolbarPositionOptions.bottom && '0'};;
   z-index: 1000000000000;
 
-  &:hover #ticker-bar {
+  &:hover .ticker-bar {
     animation-play-state: paused;
   }
 `;

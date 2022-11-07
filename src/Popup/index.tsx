@@ -36,6 +36,7 @@ function App() {
     [StorageKeys.switchIndicationColors]: switchIndicationColors,
     [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
     [StorageKeys.toolbarPosition]: toolbarPosition,
+    [StorageKeys.showGainersBar]: showGainersBar,
   } = currentStorageValues;
 
   return (
@@ -45,6 +46,7 @@ function App() {
         toolbarVisible={toolbarVisible}
         websiteVisibility={websiteVisibility}
         selectedWebsitesList={selectedWebsitesList}
+        showGainersBar={showGainersBar}
         switchIndicationColors={switchIndicationColors}
         refreshStockDataInterval={refreshStockDataInterval}
         toolbarPosition={toolbarPosition}

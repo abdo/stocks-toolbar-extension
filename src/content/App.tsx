@@ -11,8 +11,6 @@ import parseStorageValues from '../utils/parseStorageValues';
 import BarInfo from './components/BarInfo';
 import { AppStyled } from './style';
 
-export const contentHeight = '30px';
-
 const App = () => {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
     [key: string]: any;
@@ -26,6 +24,7 @@ const App = () => {
     [StorageKeys.switchIndicationColors]: switchIndicationColors,
     [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
     [StorageKeys.toolbarPosition]: toolbarPosition,
+    [StorageKeys.showGainersBar]: showGainersBar,
   } = currentStorageValues;
 
   const currentUrl = window.location.href;
@@ -39,6 +38,10 @@ const App = () => {
       selectedWebsitesList.some((website: string) =>
         currentUrl.includes(website),
       ));
+
+  const numberOfBars = showGainersBar ? 2 : 1;
+  const contentHeight = `${numberOfBars * 30}px`;
+  const barHeight = '30px';
 
   // Adjusting the page to suit the header when it is -visible & at the top-
   useEffect(() => {
@@ -63,7 +66,7 @@ const App = () => {
       body?.style.setProperty('margin-top', contentHeight, 'important');
 
       if (
-        headerTopAttribute?.startsWith('0') &&
+        headerTopAttribute &&
         ['absolute', 'fixed'].includes(headerPositionAttribute as string)
       ) {
         // Configuring the page header (for pages that have header)
@@ -91,7 +94,7 @@ const App = () => {
         googleHeader?.style.setProperty('margin-top', '0px', 'important');
       }
     }
-  }, [toolbarVisible, toolbarPosition]);
+  }, [toolbarVisible, toolbarPosition, contentHeight]);
 
   useEffect(() => {
     // get storage values in the beginning
@@ -120,6 +123,17 @@ const App = () => {
         chosenSymbolsList={chosenSymbolsList}
         switchIndicationColors={switchIndicationColors}
         refreshStockDataInterval={refreshStockDataInterval}
+        isGainersBar={false}
+        numberOfBars={numberOfBars}
+        barHeight={barHeight}
+      />
+      <BarInfo
+        switchIndicationColors={switchIndicationColors}
+        refreshStockDataInterval={refreshStockDataInterval}
+        isGainersBar
+        numberOfBars={numberOfBars}
+        barHeight={barHeight}
+        hidden={!showGainersBar}
       />
     </AppStyled>
   );

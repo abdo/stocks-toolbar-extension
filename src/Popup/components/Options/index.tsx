@@ -17,6 +17,7 @@ type Props = {
   toolbarVisible: boolean;
   websiteVisibility: WebsiteVisibilityOptions;
   selectedWebsitesList: string[];
+  showGainersBar: boolean;
   switchIndicationColors: boolean;
   refreshStockDataInterval: number;
   toolbarPosition: ToolbarPositionOptions;
@@ -27,6 +28,7 @@ const Options = ({
   toolbarVisible,
   websiteVisibility,
   selectedWebsitesList,
+  showGainersBar,
   switchIndicationColors,
   refreshStockDataInterval,
   toolbarPosition,
@@ -95,6 +97,12 @@ const Options = ({
       [StorageKeys.selectedWebsitesList]: JSON.stringify(
         selectedWebsitesList.filter((website) => website !== removedWebsite),
       ),
+    });
+  };
+
+  const onCheckShowGainersBar = (e: CheckboxChangeEvent) => {
+    chrome.storage.sync.set({
+      [StorageKeys.showGainersBar]: e.target.checked,
     });
   };
 
@@ -216,6 +224,18 @@ const Options = ({
               ) : null}
             </Space>
           </Radio.Group>
+        </Space>
+      </Option>
+
+      <Divider />
+
+      <Option>
+        <Space direction='vertical'>
+          <b>Gainers toolbar:</b>
+
+          <Checkbox onChange={onCheckShowGainersBar} checked={showGainersBar}>
+            Show a bar for the current top gainers of the day
+          </Checkbox>
         </Space>
       </Option>
 

@@ -9,6 +9,7 @@ enum StorageKeys {
   switchIndicationColors,
   refreshStockDataInterval,
   toolbarPosition,
+  showGainersBar,
 };
 
 export default StorageKeys;
@@ -26,4 +27,5 @@ export const defaultStorageValues = {
   [StorageKeys.switchIndicationColors]: false,
   [StorageKeys.refreshStockDataInterval]: 60,
   [StorageKeys.toolbarPosition]: ToolbarPositionOptions.top,
+  [StorageKeys.showGainersBar]: false,
 };

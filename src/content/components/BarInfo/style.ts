@@ -77,7 +77,11 @@ export const Tickers = styled.div`
   animation: ${ticker} 35s linear infinite;
 `;
 
-export const Ticker = styled.div`
+export const SlowTickers = styled(Tickers)`
+  animation: ${ticker} 55s linear infinite;
+`;
+
+export const Ticker = styled.div<{ $highToolbarTop: boolean }>`
   display: inline-block;
   padding: 0 10px;
   color: white;
@@ -90,13 +94,14 @@ export const Ticker = styled.div`
     padding: 8px;
     border-radius: 8px;
     border: 1px solid ${theme.colors.background};
-    top: 140%;
+    top: ${({ $highToolbarTop }) => $highToolbarTop ? '280%' : '140%'};
     left: 50%;
     transform: translate(-50%, 0);
     position: absolute;
     transition: all 0s ease 0.2s;
     cursor: default;
     width: 80%;
+    min-width: 150px;
     white-space: break-spaces;
 
     &:hover {
