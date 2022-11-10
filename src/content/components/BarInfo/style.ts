@@ -151,7 +151,7 @@ export const DataItem = styled.span<{ $isNegative?: boolean, $isPositive?: boole
   cursor: pointer;
   color: ${({ $isPositive, $isNegative }) => $isPositive ? theme.colors.positive : $isNegative ? theme.colors.negative : theme.colors.white};
   display: ${({ $hidden }) => $hidden && 'none'};
-  font-family: 'Lato', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 17px;
 
   &:hover {

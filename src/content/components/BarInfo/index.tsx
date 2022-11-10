@@ -58,7 +58,12 @@ const BarInfo = ({
 
   // Behavior when the passed chosen symbols list changes
   useEffect(() => {
-    if (!passedChosenSymbolsList || isGainersBar) return;
+    if (
+      !passedChosenSymbolsList ||
+      !passedChosenSymbolsList.length ||
+      isGainersBar
+    )
+      return;
 
     // whether or not all passed symbols are included in current symbols in state
     // meaning that we need to make a new request
@@ -79,6 +84,9 @@ const BarInfo = ({
     if (isGainersBar) return;
     clearInterval(refreshInterval);
     refreshInterval = setInterval(() => {
+      if (!chosenSymbolsList?.length) {
+        return;
+      }
       getStocksSnapshot({ chosenSymbolsList }).then((details) =>
         setStocksData(formatTickersData(details.tickers)),
       );
@@ -141,7 +149,8 @@ const BarInfo = ({
     const node = e.currentTarget as HTMLElement;
     const rect = node?.getBoundingClientRect();
 
-    if (!tickersPositions[i]) {
+    const tickerPosition = rect.left + rect.width / 2;
+    if (tickerPosition !== tickersPositions[i]) {
       setTickersPositions((savedPositions: {}) => ({
         ...savedPositions,
         [i]: rect.left + rect.width / 2,

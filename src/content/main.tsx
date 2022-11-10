@@ -34,6 +34,6 @@ link.setAttribute('rel', 'stylesheet');
 link.setAttribute('type', 'text/css');
 link.setAttribute(
   'href',
-  'https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap',
+  'https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap',
 );
 document.head.appendChild(link);

@@ -51,9 +51,16 @@ const App = () => {
   useEffect(() => {
     const body = document.querySelector('body');
 
-    const documentHeader = document.querySelector<HTMLElement>(
-      'header, nav, #topnav, #masthead-container',
-    );
+    // Potential page headers
+    const getElement = (el: string) => document.querySelector<HTMLElement>(el);
+    const documentHeader =
+      getElement('#global-nav') ||
+      getElement('header') ||
+      getElement('nav') ||
+      getElement('#topnav') ||
+      getElement('#masthead-container');
+    console.log('documentHeader', documentHeader);
+
     const headerTopAttribute =
       documentHeader && getComputedStyle(documentHeader).top.toString();
     const headerPositionAttribute =
@@ -62,6 +69,9 @@ const App = () => {
     // Configuring the page header specifically for google pages
     const isGoogleUrl =
       currentUrl.includes('google.com') && !currentUrl.includes('mail');
+
+    // Configuring the page header specifically for linkedin pages
+    const isLinkedInUrl = currentUrl.includes('linkedin.com');
 
     const shouldModifyPage =
       toolbarVisible && toolbarPosition === ToolbarPositionOptions.top;
@@ -78,13 +88,32 @@ const App = () => {
         documentHeader?.style.setProperty('top', contentHeight, 'important');
       }
       if (isGoogleUrl) {
-        const googleHeader = document.querySelector<HTMLElement>('form#tsf');
-        googleHeader?.style.setProperty(
+        const googleSearch = document.querySelector<HTMLElement>('form#tsf');
+        googleSearch?.style?.setProperty?.(
           'margin-top',
           contentHeight,
           'important',
         );
+
+        const googleHeader = document.querySelector<HTMLElement>('div.sfbg');
+        googleHeader?.style?.setProperty?.(
+          'margin-top',
+          `calc(${contentHeight} - 20px)`,
+          'important',
+        );
       }
+      if (isLinkedInUrl) {
+        const userSection = document.querySelector<HTMLElement>(
+          'section.scaffold-layout-toolbar',
+        );
+        userSection?.style?.setProperty?.(
+          'top',
+          `calc(${contentHeight} + 50px)`,
+          'important',
+        );
+      }
+
+      // When toolbar is hidden
     } else {
       body?.style.setProperty('margin-top', '0px', 'important');
 
@@ -94,8 +123,17 @@ const App = () => {
         documentHeader?.style.setProperty('top', '0px', 'important');
       }
       if (isGoogleUrl) {
-        const googleHeader = document.querySelector<HTMLElement>('form#tsf');
-        googleHeader?.style.setProperty('margin-top', '0px', 'important');
+        const googleSearch = document.querySelector<HTMLElement>('form#tsf');
+        googleSearch?.style?.setProperty?.('margin-top', '0px', 'important');
+
+        const googleHeader = document.querySelector<HTMLElement>('div.sfbg');
+        googleHeader?.style?.setProperty?.('margin-top', '-20px', 'important');
+      }
+      if (isLinkedInUrl) {
+        const userSection = document.querySelector<HTMLElement>(
+          'section.scaffold-layout-toolbar',
+        );
+        userSection?.style?.setProperty?.('top', `50px`, 'important');
       }
     }
   }, [toolbarVisible, toolbarPosition, contentHeight]);
