@@ -9,6 +9,8 @@ import StorageKeys, {
 import parseStorageValues from '../utils/parseStorageValues';
 import Options from './components/Options';
 import { AppStyled } from './style';
+import MainLogo from '../components/MainLogo';
+import Box from '../components/Box';
 
 function App() {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
@@ -43,6 +45,10 @@ function App() {
 
   return (
     <AppStyled>
+      <Box m='0 0 30px -10px'>
+        <MainLogo />
+      </Box>
+
       {isOnline ? (
         <Options
           chosenSymbolsList={chosenSymbolsList}

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "A react extension",
+  "name": "A Invest Fellow",
   "version": "1.0.0",
   "permissions": ["storage"],
   "action": {

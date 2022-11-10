@@ -68,6 +68,7 @@ const BoxStyled = styled.div`
   flex-grow: ${({ flexGrow }) => flexGrow};
   width: ${({ w }) => w};
   height: ${({ h }) => h};
+  margin: ${({ m }) => m};
   padding: ${({ p }) => p};
 `;
 
