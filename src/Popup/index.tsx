@@ -11,11 +11,15 @@ import Options from './components/Options';
 import { AppStyled } from './style';
 import MainLogo from '../components/MainLogo';
 import Box from '../components/Box';
+import UnpaidContent from './components/UnpaidContent';
+import { Button } from 'antd';
 
 function App() {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
     [key: string]: any;
   }>(defaultStorageValues);
+
+  const [isUnpaid, setIsUnpaid] = useState<boolean>(false);
 
   useEffect(() => {
     // get storage values in the beginning
@@ -49,18 +53,29 @@ function App() {
         <MainLogo />
       </Box>
 
+      <Button
+        onClick={() => setIsUnpaid(!isUnpaid)}
+        style={{ width: '10px', height: '10px', margin: '0 0 10px' }}
+      >
+        <span></span>
+      </Button>
+
       {isOnline ? (
-        <Options
-          chosenSymbolsList={chosenSymbolsList}
-          toolbarVisible={toolbarVisible}
-          websiteVisibility={websiteVisibility}
-          selectedWebsitesList={selectedWebsitesList}
-          showGainersBar={showGainersBar}
-          switchIndicationColors={switchIndicationColors}
-          refreshStockDataInterval={refreshStockDataInterval}
-          toolbarPosition={toolbarPosition}
-          toolbarMotionType={toolbarMotionType}
-        />
+        isUnpaid ? (
+          <UnpaidContent />
+        ) : (
+          <Options
+            chosenSymbolsList={chosenSymbolsList}
+            toolbarVisible={toolbarVisible}
+            websiteVisibility={websiteVisibility}
+            selectedWebsitesList={selectedWebsitesList}
+            showGainersBar={showGainersBar}
+            switchIndicationColors={switchIndicationColors}
+            refreshStockDataInterval={refreshStockDataInterval}
+            toolbarPosition={toolbarPosition}
+            toolbarMotionType={toolbarMotionType}
+          />
+        )
       ) : (
         <b>Please make sure you have an internet connection.</b>
       )}

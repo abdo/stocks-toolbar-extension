@@ -155,7 +155,7 @@ const Options = ({
       <Divider />
 
       <Option>
-        <b>Stocks:</b>
+        <b>Stocks to monitor:</b>
         <Select
           mode='multiple'
           style={{

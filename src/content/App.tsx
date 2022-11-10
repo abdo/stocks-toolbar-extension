@@ -175,7 +175,7 @@ const App = () => {
   }
 
   return (
-    <AppStyled $height={contentHeight} $position={toolbarPosition}>
+    <AppStyled $height={contentHeight} $position={toolbarPosition} dir='ltr'>
       <BarInfo
         chosenSymbolsList={chosenSymbolsList}
         switchIndicationColors={switchIndicationColors}
