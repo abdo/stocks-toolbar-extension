@@ -59,7 +59,6 @@ const App = () => {
       getElement('nav') ||
       getElement('#topnav') ||
       getElement('#masthead-container');
-    console.log('documentHeader', documentHeader);
 
     const headerTopAttribute =
       documentHeader && getComputedStyle(documentHeader).top.toString();
@@ -168,6 +167,11 @@ const App = () => {
       ...parsedValues,
       storageInitiallyChecked: true,
     }));
+    // saving userId to local storage for the payment page to consume
+    const userId = parsedValues[StorageKeys.userId];
+    if (userId) {
+      localStorage.setItem('financialtoolbaruserid', userId);
+    }
   };
 
   if (!toolbarVisible) {

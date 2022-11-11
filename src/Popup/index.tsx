@@ -27,6 +27,16 @@ function App() {
 
     // listener for storage values
     chrome.storage.onChanged.addListener(parseAndSetStorageValues);
+
+    chrome.identity.getProfileUserInfo(
+      { accountStatus: chrome.identity.AccountStatus.ANY },
+      function (userInfo) {
+        const userEmail = userInfo.email;
+        chrome.storage.sync.set({
+          [StorageKeys.userId]: userEmail,
+        });
+      },
+    );
   }, []);
 
   const parseAndSetStorageValues = (values: chrome.storage.StorageChange) => {

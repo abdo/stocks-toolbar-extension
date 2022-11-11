@@ -109,7 +109,7 @@ export const Ticker = styled.div<{ $highToolbarTop: boolean, $barHeight: string,
     margin-left: ${({ $isStaticBar }) => !$isStaticBar && '100px'};
   }
 
-  & .tooltip {
+  & .tickinfo-tooltip {
     visibility: hidden;
     color: ${theme.colors.background};
     background-color: ${theme.colors.black};
@@ -140,7 +140,7 @@ export const Ticker = styled.div<{ $highToolbarTop: boolean, $barHeight: string,
     }
   }
 
-  &:hover .tooltip {
+  &:hover .tickinfo-tooltip {
     transition-delay: 0s;
     visibility: visible;
   }

@@ -4,6 +4,18 @@ import Box from '../../../components/Box';
 import theme from '../../../style/theme';
 
 const UnpaidContent: React.FC = () => {
+  const onSubscribe = () => {
+    chrome.identity.getProfileUserInfo(
+      { accountStatus: chrome.identity.AccountStatus.ANY },
+      function (userInfo) {
+        const userEmail = userInfo.email;
+        window.open(
+          `http://127.0.0.1:5500/investfellowsetup.html?userId=${userEmail}`,
+        );
+      },
+    );
+  };
+
   return (
     <Box>
       <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
@@ -24,8 +36,9 @@ const UnpaidContent: React.FC = () => {
         style={{ fontWeight: 'bold' }}
         size='large'
         shape='round'
+        onClick={onSubscribe}
       >
-        Start your 2-days free trial now
+        Try for free
       </Button>
     </Box>
   );

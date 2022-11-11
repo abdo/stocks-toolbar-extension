@@ -228,7 +228,7 @@ const BarInfo = ({
                   ) : null}
                   <div className='tooltipWrapper'>
                     <div
-                      className='tooltip'
+                      className='tickinfo-tooltip'
                       onClick={(e) => e.stopPropagation()}
                     >
                       {stockData.isMarketClosed ? (
