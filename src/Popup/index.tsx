@@ -5,6 +5,7 @@ import 'antd/dist/antd.css';
 import { useEffect, useState } from 'react';
 import StorageKeys, {
   defaultStorageValues,
+  SubscriptionStatusTypeOptions,
 } from '../data/constants/storageKeys';
 import parseStorageValues from '../utils/parseStorageValues';
 import Options from './components/Options';
@@ -12,14 +13,16 @@ import { AppStyled } from './style';
 import MainLogo from '../components/MainLogo';
 import Box from '../components/Box';
 import UnpaidContent from './components/UnpaidContent';
-import { Button } from 'antd';
+import getSubscriptionStatus from '../utils/requests/getSubscriptionStatus';
+import getHoursDiff from '../utils/helpers/getHoursDiff';
 
 function App() {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
     [key: string]: any;
   }>(defaultStorageValues);
 
-  const [isUnpaid, setIsUnpaid] = useState<boolean>(false);
+  const [isLoadingSubscriptionStatus, setIsLoadingSubscriptionStatus] =
+    useState<boolean>(false);
 
   useEffect(() => {
     // get storage values in the beginning
@@ -28,6 +31,7 @@ function App() {
     // listener for storage values
     chrome.storage.onChanged.addListener(parseAndSetStorageValues);
 
+    // setting user email
     chrome.identity.getProfileUserInfo(
       { accountStatus: chrome.identity.AccountStatus.ANY },
       function (userInfo) {
@@ -55,7 +59,55 @@ function App() {
     [StorageKeys.showGainersBar]: showGainersBar,
     [StorageKeys.toolbarMotionType]: toolbarMotionType,
     [StorageKeys.isOnline]: isOnline,
+    [StorageKeys.userId]: userId,
+    [StorageKeys.subscriptionStatus]: subscriptionStatus,
+    [StorageKeys.subscriptionStatusUpdatedAt]: subscriptionStatusUpdatedAt,
+    [StorageKeys.hasClickedSubscribe]: hasClickedSubscribe,
   } = currentStorageValues;
+
+  const isSubscriptionActive =
+    subscriptionStatus === SubscriptionStatusTypeOptions.active;
+  // const isSubscriptionStopped =
+  //   subscriptionStatus === SubscriptionStatusTypeOptions.stopped;
+
+  // Check user subscription status
+  useEffect(() => {
+    const subscriptionLastUpdatedInHours = subscriptionStatusUpdatedAt
+      ? getHoursDiff({
+          startDate: subscriptionStatusUpdatedAt,
+          endDate: new Date(),
+        })
+      : 0;
+
+    const wasSubscriptionUpdatedRecently: boolean =
+      subscriptionStatusUpdatedAt && subscriptionLastUpdatedInHours < 24;
+    const noNeedForSubscriptionCheck =
+      wasSubscriptionUpdatedRecently && isSubscriptionActive;
+    const needToCheckSubscription = userId && !noNeedForSubscriptionCheck;
+
+    if (needToCheckSubscription) {
+      setIsLoadingSubscriptionStatus(true);
+      getSubscriptionStatus({ userId })
+        .then((data) => {
+          const status = data.status;
+          const newSubscriptionStatus =
+            status === 'NOT ACTIVE'
+              ? SubscriptionStatusTypeOptions.notActive
+              : status === 'STOPPED'
+              ? SubscriptionStatusTypeOptions.stopped
+              : SubscriptionStatusTypeOptions.active;
+          chrome.storage.sync.set({
+            [StorageKeys.subscriptionStatus]: newSubscriptionStatus,
+            [StorageKeys.subscriptionStatusUpdatedAt]: new Date().toJSON(),
+            [StorageKeys.hasClickedSubscribe]:
+              newSubscriptionStatus === SubscriptionStatusTypeOptions.active
+                ? false
+                : hasClickedSubscribe,
+          });
+        })
+        .finally(() => setIsLoadingSubscriptionStatus(false));
+    }
+  }, [userId]);
 
   return (
     <AppStyled>
@@ -63,17 +115,10 @@ function App() {
         <MainLogo />
       </Box>
 
-      <Button
-        onClick={() => setIsUnpaid(!isUnpaid)}
-        style={{ width: '10px', height: '10px', margin: '0 0 10px' }}
-      >
-        <span></span>
-      </Button>
+      {isLoadingSubscriptionStatus ? 'Loading status..' : ''}
 
       {isOnline ? (
-        isUnpaid ? (
-          <UnpaidContent />
-        ) : (
+        isSubscriptionActive ? (
           <Options
             chosenSymbolsList={chosenSymbolsList}
             toolbarVisible={toolbarVisible}
@@ -85,6 +130,8 @@ function App() {
             toolbarPosition={toolbarPosition}
             toolbarMotionType={toolbarMotionType}
           />
+        ) : (
+          <UnpaidContent hasClickedSubscribe={hasClickedSubscribe} />
         )
       ) : (
         <b>Please make sure you have an internet connection.</b>

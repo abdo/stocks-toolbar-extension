@@ -1,16 +1,23 @@
 import { Button } from 'antd';
-import React from 'react';
 import Box from '../../../components/Box';
+import StorageKeys from '../../../data/constants/storageKeys';
 import theme from '../../../style/theme';
 
-const UnpaidContent: React.FC = () => {
+type Props = {
+  hasClickedSubscribe: boolean;
+};
+
+const UnpaidContent = ({ hasClickedSubscribe }: Props) => {
   const onSubscribe = () => {
+    chrome.storage.sync.set({
+      [StorageKeys.hasClickedSubscribe]: true,
+    });
     chrome.identity.getProfileUserInfo(
       { accountStatus: chrome.identity.AccountStatus.ANY },
       function (userInfo) {
         const userEmail = userInfo.email;
         window.open(
-          `http://127.0.0.1:5500/investfellowsetup.html?userId=${userEmail}`,
+          `https://tastola.com/investfellowsetup?userId=${userEmail}`,
         );
       },
     );
@@ -18,6 +25,14 @@ const UnpaidContent: React.FC = () => {
 
   return (
     <Box>
+      {hasClickedSubscribe ? (
+        <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
+          If you have already subscribed, it will just take a minute to
+          reflect..
+        </h3>
+      ) : (
+        ''
+      )}
       <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
         You have just chosen Invest Fellow, thank you!
       </h3>

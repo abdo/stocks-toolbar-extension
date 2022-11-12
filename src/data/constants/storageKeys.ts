@@ -13,6 +13,9 @@ enum StorageKeys {
   toolbarMotionType,
   isOnline,
   userId,
+  subscriptionStatus,
+  subscriptionStatusUpdatedAt,
+  hasClickedSubscribe
 };
 
 export default StorageKeys;
@@ -27,6 +30,12 @@ export enum ToolbarMotionTypeOptions {
   static
 };
 
+export enum SubscriptionStatusTypeOptions {
+  active,
+  notActive,
+  stopped
+};
+
 export const defaultStorageValues = {
   [StorageKeys.chosenSymbolsList]: defaultCompanies,
   [StorageKeys.toolbarVisible]: true,
@@ -39,4 +48,7 @@ export const defaultStorageValues = {
   [StorageKeys.toolbarMotionType]: ToolbarMotionTypeOptions.scrolling,
   [StorageKeys.isOnline]: true,
   [StorageKeys.userId]: '',
+  [StorageKeys.subscriptionStatus]: null,
+  [StorageKeys.subscriptionStatusUpdatedAt]: null,
+  [StorageKeys.hasClickedSubscribe]: false,
 };
