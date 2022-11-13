@@ -15,7 +15,8 @@ enum StorageKeys {
   userId,
   subscriptionStatus,
   subscriptionStatusUpdatedAt,
-  hasClickedSubscribe
+  hasClickedSubscribe,
+  subscriptionId,
 };
 
 export default StorageKeys;
@@ -51,4 +52,5 @@ export const defaultStorageValues = {
   [StorageKeys.subscriptionStatus]: null,
   [StorageKeys.subscriptionStatusUpdatedAt]: null,
   [StorageKeys.hasClickedSubscribe]: false,
+  [StorageKeys.subscriptionId]: '',
 };

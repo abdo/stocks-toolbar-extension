@@ -2,8 +2,10 @@
 /// <reference types="vite-plugin-svgr/client" />
 
 import { useEffect, useState } from 'react';
+import LocalStorageKeys from '../data/constants/localStorageKeys';
 import StorageKeys, {
   defaultStorageValues,
+  SubscriptionStatusTypeOptions,
   ToolbarPositionOptions,
 } from '../data/constants/storageKeys';
 import WebsiteVisibilityOptions from '../data/constants/websiteVisibilityOptions';
@@ -27,10 +29,16 @@ const App = () => {
     [StorageKeys.showGainersBar]: showGainersBar,
     [StorageKeys.toolbarMotionType]: toolbarMotionType,
     [StorageKeys.isOnline]: isOnline,
+    [StorageKeys.subscriptionStatus]: subscriptionStatus,
+    [StorageKeys.subscriptionId]: subscriptionId,
   } = currentStorageValues;
 
   const currentUrl = window.location.href;
+  const isSubscriptionActive =
+    subscriptionStatus === SubscriptionStatusTypeOptions.active;
   const toolbarVisible =
+    // user subscription is active
+    isSubscriptionActive &&
     // saved value for toolbarVisible is true
     toolbarVisibleStoredValue &&
     // storage values have been extracted
@@ -155,6 +163,21 @@ const App = () => {
     window.addEventListener('online', () => onChangeOnlineState(true));
   }, []);
 
+  // Check for subscription id added by payment page
+  const passedSubscriptionId = localStorage?.getItem?.(
+    LocalStorageKeys.financialtoolbarsubscriptionid,
+  );
+  const storageSavedSubscriptionId = subscriptionId;
+  const shouldSetNewStorageSavedSubscriptionId =
+    passedSubscriptionId && passedSubscriptionId !== storageSavedSubscriptionId;
+
+  if (shouldSetNewStorageSavedSubscriptionId) {
+    chrome.storage.sync.set({
+      [StorageKeys.subscriptionId]: passedSubscriptionId,
+    });
+    localStorage?.removeItem?.(LocalStorageKeys.financialtoolbarsubscriptionid);
+  }
+
   // Detect when offline
   useEffect(() => {
     onChangeOnlineState(navigator.onLine);
@@ -170,7 +193,7 @@ const App = () => {
     // saving userId to local storage for the payment page to consume
     const userId = parsedValues[StorageKeys.userId];
     if (userId) {
-      localStorage.setItem('financialtoolbaruserid', userId);
+      localStorage?.setItem?.(LocalStorageKeys.financialtoolbaruserid, userId);
     }
   };
 

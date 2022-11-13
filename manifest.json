@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "A Invest Fellow",
+  "name": "Invest Fellow",
   "version": "1.0.0",
   "permissions": ["storage", "identity", "identity.email", "identity.accounts"],
   "action": {

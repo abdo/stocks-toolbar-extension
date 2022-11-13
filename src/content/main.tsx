@@ -21,6 +21,9 @@ body.prepend(injectedContent);
 const container = document.getElementById('root');
 const root = createRoot(container!);
 
+// For clearing storage for testing:
+// chrome.storage.sync.clear();
+
 // Rendering App into the injected content
 root.render(
   <React.StrictMode>

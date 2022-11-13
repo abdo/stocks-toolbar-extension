@@ -63,9 +63,11 @@ function App() {
     [StorageKeys.subscriptionStatus]: subscriptionStatus,
     [StorageKeys.subscriptionStatusUpdatedAt]: subscriptionStatusUpdatedAt,
     [StorageKeys.hasClickedSubscribe]: hasClickedSubscribe,
+    [StorageKeys.subscriptionId]: subscriptionId,
   } = currentStorageValues;
 
   const isSubscriptionActive =
+    !subscriptionStatus ||
     subscriptionStatus === SubscriptionStatusTypeOptions.active;
   // const isSubscriptionStopped =
   //   subscriptionStatus === SubscriptionStatusTypeOptions.stopped;
@@ -87,7 +89,7 @@ function App() {
 
     if (needToCheckSubscription) {
       setIsLoadingSubscriptionStatus(true);
-      getSubscriptionStatus({ userId })
+      getSubscriptionStatus({ userId, subscriptionId })
         .then((data) => {
           const status = data.status;
           const newSubscriptionStatus =
@@ -107,7 +109,7 @@ function App() {
         })
         .finally(() => setIsLoadingSubscriptionStatus(false));
     }
-  }, [userId]);
+  }, [userId, subscriptionId]);
 
   return (
     <AppStyled>
