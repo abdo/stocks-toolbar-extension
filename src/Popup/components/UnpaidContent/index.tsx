@@ -5,9 +5,13 @@ import theme from '../../../style/theme';
 
 type Props = {
   hasClickedSubscribe: boolean;
+  isSubscriptionStopped: boolean;
 };
 
-const UnpaidContent = ({ hasClickedSubscribe }: Props) => {
+const UnpaidContent = ({
+  hasClickedSubscribe,
+  isSubscriptionStopped,
+}: Props) => {
   const onSubscribe = () => {
     chrome.storage.sync.set({
       [StorageKeys.hasClickedSubscribe]: true,
@@ -27,15 +31,21 @@ const UnpaidContent = ({ hasClickedSubscribe }: Props) => {
     <Box>
       {hasClickedSubscribe ? (
         <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
-          If you have already subscribed, it will just take a minute to
-          reflect..
+          Have you already subscribed?
+          <br />
+          It will just take a minute to reflect.
+        </h3>
+      ) : isSubscriptionStopped ? (
+        <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
+          It looks like your subscription has stopped or was paused.
+          <br />
+          Subscribe again to continue using InvestFellow
         </h3>
       ) : (
-        ''
+        <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
+          You have just chosen Invest Fellow, thank you!
+        </h3>
       )}
-      <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
-        You have just chosen Invest Fellow, thank you!
-      </h3>
       <br />
       <h3 style={{ color: theme.colors.black }}>
         You are ready to always get{' '}
@@ -53,7 +63,7 @@ const UnpaidContent = ({ hasClickedSubscribe }: Props) => {
         shape='round'
         onClick={onSubscribe}
       >
-        Try for free
+        {isSubscriptionStopped ? 'Subscribe' : 'Try for free'}
       </Button>
     </Box>
   );

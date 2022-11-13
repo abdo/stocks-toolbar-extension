@@ -2,7 +2,7 @@
 /// <reference types="vite-plugin-svgr/client" />
 
 import 'antd/dist/antd.css';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StorageKeys, {
   defaultStorageValues,
   SubscriptionStatusTypeOptions,
@@ -15,6 +15,7 @@ import Box from '../components/Box';
 import UnpaidContent from './components/UnpaidContent';
 import getSubscriptionStatus from '../utils/requests/getSubscriptionStatus';
 import getHoursDiff from '../utils/helpers/getHoursDiff';
+import { Skeleton } from 'antd';
 
 function App() {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
@@ -67,16 +68,15 @@ function App() {
   } = currentStorageValues;
 
   const isSubscriptionActive =
-    !subscriptionStatus ||
     subscriptionStatus === SubscriptionStatusTypeOptions.active;
-  // const isSubscriptionStopped =
-  //   subscriptionStatus === SubscriptionStatusTypeOptions.stopped;
+  const isSubscriptionStopped =
+    subscriptionStatus === SubscriptionStatusTypeOptions.stopped;
 
   // Check user subscription status
   useEffect(() => {
     const subscriptionLastUpdatedInHours = subscriptionStatusUpdatedAt
       ? getHoursDiff({
-          startDate: subscriptionStatusUpdatedAt,
+          startDate: new Date(subscriptionStatusUpdatedAt),
           endDate: new Date(),
         })
       : 0;
@@ -111,32 +111,57 @@ function App() {
     }
   }, [userId, subscriptionId]);
 
+  const PopupContainer = ({ children }: { children: React.ReactNode }) => (
+    <AppStyled>
+      <Box m='0 0 30px -10px'>
+        <MainLogo />
+        {children}
+      </Box>
+    </AppStyled>
+  );
+
+  if (!isOnline) {
+    return (
+      <PopupContainer>
+        <b>Please make sure you have an internet connection.</b>
+      </PopupContainer>
+    );
+  }
+
+  if (isLoadingSubscriptionStatus) {
+    return (
+      <PopupContainer>
+        <br />
+        <br />
+        <br />
+        <br />
+        <Skeleton active />
+      </PopupContainer>
+    );
+  }
   return (
     <AppStyled>
       <Box m='0 0 30px -10px'>
         <MainLogo />
       </Box>
 
-      {isLoadingSubscriptionStatus ? 'Loading status..' : ''}
-
-      {isOnline ? (
-        isSubscriptionActive ? (
-          <Options
-            chosenSymbolsList={chosenSymbolsList}
-            toolbarVisible={toolbarVisible}
-            websiteVisibility={websiteVisibility}
-            selectedWebsitesList={selectedWebsitesList}
-            showGainersBar={showGainersBar}
-            switchIndicationColors={switchIndicationColors}
-            refreshStockDataInterval={refreshStockDataInterval}
-            toolbarPosition={toolbarPosition}
-            toolbarMotionType={toolbarMotionType}
-          />
-        ) : (
-          <UnpaidContent hasClickedSubscribe={hasClickedSubscribe} />
-        )
+      {isSubscriptionActive ? (
+        <Options
+          chosenSymbolsList={chosenSymbolsList}
+          toolbarVisible={toolbarVisible}
+          websiteVisibility={websiteVisibility}
+          selectedWebsitesList={selectedWebsitesList}
+          showGainersBar={showGainersBar}
+          switchIndicationColors={switchIndicationColors}
+          refreshStockDataInterval={refreshStockDataInterval}
+          toolbarPosition={toolbarPosition}
+          toolbarMotionType={toolbarMotionType}
+        />
       ) : (
-        <b>Please make sure you have an internet connection.</b>
+        <UnpaidContent
+          hasClickedSubscribe={hasClickedSubscribe}
+          isSubscriptionStopped={isSubscriptionStopped}
+        />
       )}
     </AppStyled>
   );
