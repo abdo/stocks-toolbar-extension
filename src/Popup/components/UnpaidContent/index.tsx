@@ -43,18 +43,23 @@ const UnpaidContent = ({
         </h3>
       ) : (
         <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
-          You have just chosen Invest Fellow, thank you!
+          Thank you for trusting InvestFellow.
         </h3>
       )}
       <br />
-      <h3 style={{ color: theme.colors.black }}>
-        You are ready to always get{' '}
-        <span style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
-          real time
-        </span>{' '}
-        stock market information about your favorite stocks.. and many more
-        features.
-      </h3>
+      <h4 style={{ color: theme.colors.primary }}>
+        You are now ready to constantly get{' '}
+        <span style={{ fontWeight: 'bold' }}>real time</span> stock market
+        information about your favorite stocks.. and many more features.
+      </h4>
+      <br />
+      <Box hidden={isSubscriptionStopped}>
+        <h4 style={{ color: theme.colors.primary }}>
+          Subscription will be automatically associated with your{' '}
+          <span style={{ fontWeight: 'bold' }}>Google account</span>, to avoid
+          any signup hustle.
+        </h4>
+      </Box>
       <br />
       <Button
         type='primary'

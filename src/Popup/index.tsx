@@ -149,6 +149,7 @@ function App() {
       </PopupContainer>
     );
   }
+
   return (
     <PopupContainer>
       {isSubscriptionActive ? (
