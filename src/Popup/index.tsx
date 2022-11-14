@@ -117,13 +117,23 @@ function App() {
         <MainLogo />
         {children}
       </Box>
+      <Box>
+        <a
+          href='mailto: contact@tastola.com'
+          title='For any enquiry, suggestion or feedback.'
+        >
+          Contact us
+        </a>
+      </Box>
     </AppStyled>
   );
 
   if (!isOnline) {
     return (
       <PopupContainer>
-        <b>Please make sure you have an internet connection.</b>
+        <Box m='30px 0 0'>
+          <b>Please make sure you are connected to the internet.</b>
+        </Box>
       </PopupContainer>
     );
   }
@@ -140,11 +150,7 @@ function App() {
     );
   }
   return (
-    <AppStyled>
-      <Box m='0 0 30px -10px'>
-        <MainLogo />
-      </Box>
-
+    <PopupContainer>
       {isSubscriptionActive ? (
         <Options
           chosenSymbolsList={chosenSymbolsList}
@@ -163,7 +169,7 @@ function App() {
           isSubscriptionStopped={isSubscriptionStopped}
         />
       )}
-    </AppStyled>
+    </PopupContainer>
   );
 }
 
