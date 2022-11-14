@@ -1,4 +1,5 @@
 import { Button } from 'antd';
+import { useEffect, useState } from 'react';
 import Box from '../../../components/Box';
 import StorageKeys from '../../../data/constants/storageKeys';
 import theme from '../../../style/theme';
@@ -12,19 +13,27 @@ const UnpaidContent = ({
   hasClickedSubscribe,
   isSubscriptionStopped,
 }: Props) => {
+  const [userEmail, setUserEmail] = useState('');
+
+  const checkUserEmail = () => {
+    chrome.identity.getProfileUserInfo(
+      { accountStatus: chrome.identity.AccountStatus.ANY },
+      (userInfo) => {
+        const userEmail = userInfo?.email;
+        setUserEmail(userEmail);
+      },
+    );
+  };
+
+  useEffect(() => {
+    checkUserEmail();
+  }, []);
+
   const onSubscribe = () => {
     chrome.storage.sync.set({
       [StorageKeys.hasClickedSubscribe]: true,
     });
-    chrome.identity.getProfileUserInfo(
-      { accountStatus: chrome.identity.AccountStatus.ANY },
-      function (userInfo) {
-        const userEmail = userInfo.email;
-        window.open(
-          `https://tastola.com/investfellowsetup?userId=${userEmail}`,
-        );
-      },
-    );
+    window.open(`https://tastola.com/investfellowsetup?userId=${userEmail}`);
   };
 
   return (
@@ -53,23 +62,46 @@ const UnpaidContent = ({
         information about your favorite stocks.. and many more features.
       </h4>
       <br />
-      <Box hidden={isSubscriptionStopped}>
-        <h4 style={{ color: theme.colors.primary }}>
-          Subscription will be automatically associated with your{' '}
-          <span style={{ fontWeight: 'bold' }}>Google account</span>, to avoid
-          any signup hustle.
-        </h4>
-      </Box>
-      <br />
-      <Button
-        type='primary'
-        style={{ fontWeight: 'bold' }}
-        size='large'
-        shape='round'
-        onClick={onSubscribe}
-      >
-        {isSubscriptionStopped ? 'Subscribe' : 'Try for free'}
-      </Button>
+      {userEmail ? (
+        <>
+          <Box hidden={isSubscriptionStopped}>
+            <h4 style={{ color: theme.colors.primary }}>
+              Subscription will be automatically associated with your{' '}
+              <span style={{ fontWeight: 'bold' }}>Google account</span>, to
+              avoid any signup hustle.
+            </h4>
+          </Box>
+          <br />
+          <Button
+            type='primary'
+            style={{ fontWeight: 'bold' }}
+            size='large'
+            shape='round'
+            onClick={onSubscribe}
+          >
+            {isSubscriptionStopped ? 'Subscribe' : 'Try for free'}
+          </Button>
+        </>
+      ) : (
+        <Box>
+          <h4 style={{ color: theme.colors.primary }}>
+            It looks like you are not signed up with a chrome{' '}
+            <span style={{ fontWeight: 'bold' }}>Google account</span> (or in
+            guest mode), please make sure you are signed up with a Google
+            account to be able to use InvestFellow.
+          </h4>
+          <br />
+          <Button
+            type='primary'
+            style={{ fontWeight: 'bold' }}
+            size='large'
+            shape='round'
+            onClick={checkUserEmail}
+          >
+            Try again
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };

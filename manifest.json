@@ -3,6 +3,9 @@
   "name": "Invest Fellow",
   "version": "1.0.0",
   "permissions": ["storage", "identity", "identity.email", "identity.accounts"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_title": "Popup",
     "default_popup": "index.html#popup",
