@@ -14,11 +14,16 @@ chrome.runtime.onInstalled.addListener((details) => {
   }
 });
 
+// setting user email
 chrome.identity.getProfileUserInfo(
   { accountStatus: chrome.identity.AccountStatus.ANY },
   function (userInfo) {
-    const userEmail = userInfo.email;
-    console.log('userEmail', userEmail);
+    const userEmail = userInfo?.email;
+    chrome.storage.sync.set({
+      userId: userEmail,
+    });
   },
 );
 
+// For clearing storage for testing:
+// chrome.storage.sync.clear();

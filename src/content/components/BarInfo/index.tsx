@@ -171,7 +171,6 @@ const BarInfo = ({
     >
       <Box
         h={`calc(${barHeight} - 4px)`}
-        m='0 0 0 2px'
         zIndex={1}
         bgc={theme.colors.black}
         hidden={isGainersBar}

@@ -12,11 +12,11 @@ enum StorageKeys {
   showGainersBar,
   toolbarMotionType,
   isOnline,
-  userId,
   subscriptionStatus,
   subscriptionStatusUpdatedAt,
   hasClickedSubscribe,
   subscriptionId,
+  userId = 'userId',
 };
 
 export default StorageKeys;

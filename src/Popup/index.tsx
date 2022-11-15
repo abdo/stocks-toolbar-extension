@@ -33,13 +33,16 @@ function App() {
     chrome.storage.onChanged.addListener(parseAndSetStorageValues);
 
     // setting user email
+    // it is already sat from background file, but again here just in case
     chrome.identity.getProfileUserInfo(
       { accountStatus: chrome.identity.AccountStatus.ANY },
       function (userInfo) {
-        const userEmail = userInfo.email;
-        chrome.storage.sync.set({
-          [StorageKeys.userId]: userEmail,
-        });
+        const userEmail = userInfo?.email;
+        if (userEmail) {
+          chrome.storage.sync.set({
+            [StorageKeys.userId]: userEmail,
+          });
+        }
       },
     );
   }, []);
