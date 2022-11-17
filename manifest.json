@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Invest Fellow",
+  "name": "InvestFellow - Real Time Stock Tracker",
   "version": "1.0.0",
-  "permissions": ["storage", "identity", "identity.email", "identity.accounts"],
+  "permissions": ["storage", "identity", "identity.email"],
   "background": {
     "service_worker": "background.js"
   },

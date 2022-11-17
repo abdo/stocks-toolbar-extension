@@ -1,10 +1,15 @@
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
     // Code to be executed on first install
-    // eg. open a tab with a url
-    chrome.tabs.create({
-      url: "https://google.com"
-    });
+    chrome.identity.getProfileUserInfo(
+      { accountStatus: chrome.identity.AccountStatus.ANY },
+      function (userInfo) {
+        const userEmail = userInfo?.email;
+        chrome.tabs.create({
+          url: `https://tastola.com/investfellowsetup?userId=${userEmail}`
+        });
+      },
+    );
   } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
     // When extension is updated
   } else if (details.reason === chrome.runtime.OnInstalledReason.CHROME_UPDATE) {
@@ -19,9 +24,11 @@ chrome.identity.getProfileUserInfo(
   { accountStatus: chrome.identity.AccountStatus.ANY },
   function (userInfo) {
     const userEmail = userInfo?.email;
-    chrome.storage.sync.set({
-      userId: userEmail,
-    });
+    if (userEmail) {
+      chrome.storage.sync.set({
+        userId: userEmail,
+      });
+    }
   },
 );
 
