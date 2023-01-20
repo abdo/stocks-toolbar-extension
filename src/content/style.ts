@@ -9,8 +9,8 @@ export const AppStyled = styled.div<{ $height: string, $position: ToolbarPositio
   height: ${({ $height }) => $height};
   width: 100vw;
   position: fixed;
-  top: ${({ $position }) => $position === ToolbarPositionOptions.top && '0'};;
-  bottom: ${({ $position }) => $position === ToolbarPositionOptions.bottom && '0'};;
+  top: ${({ $position }) => $position === ToolbarPositionOptions.top && '0'};
+  bottom: ${({ $position }) => $position === ToolbarPositionOptions.bottom && '0'};
   z-index: 1000000000000;
 
   &:hover .ticker-bar {

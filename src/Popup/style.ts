@@ -7,8 +7,9 @@ export const AppStyled = styled.div`
   width: 400px;
   padding: 25px;
 
-  p, b {
+  p,
+  b {
     color: ${theme.colors.primary};
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Open Sans', sans-serif;
   }
 `;
