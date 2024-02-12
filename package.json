@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "watch": "watch 'yarn build' ./src ./public"
+    "watch": "watch \"yarn build\" ./src ./public"
   },
   "dependencies": {
     "antd": "^4.24.0",
