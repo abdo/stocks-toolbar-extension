@@ -1,5 +1,5 @@
-import Box from '../../../components/Box';
-import { defaultCompanies } from '../../../data/static/companies';
+import Box from "../../../components/Box";
+import { defaultCompanies } from "../../../data/static/companies";
 import {
   DataItem,
   Ticker,
@@ -7,21 +7,21 @@ import {
   Tickers,
   BarIcon,
   AnimatedTickers,
-} from './style';
-import world from '../../../assets/world.svg';
-import getMediaUrl from '../../../utils/helpers/getMediaUrl';
-import { useEffect, useRef, useState } from 'react';
-import getStocksSnapshot from '../../../utils/requests/getStocksSnapshot';
-import formatTickersData, {
-  StockData,
-} from '../../../utils/helpers/formatTickersData';
-import goToStockPage from '../../../utils/helpers/goToStockPage';
-import theme from '../../../style/theme';
-import getCurrentGainers from '../../../utils/requests/getCurrentGainers';
+} from "./style";
+import world from "../../../assets/world.svg";
+import getMediaUrl from "../../../utils/helpers/getMediaUrl";
+import { useEffect, useState } from "react";
+import goToStockPage from "../../../utils/helpers/goToStockPage";
+import theme from "../../../style/theme";
 import {
   ToolbarMotionTypeOptions,
   ToolbarPositionOptions,
-} from '../../../data/constants/storageKeys';
+} from "../../../data/constants/storageKeys";
+import getStocksInfo from "../../../utils/requests/getStocksInfo";
+import formatStocksData, {
+  StockData,
+} from "../../../utils/helpers/formatStocksData";
+import getStocksGainers from "../../../utils/requests/getStocksGainers";
 
 let refreshInterval: NodeJS.Timer;
 
@@ -68,12 +68,13 @@ const BarInfo = ({
     // whether or not all passed symbols are included in current symbols in state
     // meaning that we need to make a new request
     const newSymbolsAdded = passedChosenSymbolsList.some(
-      (passedSymbol) => !chosenSymbolsList.includes(passedSymbol),
+      (passedSymbol) => !chosenSymbolsList.includes(passedSymbol)
     );
 
     if (newSymbolsAdded) {
-      getStocksSnapshot({ chosenSymbolsList: passedChosenSymbolsList }).then(
-        (details) => setStocksData(formatTickersData(details.tickers)),
+      getStocksInfo({ chosenSymbolsList: passedChosenSymbolsList }).then(
+        (details) =>
+          setStocksData(formatStocksData(details.quoteResponse.result))
       );
     }
 
@@ -87,8 +88,8 @@ const BarInfo = ({
       if (!chosenSymbolsList?.length) {
         return;
       }
-      getStocksSnapshot({ chosenSymbolsList }).then((details) =>
-        setStocksData(formatTickersData(details.tickers)),
+      getStocksInfo({ chosenSymbolsList }).then((details) =>
+        setStocksData(formatStocksData(details.quoteResponse.result))
       );
     }, refreshStockDataInterval * 1000);
 
@@ -107,15 +108,15 @@ const BarInfo = ({
     if (!isGainersBar) return;
 
     // Initial request
-    getCurrentGainers().then((details) => {
-      setStocksData(formatTickersData(details.tickers));
-    });
+    getStocksGainers().then((details) =>
+      setStocksData(formatStocksData(details.finance.result[0].quotes))
+    );
 
     const refreshGainersDataInterval = 120;
 
     refreshInterval = setInterval(() => {
-      getCurrentGainers().then((details) =>
-        setStocksData(formatTickersData(details.tickers)),
+      getStocksGainers().then((details) =>
+        setStocksData(formatStocksData(details.finance.result[0].quotes))
       );
     }, refreshGainersDataInterval * 1000);
 
@@ -138,13 +139,13 @@ const BarInfo = ({
   const stocksDataSorted = stocksData.sort(
     (stock1, stock2) =>
       chosenSymbolsList.indexOf(stock1.name) -
-      chosenSymbolsList.indexOf(stock2.name),
+      chosenSymbolsList.indexOf(stock2.name)
   );
 
   // Save the position of the ticker on hover
   const handleTickerMouseOver = (
     e: React.MouseEvent<HTMLElement>,
-    i: number,
+    i: number
   ): void => {
     const node = e.currentTarget as HTMLElement;
     const rect = node?.getBoundingClientRect();
@@ -164,8 +165,8 @@ const BarInfo = ({
 
   return (
     <Box
-      display='flex'
-      alignItems='center'
+      display="flex"
+      alignItems="center"
       h={`${100 / numberOfBars}%`}
       hidden={hidden}
     >
@@ -175,14 +176,14 @@ const BarInfo = ({
         bgc={theme.colors.black}
         hidden={isGainersBar}
       >
-        <BarIcon src={`${getMediaUrl(world)}`} alt='stocks-world' />
+        <BarIcon src={`${getMediaUrl(world)}`} alt="stocks-world" />
       </Box>
-      <Box w={isGainersBar ? '100%' : '95%'}>
+      <Box w={isGainersBar ? "100%" : "95%"}>
         <TickersWrap $isStaticBar={isStaticBar}>
           <TickersComponent
-            className='ticker-bar'
+            className="ticker-bar"
             $isStaticBar={isStaticBar}
-            $animationDuration={isGainersBar ? '45s' : '35s'}
+            $animationDuration={isGainersBar ? "45s" : "35s"}
           >
             {stocksDataSorted.map((stockData, i) => {
               const stockisChosen = chosenSymbolsList.includes(stockData.name);
@@ -200,7 +201,7 @@ const BarInfo = ({
                   $toolbarPosition={toolbarPosition}
                 >
                   <DataItem>{stockData.name}</DataItem>
-                  <DataItem title='Current price'>{stockData?.price}</DataItem>
+                  <DataItem title="Current price">{stockData?.price}</DataItem>
                   <DataItem
                     title="Today's change"
                     $isPositive={isPositive(stockData?.todaysChange)}
@@ -217,54 +218,45 @@ const BarInfo = ({
                   >
                     ({stockData?.todaysChangePerc}%)
                   </DataItem>
-                  {stockData?.isMarketClosed ? (
-                    <small
-                      title='Market is now closed'
-                      style={{ verticalAlign: 'text-bottom' }}
-                    >
-                      🔒
-                    </small>
-                  ) : null}
-                  <div className='tooltipWrapper'>
+                  <div className="tooltipWrapper">
                     <div
-                      className='tickinfo-tooltip'
+                      className="tickinfo-tooltip"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {stockData.isMarketClosed ? (
+                      {
                         <>
-                          <b className='special-info'>Market is now closed</b>
-                        </>
-                      ) : (
-                        <>
-                          <b className='special-info'>BID price:</b>{' '}
+                          {stockData.isMarketClosed ? (
+                            <>
+                              <b className="special-info">
+                                Market is now closed
+                              </b>
+                              <small
+                                title="Market is now closed"
+                                style={{ verticalAlign: "text-bottom" }}
+                              >
+                                🔒
+                              </small>
+                              <br />
+                              <br />
+                            </>
+                          ) : null}
+                          <b className="special-info">BID price:</b>{" "}
                           {stockData.bidPrice}
                           <br />
-                          <div className='last-trade'>
-                            <b className='special-info'>Last trade info:</b>
+                          <br />
+                          <b className="special-info">ASK price:</b>{" "}
+                          {stockData.askPrice}
+                          <br />
+                          <div className="last-trade">
+                            <b className="special-info">Name:</b>{" "}
+                            {stockData.company}
                             <br />
-                            <Box hidden={stockData.lastTrade.size === 0}>
-                              <span className='special-info'>
-                                {stockData.lastTrade.size}
-                              </span>{' '}
-                              stocks were sold
-                            </Box>
                             <br />
-                            <div>
-                              <span className='special-info'>
-                                ${stockData.lastTrade.pricePerStock}
-                              </span>{' '}
-                              per stock
-                            </div>
-                            <br />
-                            <div>
-                              Trade id:{' '}
-                              <span className='special-info'>
-                                {stockData.lastTrade.id}
-                              </span>
-                            </div>
+                            <b className="special-info">Exchange:</b>{" "}
+                            {stockData.exchange}
                           </div>
                         </>
-                      )}
+                      }
                     </div>
                   </div>
                 </Ticker>
