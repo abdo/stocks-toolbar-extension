@@ -16,26 +16,28 @@ enum StorageKeys {
   subscriptionStatusUpdatedAt,
   hasClickedSubscribe,
   subscriptionId,
-  userId = 'userId',
-};
+  financeApiCrumb,
+  financeApiCookie,
+  userId = "userId",
+}
 
 export default StorageKeys;
 
 export enum ToolbarPositionOptions {
   top,
-  bottom
-};
+  bottom,
+}
 
 export enum ToolbarMotionTypeOptions {
   scrolling,
-  static
-};
+  static,
+}
 
 export enum SubscriptionStatusTypeOptions {
   active,
   notActive,
-  stopped
-};
+  stopped,
+}
 
 export const defaultStorageValues = {
   [StorageKeys.chosenSymbolsList]: defaultCompanies,
@@ -48,9 +50,9 @@ export const defaultStorageValues = {
   [StorageKeys.showGainersBar]: false,
   [StorageKeys.toolbarMotionType]: ToolbarMotionTypeOptions.scrolling,
   [StorageKeys.isOnline]: true,
-  [StorageKeys.userId]: '',
+  [StorageKeys.userId]: "",
   [StorageKeys.subscriptionStatus]: null,
   [StorageKeys.subscriptionStatusUpdatedAt]: null,
   [StorageKeys.hasClickedSubscribe]: false,
-  [StorageKeys.subscriptionId]: '',
+  [StorageKeys.subscriptionId]: "",
 };

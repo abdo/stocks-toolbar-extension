@@ -1,17 +1,17 @@
 /// <reference types="chrome" />
 /// <reference types="vite-plugin-svgr/client" />
 
-import { useEffect, useState } from 'react';
-import LocalStorageKeys from '../data/constants/localStorageKeys';
+import { useEffect, useState } from "react";
+import LocalStorageKeys from "../data/constants/localStorageKeys";
 import StorageKeys, {
   defaultStorageValues,
   SubscriptionStatusTypeOptions,
   ToolbarPositionOptions,
-} from '../data/constants/storageKeys';
-import WebsiteVisibilityOptions from '../data/constants/websiteVisibilityOptions';
-import parseStorageValues from '../utils/parseStorageValues';
-import BarInfo from './components/BarInfo';
-import { AppStyled } from './style';
+} from "../data/constants/storageKeys";
+import WebsiteVisibilityOptions from "../data/constants/websiteVisibilityOptions";
+import parseStorageValues from "../utils/parseStorageValues";
+import BarInfo from "./components/BarInfo";
+import { AppStyled } from "./style";
 
 const App = () => {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
@@ -19,7 +19,6 @@ const App = () => {
   }>(defaultStorageValues);
 
   const {
-    [StorageKeys.chosenSymbolsList]: chosenSymbolsList,
     [StorageKeys.toolbarVisible]: toolbarVisibleStoredValue,
     [StorageKeys.websiteVisibility]: websiteVisibility,
     [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
@@ -46,27 +45,27 @@ const App = () => {
     // current website is chosen for toolbar visibility
     (websiteVisibility === WebsiteVisibilityOptions.All ||
       selectedWebsitesList.some((website: string) =>
-        currentUrl.includes(website),
+        currentUrl.includes(website)
       )) &&
     // internet is on
     isOnline;
 
   const numberOfBars = showGainersBar ? 2 : 1;
   const contentHeight = `${numberOfBars * 30}px`;
-  const barHeight = '30px';
+  const barHeight = "30px";
 
   // Adjusting the page to suit the header when it is -visible & at the top-
   useEffect(() => {
-    const body = document.querySelector('body');
+    const body = document.querySelector("body");
 
     // Potential page headers
     const getElement = (el: string) => document.querySelector<HTMLElement>(el);
     const documentHeader =
-      getElement('#global-nav') ||
-      getElement('header') ||
-      getElement('nav') ||
-      getElement('#topnav') ||
-      getElement('#masthead-container');
+      getElement("#global-nav") ||
+      getElement("header") ||
+      getElement("nav") ||
+      getElement("#topnav") ||
+      getElement("#masthead-container");
 
     const headerTopAttribute =
       documentHeader && getComputedStyle(documentHeader).top.toString();
@@ -75,72 +74,72 @@ const App = () => {
 
     // Configuring the page header specifically for google pages
     const isGoogleUrl =
-      currentUrl.includes('google.com') && !currentUrl.includes('mail');
+      currentUrl.includes("google.com") && !currentUrl.includes("mail");
 
     // Configuring the page header specifically for linkedin pages
-    const isLinkedInUrl = currentUrl.includes('linkedin.com');
+    const isLinkedInUrl = currentUrl.includes("linkedin.com");
 
     const shouldModifyPage =
       toolbarVisible && toolbarPosition === ToolbarPositionOptions.top;
 
     if (shouldModifyPage) {
-      body?.style.setProperty('margin-top', contentHeight, 'important');
+      body?.style.setProperty("margin-top", contentHeight, "important");
 
       if (
         headerTopAttribute &&
-        ['absolute', 'fixed'].includes(headerPositionAttribute as string)
+        ["absolute", "fixed"].includes(headerPositionAttribute as string)
       ) {
         // Configuring the page header (for pages that have header)
         // to suit the content to be injected
-        documentHeader?.style.setProperty('top', contentHeight, 'important');
+        documentHeader?.style.setProperty("top", contentHeight, "important");
       }
       if (isGoogleUrl) {
-        const googleSearch = document.querySelector<HTMLElement>('form#tsf');
+        const googleSearch = document.querySelector<HTMLElement>("form#tsf");
         googleSearch?.style?.setProperty?.(
-          'margin-top',
+          "margin-top",
           contentHeight,
-          'important',
+          "important"
         );
 
-        const googleHeader = document.querySelector<HTMLElement>('div.sfbg');
+        const googleHeader = document.querySelector<HTMLElement>("div.sfbg");
         googleHeader?.style?.setProperty?.(
-          'margin-top',
+          "margin-top",
           `calc(${contentHeight} - 20px)`,
-          'important',
+          "important"
         );
       }
       if (isLinkedInUrl) {
         const userSection = document.querySelector<HTMLElement>(
-          'section.scaffold-layout-toolbar',
+          "section.scaffold-layout-toolbar"
         );
         userSection?.style?.setProperty?.(
-          'top',
+          "top",
           `calc(${contentHeight} + 50px)`,
-          'important',
+          "important"
         );
       }
 
       // When toolbar is hidden
     } else {
-      body?.style.setProperty('margin-top', '0px', 'important');
+      body?.style.setProperty("margin-top", "0px", "important");
 
       if (headerTopAttribute?.includes(contentHeight)) {
         // Configuring the page header (for pages that have header)
         // to suit the content to be injected
-        documentHeader?.style.setProperty('top', '0px', 'important');
+        documentHeader?.style.setProperty("top", "0px", "important");
       }
       if (isGoogleUrl) {
-        const googleSearch = document.querySelector<HTMLElement>('form#tsf');
-        googleSearch?.style?.setProperty?.('margin-top', '0px', 'important');
+        const googleSearch = document.querySelector<HTMLElement>("form#tsf");
+        googleSearch?.style?.setProperty?.("margin-top", "0px", "important");
 
-        const googleHeader = document.querySelector<HTMLElement>('div.sfbg');
-        googleHeader?.style?.setProperty?.('margin-top', '-20px', 'important');
+        const googleHeader = document.querySelector<HTMLElement>("div.sfbg");
+        googleHeader?.style?.setProperty?.("margin-top", "-20px", "important");
       }
       if (isLinkedInUrl) {
         const userSection = document.querySelector<HTMLElement>(
-          'section.scaffold-layout-toolbar',
+          "section.scaffold-layout-toolbar"
         );
-        userSection?.style?.setProperty?.('top', `50px`, 'important');
+        userSection?.style?.setProperty?.("top", `50px`, "important");
       }
     }
   }, [toolbarVisible, toolbarPosition, contentHeight]);
@@ -159,13 +158,13 @@ const App = () => {
     chrome.storage.onChanged.addListener(parseAndSetStorageValues);
 
     // Detect when offline
-    window.addEventListener('offline', () => onChangeOnlineState(false));
-    window.addEventListener('online', () => onChangeOnlineState(true));
+    window.addEventListener("offline", () => onChangeOnlineState(false));
+    window.addEventListener("online", () => onChangeOnlineState(true));
   }, []);
 
   // Check for subscription id added by payment page
   const passedSubscriptionId = localStorage?.getItem?.(
-    LocalStorageKeys.financialtoolbarsubscriptionid,
+    LocalStorageKeys.financialtoolbarsubscriptionid
   );
   const storageSavedSubscriptionId = subscriptionId;
   const shouldSetNewStorageSavedSubscriptionId =
@@ -202,9 +201,9 @@ const App = () => {
   }
 
   return (
-    <AppStyled $height={contentHeight} $position={toolbarPosition} dir='ltr'>
+    <AppStyled $height={contentHeight} $position={toolbarPosition} dir="ltr">
       <BarInfo
-        chosenSymbolsList={chosenSymbolsList}
+        currentStorageValues={currentStorageValues}
         switchIndicationColors={switchIndicationColors}
         refreshStockDataInterval={refreshStockDataInterval}
         isGainersBar={false}
@@ -214,6 +213,7 @@ const App = () => {
         toolbarPosition={toolbarPosition}
       />
       <BarInfo
+        currentStorageValues={currentStorageValues}
         switchIndicationColors={switchIndicationColors}
         refreshStockDataInterval={refreshStockDataInterval}
         isGainersBar

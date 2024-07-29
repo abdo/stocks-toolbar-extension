@@ -13,7 +13,7 @@ import getMediaUrl from "../../../utils/helpers/getMediaUrl";
 import { useEffect, useState } from "react";
 import goToStockPage from "../../../utils/helpers/goToStockPage";
 import theme from "../../../style/theme";
-import {
+import StorageKeys, {
   ToolbarMotionTypeOptions,
   ToolbarPositionOptions,
 } from "../../../data/constants/storageKeys";
@@ -26,7 +26,9 @@ import getStocksGainers from "../../../utils/requests/getStocksGainers";
 let refreshInterval: NodeJS.Timer;
 
 type Props = {
-  chosenSymbolsList: string[];
+  currentStorageValues: {
+    [key: string]: any;
+  };
   switchIndicationColors: boolean;
   refreshStockDataInterval: number;
   isGainersBar: boolean;
@@ -38,7 +40,7 @@ type Props = {
 };
 
 const BarInfo = ({
-  chosenSymbolsList: passedChosenSymbolsList,
+  currentStorageValues,
   switchIndicationColors,
   refreshStockDataInterval,
   isGainersBar,
@@ -56,6 +58,12 @@ const BarInfo = ({
 
   const [tickersPositions, setTickersPositions] = useState<any>({});
 
+  const {
+    [StorageKeys.chosenSymbolsList]: passedChosenSymbolsList,
+    [StorageKeys.financeApiCrumb]: financeApiCrumb,
+    [StorageKeys.financeApiCookie]: financeApiCookie,
+  } = currentStorageValues;
+
   // Behavior when the passed chosen symbols list changes
   useEffect(() => {
     if (
@@ -67,19 +75,20 @@ const BarInfo = ({
 
     // whether or not all passed symbols are included in current symbols in state
     // meaning that we need to make a new request
-    const newSymbolsAdded = passedChosenSymbolsList.some(
+    const newSymbolsAdded = (passedChosenSymbolsList as string[]).some(
       (passedSymbol) => !chosenSymbolsList.includes(passedSymbol)
     );
 
     if (newSymbolsAdded) {
-      getStocksInfo({ chosenSymbolsList: passedChosenSymbolsList }).then(
-        (details) =>
-          setStocksData(formatStocksData(details.quoteResponse.result))
-      );
+      getStocksInfo({
+        chosenSymbolsList: passedChosenSymbolsList,
+        crumb: financeApiCrumb,
+        cookie: financeApiCookie,
+      }).then((stocks) => setStocksData(formatStocksData(stocks)));
     }
 
     setChosenSymbolsList(passedChosenSymbolsList);
-  }, [passedChosenSymbolsList]);
+  }, [passedChosenSymbolsList, financeApiCrumb, financeApiCookie]);
 
   useEffect(() => {
     if (isGainersBar) return;
@@ -88,15 +97,23 @@ const BarInfo = ({
       if (!chosenSymbolsList?.length) {
         return;
       }
-      getStocksInfo({ chosenSymbolsList }).then((details) =>
-        setStocksData(formatStocksData(details.quoteResponse.result))
-      );
+      getStocksInfo({
+        chosenSymbolsList,
+        crumb: financeApiCrumb,
+        cookie: financeApiCookie,
+      }).then((stocks) => setStocksData(formatStocksData(stocks)));
     }, refreshStockDataInterval * 1000);
 
     return () => {
       clearInterval(refreshInterval);
     };
-  }, [refreshStockDataInterval, chosenSymbolsList, isGainersBar]);
+  }, [
+    refreshStockDataInterval,
+    chosenSymbolsList,
+    isGainersBar,
+    financeApiCrumb,
+    financeApiCookie,
+  ]);
 
   // Remove saved ticker positions when toolbar position changes
   useEffect(() => {
@@ -108,22 +125,27 @@ const BarInfo = ({
     if (!isGainersBar) return;
 
     // Initial request
-    getStocksGainers().then((details) =>
-      setStocksData(formatStocksData(details.finance.result[0].quotes))
-    );
+    getStocksGainers({
+      crumb: financeApiCrumb,
+      cookie: financeApiCookie,
+    }).then((stocks) => {
+      setStocksData(formatStocksData(stocks));
+    });
 
     const refreshGainersDataInterval = 120;
 
+    clearInterval(refreshInterval);
     refreshInterval = setInterval(() => {
-      getStocksGainers().then((details) =>
-        setStocksData(formatStocksData(details.finance.result[0].quotes))
-      );
+      getStocksGainers({
+        crumb: financeApiCrumb,
+        cookie: financeApiCookie,
+      }).then((stocks) => setStocksData(formatStocksData(stocks)));
     }, refreshGainersDataInterval * 1000);
 
     return () => {
       clearInterval(refreshInterval);
     };
-  }, []);
+  }, [financeApiCrumb, financeApiCookie]);
 
   const isPositive = (value: number) => {
     const positive = value > 0;
