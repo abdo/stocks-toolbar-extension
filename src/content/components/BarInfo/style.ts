@@ -1,6 +1,6 @@
-import { ToolbarPositionOptions } from './../../../data/constants/storageKeys';
-import styled, { css, keyframes } from 'styled-components';
-import theme from '../../../style/theme';
+import { ToolbarPositionOptions } from "./../../../data/constants/storageKeys";
+import styled, { css, keyframes } from "styled-components";
+import theme from "../../../style/theme";
 
 const ticker = keyframes`
   0% {
@@ -67,8 +67,8 @@ export const BarIcon = styled.img`
 export const TickersWrap = styled.div<{ $isStaticBar: boolean }>`
   width: 100%;
   box-sizing: content-box;
-  padding-left: ${({ $isStaticBar }) => !$isStaticBar && '100%'};
-  overflow-x: ${({ $isStaticBar }) => $isStaticBar && 'auto'};
+  padding-left: ${({ $isStaticBar }) => !$isStaticBar && "100%"};
+  overflow-x: ${({ $isStaticBar }) => $isStaticBar && "auto"};
 
   &::-webkit-scrollbar {
     width: 0px;
@@ -77,10 +77,13 @@ export const TickersWrap = styled.div<{ $isStaticBar: boolean }>`
   }
 `;
 
-const baseTickerStyles = css<{ $isStaticBar: boolean, $animationDuration?: string }>`
+const baseTickerStyles = css<{
+  $isStaticBar: boolean;
+  $animationDuration?: string;
+}>`
   display: inline-block;
   white-space: nowrap;
-  padding-right: ${({ $isStaticBar }) => !$isStaticBar && '100%'};
+  padding-right: ${({ $isStaticBar }) => !$isStaticBar && "100%"};
   box-sizing: content-box;
 `;
 
@@ -96,7 +99,13 @@ export const AnimatedTickers = styled.div`
   animation-duration: ${({ $animationDuration }) => $animationDuration};
 `;
 
-export const Ticker = styled.div<{ $highToolbarTop: boolean, $barHeight: string, $tickerLeftPosition: number, $isStaticBar: boolean, $toolbarPosition: ToolbarPositionOptions }>`
+export const Ticker = styled.div<{
+  $highToolbarTop: boolean;
+  $barHeight: string;
+  $tickerLeftPosition: number;
+  $isStaticBar: boolean;
+  $toolbarPosition: ToolbarPositionOptions;
+}>`
   display: inline-block;
   padding: 0 10px;
   color: white;
@@ -104,9 +113,20 @@ export const Ticker = styled.div<{ $highToolbarTop: boolean, $barHeight: string,
 
   & .tooltipWrapper {
     position: fixed;
-    margin-top: ${({ $highToolbarTop, $barHeight, $toolbarPosition, $isStaticBar }) => $toolbarPosition === ToolbarPositionOptions.bottom ? '-200px' : $highToolbarTop ? `calc(${$barHeight} + 10px)` : '10px'};
-    left: ${({ $tickerLeftPosition, $isStaticBar }) => $isStaticBar && `${$tickerLeftPosition}px`};
-    margin-left: ${({ $isStaticBar }) => !$isStaticBar && '100px'};
+    margin-top: ${({
+      $highToolbarTop,
+      $barHeight,
+      $toolbarPosition,
+      $isStaticBar,
+    }) =>
+      $toolbarPosition === ToolbarPositionOptions.bottom
+        ? "-200px"
+        : $highToolbarTop
+        ? `calc(${$barHeight} + 10px)`
+        : "10px"};
+    left: ${({ $tickerLeftPosition, $isStaticBar }) =>
+      $isStaticBar && `${$tickerLeftPosition}px`};
+    margin-left: ${({ $isStaticBar }) => !$isStaticBar && "100px"};
   }
 
   & .tickinfo-tooltip {
@@ -128,11 +148,17 @@ export const Ticker = styled.div<{ $highToolbarTop: boolean, $barHeight: string,
       visibility: visible;
     }
 
+    & .stock-logo {
+      width: 20px;
+      height: 20px;
+      margin-block-end: 5px;
+    }
+
     & .special-info {
       color: ${theme.colors.gray};
     }
 
-    & .last-trade {
+    & .box {
       border-radius: 6px;
       border: 1px solid ${theme.colors.background};
       padding: 8px;
@@ -146,12 +172,21 @@ export const Ticker = styled.div<{ $highToolbarTop: boolean, $barHeight: string,
   }
 `;
 
-export const DataItem = styled.span<{ $isNegative?: boolean, $isPositive?: boolean, $hidden?: boolean }>`
+export const DataItem = styled.span<{
+  $isNegative?: boolean;
+  $isPositive?: boolean;
+  $hidden?: boolean;
+}>`
   padding: 0 5px;
   cursor: pointer;
-  color: ${({ $isPositive, $isNegative }) => $isPositive ? theme.colors.positive : $isNegative ? theme.colors.negative : theme.colors.white};
-  display: ${({ $hidden }) => $hidden && 'none'};
-  font-family: 'Open Sans', sans-serif;
+  color: ${({ $isPositive, $isNegative }) =>
+    $isPositive
+      ? theme.colors.positive
+      : $isNegative
+      ? theme.colors.negative
+      : theme.colors.white};
+  display: ${({ $hidden }) => $hidden && "none"};
+  font-family: "Open Sans", sans-serif;
   font-size: 17px;
 
   &:hover {

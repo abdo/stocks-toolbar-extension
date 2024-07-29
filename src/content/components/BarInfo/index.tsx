@@ -132,7 +132,7 @@ const BarInfo = ({
       setStocksData(formatStocksData(stocks));
     });
 
-    const refreshGainersDataInterval = 120;
+    const refreshGainersDataInterval = 60;
 
     clearInterval(refreshInterval);
     refreshInterval = setInterval(() => {
@@ -262,18 +262,28 @@ const BarInfo = ({
                               <br />
                             </>
                           ) : null}
-                          <b className="special-info">BID price:</b>{" "}
-                          {stockData.bidPrice}
+                          <Box
+                            hidden={!stockData.logo}
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            <img src={stockData.logo} className="stock-logo" />
+                          </Box>
+                          <b className="special-info">Name:</b>{" "}
+                          {stockData.company}
                           <br />
-                          <br />
-                          <b className="special-info">ASK price:</b>{" "}
-                          {stockData.askPrice}
-                          <br />
-                          <div className="last-trade">
-                            <b className="special-info">Name:</b>{" "}
-                            {stockData.company}
+                          <Box hidden={!stockData.bidPrice}>
+                            <b className="special-info">BID price:</b>{" "}
+                            {stockData.bidPrice}
                             <br />
+                          </Box>
+                          <Box hidden={!stockData.askPrice}>
+                            <b className="special-info">ASK price:</b>{" "}
+                            {stockData.askPrice}
                             <br />
+                          </Box>
+                          <div className="box">
                             <b className="special-info">Exchange:</b>{" "}
                             {stockData.exchange}
                           </div>

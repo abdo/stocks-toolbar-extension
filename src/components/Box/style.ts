@@ -1,10 +1,10 @@
 // @ts-nocheck
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const BoxStyled = styled.div`
   display: ${({ display, $span, hidden }) =>
-    hidden ? 'none' : display ? display : $span && 'inline-block'};
+    hidden ? "none" : display ? display : $span && "inline-block"};
   background-color: ${({ bgc }) => bgc};
   background-size: ${({ bgs }) => bgs};
   background-image: ${({ bgi }) => (bgi?.src ? `url(${bgi?.src})` : bgi)};
@@ -12,7 +12,7 @@ const BoxStyled = styled.div`
   background-repeat: ${({ bgr }) => bgr};
   color: ${({ color }) => color};
   border-radius: ${({ borderRadius }) => borderRadius};
-  cursor: ${({ pointer, cursor }) => (pointer ? 'pointer' : cursor)};
+  cursor: ${({ pointer, cursor }) => (pointer ? "pointer" : cursor)};
   border: ${({ b }) => b};
   border-bottom: ${({ bb }) => bb};
   border-top: ${({ bt }) => bt};
@@ -42,14 +42,14 @@ const BoxStyled = styled.div`
   opacity: ${({ opacity }) => opacity};
   clip-path: ${({ clipPath }) => clipPath};
   box-shadow: ${({ boxShadow, shadow2 }) =>
-    boxShadow || shadow2 ? '0px 4px 16px rgba(0, 0, 0, 0.16)' : ''};
+    boxShadow || shadow2 ? "0px 4px 16px rgba(0, 0, 0, 0.16)" : ""};
   filter: ${({ filter }) => filter};
   z-index: ${({ zIndex }) => zIndex};
   letter-spacing: ${({ ls }) => ls};
   font-family: ${({ fontFamily }) => fontFamily};
   font-size: ${({ fz }) => fz};
   font-weight: ${({ fw }) => fw};
-  user-select: ${({ noSelect }) => noSelect && 'none'};
+  user-select: ${({ noSelect }) => noSelect && "none"};
 
   grid-template-columns: ${({ gridTemplateColumns }) => gridTemplateColumns};
   column-gap: ${({ columnGap }) => columnGap};
@@ -66,6 +66,7 @@ const BoxStyled = styled.div`
   flex-wrap: ${({ flexWrap }) => flexWrap};
   flex-basis: ${({ flexBasis }) => flexBasis};
   flex-grow: ${({ flexGrow }) => flexGrow};
+  gap: ${({ gap }) => gap};
   width: ${({ w }) => w};
   height: ${({ h }) => h};
   margin: ${({ m }) => m};
@@ -75,7 +76,7 @@ const BoxStyled = styled.div`
 BoxStyled.defaultProps = {
   m: 0,
   p: null,
-  display: 'block',
+  display: "block",
   hidden: false,
 };
 
