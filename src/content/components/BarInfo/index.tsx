@@ -265,14 +265,14 @@ const BarInfo = ({
                           <Box
                             hidden={!stockData.logo}
                             display="flex"
+                            flexDirection="column"
                             alignItems="center"
                             justifyContent="center"
                           >
                             <img src={stockData.logo} className="stock-logo" />
+                            {stockData.company}
+                            <br />
                           </Box>
-                          <b className="special-info">Name:</b>{" "}
-                          {stockData.company}
-                          <br />
                           <Box hidden={!stockData.bidPrice}>
                             <b className="special-info">BID price:</b>{" "}
                             {stockData.bidPrice}
