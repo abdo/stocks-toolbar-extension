@@ -151,7 +151,6 @@ export const Ticker = styled.div<{
     & .stock-logo {
       width: 20px;
       height: 20px;
-      margin-block-end: 5px;
     }
 
     & .special-info {

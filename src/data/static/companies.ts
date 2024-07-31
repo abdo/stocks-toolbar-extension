@@ -1,6 +1,6 @@
 const defaultCompanies = [
   "AAPL",
-  "DIA",
+  "BTC-USD",
   "GOOG",
   "SPY",
   "TSLA",

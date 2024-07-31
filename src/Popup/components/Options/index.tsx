@@ -25,6 +25,7 @@ import getSearchSuggestions, {
   type SuggestedQuote,
 } from "../../../utils/requests/getSearchSuggestions";
 import useDebounce from "../../../utils/hooks/useDebounce";
+import getQuoteTypeIndicator from "../../../utils/helpers/getQuoteTypeIndicator";
 
 type Props = {
   chosenSymbolsList: string[];
@@ -181,15 +182,29 @@ const Options = ({
           onSearch={(s) => setTypesQuery(s)}
           onChange={onSymbolsListChange}
           optionLabelProp="label"
-          options={suggestedQuotes.map(({ symbol, shortname, exchange }) => ({
-            label: `${symbol} - ${shortname} (${exchange})`,
+          options={suggestedQuotes.map(({ symbol, ...quote }) => ({
             value: symbol,
+            ...quote,
           }))}
+          optionRender={({
+            value,
+            data: { shortname, exchange, quoteType, typeDisp },
+          }) => (
+            <Box display="flex" alignItems="center" gap="6px">
+              <Box>
+                {value} - {shortname} ({exchange})
+              </Box>
+              {getQuoteTypeIndicator({
+                quoteType,
+                typeDisp,
+              })}
+            </Box>
+          )}
           notFoundContent={null}
           listHeight={100}
           onBlur={() => setTypesQuery("")}
           filterOption={false}
-        ></Select>
+        />
       </Option>
 
       <Divider />

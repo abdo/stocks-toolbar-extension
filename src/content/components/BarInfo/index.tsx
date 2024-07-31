@@ -22,6 +22,7 @@ import formatStocksData, {
   StockData,
 } from "../../../utils/helpers/formatStocksData";
 import getStocksGainers from "../../../utils/requests/getStocksGainers";
+import getQuoteTypeIndicator from "../../../utils/helpers/getQuoteTypeIndicator";
 
 let refreshInterval: NodeJS.Timer;
 
@@ -263,30 +264,47 @@ const BarInfo = ({
                             </>
                           ) : null}
                           <Box
-                            hidden={!stockData.logo}
                             display="flex"
                             flexDirection="column"
                             alignItems="center"
                             justifyContent="center"
                           >
-                            <img src={stockData.logo} className="stock-logo" />
+                            <Box
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="center"
+                              gap="10px"
+                              m="0 0 5px 0"
+                            >
+                              <Box hidden={!stockData.logo}>
+                                <img
+                                  src={stockData.logo}
+                                  className="stock-logo"
+                                />
+                              </Box>
+                              {getQuoteTypeIndicator(stockData)}
+                            </Box>
                             {stockData.company}
                             <br />
                           </Box>
-                          <Box hidden={!stockData.bidPrice}>
-                            <b className="special-info">BID price:</b>{" "}
-                            {stockData.bidPrice}
-                            <br />
-                          </Box>
-                          <Box hidden={!stockData.askPrice}>
-                            <b className="special-info">ASK price:</b>{" "}
-                            {stockData.askPrice}
-                            <br />
-                          </Box>
-                          <div className="box">
+                          <Box hidden={!stockData.exchange}>
                             <b className="special-info">Exchange:</b>{" "}
                             {stockData.exchange}
-                          </div>
+                          </Box>
+                          <Box
+                            className="box"
+                            hidden={!stockData.askPrice || !stockData.bidPrice}
+                          >
+                            <Box hidden={!stockData.askPrice}>
+                              <b className="special-info">ASK price:</b>{" "}
+                              {stockData.askPrice}
+                            </Box>
+                            <Box hidden={!stockData.bidPrice}>
+                              <b className="special-info">BID price:</b>{" "}
+                              {stockData.bidPrice}
+                              <br />
+                            </Box>
+                          </Box>
                         </>
                       }
                     </div>

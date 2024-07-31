@@ -10,7 +10,7 @@
     "watch": "watch \"yarn build\" ./src ./public"
   },
   "dependencies": {
-    "antd": "^4.24.0",
+    "antd": "^5.19.4",
     "crypto-js": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

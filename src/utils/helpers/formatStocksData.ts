@@ -10,6 +10,9 @@ export type StockData = {
   logo: string;
   exchange: string;
   company: string;
+  quoteType: string;
+  typeDisp: string;
+  sectorDisp: string;
 };
 
 const formatStocksData = (data: Object[]): StockData[] =>
@@ -30,6 +33,9 @@ const formatStocksData = (data: Object[]): StockData[] =>
       logo: ticker.logoUrl,
       exchange: ticker.fullExchangeName,
       company: ticker.longName,
+      quoteType: ticker.quoteType,
+      typeDisp: ticker.typeDisp,
+      sectorDisp: ticker.sectorDisp,
     };
   });
 

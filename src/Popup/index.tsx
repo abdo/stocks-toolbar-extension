@@ -1,21 +1,20 @@
 /// <reference types="chrome" />
 /// <reference types="vite-plugin-svgr/client" />
 
-import 'antd/dist/antd.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import StorageKeys, {
   defaultStorageValues,
   SubscriptionStatusTypeOptions,
-} from '../data/constants/storageKeys';
-import parseStorageValues from '../utils/parseStorageValues';
-import Options from './components/Options';
-import { AppStyled } from './style';
-import MainLogo from '../components/MainLogo';
-import Box from '../components/Box';
-import UnpaidContent from './components/UnpaidContent';
-import getSubscriptionStatus from '../utils/requests/getSubscriptionStatus';
-import getHoursDiff from '../utils/helpers/getHoursDiff';
-import { Skeleton } from 'antd';
+} from "../data/constants/storageKeys";
+import parseStorageValues from "../utils/parseStorageValues";
+import Options from "./components/Options";
+import { AppStyled } from "./style";
+import MainLogo from "../components/MainLogo";
+import Box from "../components/Box";
+import UnpaidContent from "./components/UnpaidContent";
+import getSubscriptionStatus from "../utils/requests/getSubscriptionStatus";
+import getHoursDiff from "../utils/helpers/getHoursDiff";
+import { Skeleton } from "antd";
 
 function App() {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
@@ -43,7 +42,7 @@ function App() {
             [StorageKeys.userId]: userEmail,
           });
         }
-      },
+      }
     );
   }, []);
 
@@ -96,9 +95,9 @@ function App() {
         .then((data) => {
           const status = data.status;
           const newSubscriptionStatus =
-            status === 'NOT ACTIVE'
+            status === "NOT ACTIVE"
               ? SubscriptionStatusTypeOptions.notActive
-              : status === 'STOPPED'
+              : status === "STOPPED"
               ? SubscriptionStatusTypeOptions.stopped
               : SubscriptionStatusTypeOptions.active;
           chrome.storage.sync.set({
@@ -116,14 +115,14 @@ function App() {
 
   const PopupContainer = ({ children }: { children: React.ReactNode }) => (
     <AppStyled>
-      <Box m='0 0 30px -10px'>
+      <Box m="0 0 30px -10px">
         <MainLogo />
         {children}
       </Box>
       <Box>
         <a
-          href='mailto: contact@tastola.com'
-          title='For any enquiry, suggestion or feedback.'
+          href="mailto: contact@tastola.com"
+          title="For any enquiry, suggestion or feedback."
         >
           Contact us
         </a>
@@ -134,7 +133,7 @@ function App() {
   if (!isOnline) {
     return (
       <PopupContainer>
-        <Box m='30px 0 0'>
+        <Box m="30px 0 0">
           <b>Please make sure you are connected to the internet.</b>
         </Box>
       </PopupContainer>
