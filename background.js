@@ -42,14 +42,5 @@ chrome.commands.onCommand.addListener((shortcut) => {
   }
 });
 
-// the extension reloads when the browser is focused, only in development
-chrome.windows.onFocusChanged.addListener(() => {
-  const isDevMode = !("update_url" in chrome.runtime.getManifest());
-
-  if (isDevMode) {
-    chrome.runtime.reload();
-  }
-});
-
 // For clearing storage for testing:
 // chrome.storage.sync.clear();

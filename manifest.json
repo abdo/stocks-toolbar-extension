@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "InvestFellow: Real Time Stocks / Crypto™",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "permissions": ["storage", "identity", "identity.email"],
   "background": {
     "service_worker": "background.js"

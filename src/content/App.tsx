@@ -22,11 +22,8 @@ const App = () => {
     [StorageKeys.toolbarVisible]: toolbarVisibleStoredValue,
     [StorageKeys.websiteVisibility]: websiteVisibility,
     [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
-    [StorageKeys.switchIndicationColors]: switchIndicationColors,
-    [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
     [StorageKeys.toolbarPosition]: toolbarPosition,
-    [StorageKeys.showGainersBar]: showGainersBar,
-    [StorageKeys.toolbarMotionType]: toolbarMotionType,
+    [StorageKeys.showSecondBar]: showSecondBar,
     [StorageKeys.isOnline]: isOnline,
     [StorageKeys.subscriptionStatus]: subscriptionStatus,
     [StorageKeys.subscriptionId]: subscriptionId,
@@ -50,7 +47,7 @@ const App = () => {
     // internet is on
     isOnline;
 
-  const numberOfBars = showGainersBar ? 2 : 1;
+  const numberOfBars = showSecondBar ? 2 : 1;
   const contentHeight = `${numberOfBars * 30}px`;
   const barHeight = "30px";
 
@@ -204,24 +201,16 @@ const App = () => {
     <AppStyled $height={contentHeight} $position={toolbarPosition} dir="ltr">
       <BarInfo
         currentStorageValues={currentStorageValues}
-        switchIndicationColors={switchIndicationColors}
-        refreshStockDataInterval={refreshStockDataInterval}
-        isGainersBar={false}
+        isSecondaryBar={false}
         numberOfBars={numberOfBars}
         barHeight={barHeight}
-        toolbarMotionType={toolbarMotionType}
-        toolbarPosition={toolbarPosition}
       />
       <BarInfo
         currentStorageValues={currentStorageValues}
-        switchIndicationColors={switchIndicationColors}
-        refreshStockDataInterval={refreshStockDataInterval}
-        isGainersBar
+        isSecondaryBar
         numberOfBars={numberOfBars}
         barHeight={barHeight}
-        hidden={!showGainersBar}
-        toolbarMotionType={toolbarMotionType}
-        toolbarPosition={toolbarPosition}
+        hidden={!showSecondBar}
       />
     </AppStyled>
   );

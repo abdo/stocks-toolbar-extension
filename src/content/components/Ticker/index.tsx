@@ -6,8 +6,7 @@ import goToStockPage from "../../../utils/helpers/goToStockPage";
 
 type Props = {
   stockData: StockData;
-  numberOfBars: number;
-  isGainersBar: boolean;
+  highToolbarTop: boolean;
   barHeight: string;
   tickersPositions: number[];
   isStaticBar: boolean;
@@ -22,8 +21,7 @@ type Props = {
 
 const Ticker: React.FC<Props> = ({
   stockData,
-  numberOfBars,
-  isGainersBar,
+  highToolbarTop,
   barHeight,
   tickersPositions,
   isStaticBar,
@@ -48,7 +46,7 @@ const Ticker: React.FC<Props> = ({
   return (
     <TickerStyle
       onClick={() => onClick(stockData.name)}
-      $highToolbarTop={numberOfBars > 1 && !isGainersBar}
+      $highToolbarTop={highToolbarTop}
       $barHeight={barHeight}
       onMouseOver={(e) => handleTickerMouseOver(e, 0)}
       $tickerLeftPosition={tickersPositions[0]}

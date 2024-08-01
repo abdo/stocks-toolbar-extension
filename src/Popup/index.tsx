@@ -60,7 +60,8 @@ function App() {
     [StorageKeys.switchIndicationColors]: switchIndicationColors,
     [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
     [StorageKeys.toolbarPosition]: toolbarPosition,
-    [StorageKeys.showGainersBar]: showGainersBar,
+    [StorageKeys.showSecondBar]: showSecondBar,
+    [StorageKeys.secondBarType]: secondBarType,
     [StorageKeys.toolbarMotionType]: toolbarMotionType,
     [StorageKeys.isOnline]: isOnline,
     [StorageKeys.userId]: userId,
@@ -164,7 +165,8 @@ function App() {
           toolbarVisible={toolbarVisible}
           websiteVisibility={websiteVisibility}
           selectedWebsitesList={selectedWebsitesList}
-          showGainersBar={showGainersBar}
+          showSecondBar={showSecondBar}
+          secondBarType={secondBarType}
           switchIndicationColors={switchIndicationColors}
           refreshStockDataInterval={refreshStockDataInterval}
           toolbarPosition={toolbarPosition}

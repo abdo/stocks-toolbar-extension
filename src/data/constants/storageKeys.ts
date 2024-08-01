@@ -9,7 +9,8 @@ enum StorageKeys {
   switchIndicationColors,
   refreshStockDataInterval,
   toolbarPosition,
-  showGainersBar,
+  showSecondBar,
+  secondBarType,
   toolbarMotionType,
   isOnline,
   subscriptionStatus,
@@ -22,6 +23,14 @@ enum StorageKeys {
 }
 
 export default StorageKeys;
+
+export enum SecondaryBarTypeOptions {
+  INDEX_FUNDS,
+  MOST_ACTIVE,
+  CRYPTO,
+  TOP_GAINERS,
+  TOP_LOSERS,
+}
 
 export enum ToolbarPositionOptions {
   top,
@@ -47,7 +56,8 @@ export const defaultStorageValues = {
   [StorageKeys.switchIndicationColors]: false,
   [StorageKeys.refreshStockDataInterval]: 60,
   [StorageKeys.toolbarPosition]: ToolbarPositionOptions.top,
-  [StorageKeys.showGainersBar]: false,
+  [StorageKeys.showSecondBar]: false,
+  [StorageKeys.secondBarType]: SecondaryBarTypeOptions.MOST_ACTIVE,
   [StorageKeys.toolbarMotionType]: ToolbarMotionTypeOptions.scrolling,
   [StorageKeys.isOnline]: true,
   [StorageKeys.userId]: "",

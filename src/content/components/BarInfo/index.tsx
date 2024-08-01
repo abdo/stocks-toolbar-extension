@@ -7,43 +7,40 @@ import { useEffect, useState } from "react";
 import goToStockPage from "../../../utils/helpers/goToStockPage";
 import theme from "../../../style/theme";
 import StorageKeys, {
+  SecondaryBarTypeOptions,
   ToolbarMotionTypeOptions,
-  ToolbarPositionOptions,
 } from "../../../data/constants/storageKeys";
 import getStocksInfo from "../../../utils/requests/getStocksInfo";
 import formatStocksData, {
   StockData,
 } from "../../../utils/helpers/formatStocksData";
-import getStocksGainers from "../../../utils/requests/getStocksGainers";
+import {
+  getQuotesGainers,
+  getQuotesLosers,
+  getQuotesMostActive,
+} from "../../../utils/requests/getQuotesByType";
 import getQuoteTypeIndicator from "../../../utils/helpers/getQuoteTypeIndicator";
 import Ticker from "../Ticker";
 
 let refreshInterval: NodeJS.Timer;
+let secondaryRefreshInterval: NodeJS.Timer;
 
 type Props = {
   currentStorageValues: {
     [key: string]: any;
   };
-  switchIndicationColors: boolean;
-  refreshStockDataInterval: number;
-  isGainersBar: boolean;
+  isSecondaryBar: boolean;
   numberOfBars: number;
   barHeight: string;
   hidden?: boolean;
-  toolbarMotionType: ToolbarMotionTypeOptions;
-  toolbarPosition: ToolbarPositionOptions;
 };
 
 const BarInfo = ({
   currentStorageValues,
-  switchIndicationColors,
-  refreshStockDataInterval,
-  isGainersBar,
+  isSecondaryBar,
   numberOfBars,
   barHeight,
   hidden,
-  toolbarMotionType,
-  toolbarPosition,
 }: Props) => {
   if (hidden) return null;
 
@@ -57,6 +54,11 @@ const BarInfo = ({
     [StorageKeys.chosenSymbolsList]: passedChosenSymbolsList,
     [StorageKeys.financeApiCrumb]: financeApiCrumb,
     [StorageKeys.financeApiCookie]: financeApiCookie,
+    [StorageKeys.switchIndicationColors]: switchIndicationColors,
+    [StorageKeys.toolbarPosition]: toolbarPosition,
+    [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
+    [StorageKeys.toolbarMotionType]: toolbarMotionType,
+    [StorageKeys.secondBarType]: secondBarType,
   } = currentStorageValues;
 
   // Behavior when the passed chosen symbols list changes
@@ -64,7 +66,7 @@ const BarInfo = ({
     if (
       !passedChosenSymbolsList ||
       !passedChosenSymbolsList.length ||
-      isGainersBar
+      isSecondaryBar
     )
       return;
 
@@ -85,8 +87,9 @@ const BarInfo = ({
     setChosenSymbolsList(passedChosenSymbolsList);
   }, [passedChosenSymbolsList, financeApiCrumb, financeApiCookie]);
 
+  // request done for the main bar only
   useEffect(() => {
-    if (isGainersBar) return;
+    if (isSecondaryBar) return;
     clearInterval(refreshInterval);
     refreshInterval = setInterval(() => {
       if (!chosenSymbolsList?.length) {
@@ -105,7 +108,7 @@ const BarInfo = ({
   }, [
     refreshStockDataInterval,
     chosenSymbolsList,
-    isGainersBar,
+    isSecondaryBar,
     financeApiCrumb,
     financeApiCookie,
   ]);
@@ -115,32 +118,51 @@ const BarInfo = ({
     setTickersPositions({});
   }, [toolbarPosition]);
 
-  // Request done for gainers bar only
+  // request done for secondary bar only
   useEffect(() => {
-    if (!isGainersBar) return;
+    if (!isSecondaryBar) return;
+
+    const requestPerBarType: {
+      [key: string]: (args: {
+        crumb?: string;
+        cookie?: string;
+      }) => Promise<any>;
+    } = {
+      [SecondaryBarTypeOptions.TOP_GAINERS]: getQuotesGainers,
+      [SecondaryBarTypeOptions.TOP_LOSERS]: getQuotesLosers,
+      [SecondaryBarTypeOptions.MOST_ACTIVE]: getQuotesMostActive,
+    };
+
+    const getQuotesRequest: (args: {
+      crumb?: string;
+      cookie?: string;
+    }) => Promise<any> = requestPerBarType[secondBarType] || getQuotesGainers;
 
     // Initial request
-    getStocksGainers({
+    getQuotesRequest({
       crumb: financeApiCrumb,
       cookie: financeApiCookie,
     }).then((stocks) => {
       setStocksData(formatStocksData(stocks));
     });
 
-    const refreshGainersDataInterval = 60;
-
-    clearInterval(refreshInterval);
-    refreshInterval = setInterval(() => {
-      getStocksGainers({
+    clearInterval(secondaryRefreshInterval);
+    secondaryRefreshInterval = setInterval(() => {
+      getQuotesRequest({
         crumb: financeApiCrumb,
         cookie: financeApiCookie,
       }).then((stocks) => setStocksData(formatStocksData(stocks)));
-    }, refreshGainersDataInterval * 1000);
+    }, refreshStockDataInterval * 1000);
 
     return () => {
-      clearInterval(refreshInterval);
+      clearInterval(secondaryRefreshInterval);
     };
-  }, [financeApiCrumb, financeApiCookie]);
+  }, [
+    financeApiCrumb,
+    financeApiCookie,
+    secondBarType,
+    refreshStockDataInterval,
+  ]);
 
   const stocksDataSorted = stocksData.sort(
     (stock1, stock2) =>
@@ -180,26 +202,25 @@ const BarInfo = ({
         h={`calc(${barHeight} - 4px)`}
         zIndex={1}
         bgc={theme.colors.black}
-        hidden={isGainersBar}
+        hidden={isSecondaryBar}
       >
         <BarIcon src={`${getMediaUrl(world)}`} alt="stocks-world" />
       </Box>
-      <Box w={isGainersBar ? "100%" : "95%"}>
+      <Box w={isSecondaryBar ? "100%" : "95%"}>
         <TickersWrap $isStaticBar={isStaticBar}>
           <TickersComponent
             className="ticker-bar"
             $isStaticBar={isStaticBar}
-            $animationDuration={isGainersBar ? "45s" : "35s"}
+            $animationDuration={isSecondaryBar ? "45s" : "35s"}
           >
             {stocksDataSorted.map((stockData, i) => {
               const stockisChosen = chosenSymbolsList.includes(stockData.name);
-              if (!stockisChosen && !isGainersBar) return null;
+              if (!stockisChosen && !isSecondaryBar) return null;
 
               return (
                 <Ticker
                   stockData={stockData}
-                  numberOfBars={numberOfBars}
-                  isGainersBar={isGainersBar}
+                  highToolbarTop={numberOfBars > 1 && !isSecondaryBar}
                   barHeight={barHeight}
                   tickersPositions={tickersPositions}
                   isStaticBar={isStaticBar}

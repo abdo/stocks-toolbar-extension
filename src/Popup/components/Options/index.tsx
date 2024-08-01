@@ -4,13 +4,14 @@ import {
   Select,
   Switch,
   Tag,
-  Tooltip,
+  Typography,
   Input,
   InputNumber,
   Radio,
   Space,
 } from "antd";
 import StorageKeys, {
+  SecondaryBarTypeOptions,
   ToolbarMotionTypeOptions,
   ToolbarPositionOptions,
 } from "../../../data/constants/storageKeys";
@@ -26,13 +27,17 @@ import getSearchSuggestions, {
 } from "../../../utils/requests/getSearchSuggestions";
 import useDebounce from "../../../utils/hooks/useDebounce";
 import getQuoteTypeIndicator from "../../../utils/helpers/getQuoteTypeIndicator";
+import SecondBarOption from "./SecondBarOption";
+
+const { Text } = Typography;
 
 type Props = {
   chosenSymbolsList: string[];
   toolbarVisible: boolean;
   websiteVisibility: WebsiteVisibilityOptions;
   selectedWebsitesList: string[];
-  showGainersBar: boolean;
+  showSecondBar: boolean;
+  secondBarType: SecondaryBarTypeOptions;
   switchIndicationColors: boolean;
   refreshStockDataInterval: number;
   toolbarPosition: ToolbarPositionOptions;
@@ -44,7 +49,8 @@ const Options = ({
   toolbarVisible,
   websiteVisibility,
   selectedWebsitesList,
-  showGainersBar,
+  showSecondBar,
+  secondBarType,
   switchIndicationColors,
   refreshStockDataInterval,
   toolbarPosition,
@@ -107,9 +113,15 @@ const Options = ({
     });
   };
 
-  const onCheckShowGainersBar = (e: CheckboxChangeEvent) => {
+  const onCheckShowSecondBar = (e: CheckboxChangeEvent) => {
     chrome.storage.sync.set({
-      [StorageKeys.showGainersBar]: e.target.checked,
+      [StorageKeys.showSecondBar]: e.target.checked,
+    });
+  };
+
+  const onChangeSecondBarType = (type: SecondaryBarTypeOptions) => {
+    chrome.storage.sync.set({
+      [StorageKeys.secondBarType]: type,
     });
   };
 
@@ -160,13 +172,10 @@ const Options = ({
 
       <Option>
         <Box display="flex" alignItems="center" gap="5px">
-          <b>Stocks to monitor:</b>
-          <Tooltip
-            placement="topLeft"
-            title="Select stocks / index funds to track in real time"
-          >
-            <Box pointer>ℹ️</Box>
-          </Tooltip>
+          <b>Quotes to monitor:</b>
+          <Text type="secondary" style={{ fontSize: 10 }}>
+            Stocks, Indices, Crypto.. etc
+          </Text>
         </Box>
         <Select
           mode="multiple"
@@ -204,6 +213,17 @@ const Options = ({
           listHeight={100}
           onBlur={() => setTypesQuery("")}
           filterOption={false}
+        />
+      </Option>
+
+      <Divider />
+
+      <Option>
+        <SecondBarOption
+          showSecondBar={showSecondBar}
+          onCheckShowSecondBar={onCheckShowSecondBar}
+          secondBarType={secondBarType}
+          onChangeSecondBarType={onChangeSecondBarType}
         />
       </Option>
 
@@ -255,18 +275,6 @@ const Options = ({
               ) : null}
             </Space>
           </Radio.Group>
-        </Space>
-      </Option>
-
-      <Divider />
-
-      <Option>
-        <Space direction="vertical">
-          <b>Gainers toolbar:</b>
-
-          <Checkbox onChange={onCheckShowGainersBar} checked={showGainersBar}>
-            Show the current top gainers of the day
-          </Checkbox>
         </Space>
       </Option>
 
