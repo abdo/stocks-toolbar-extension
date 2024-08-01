@@ -5,6 +5,7 @@ export type StockData = {
   todaysChange: number;
   todaysChangePerc: number;
   isMarketClosed: boolean;
+  marketState: string;
   askPrice: number;
   bidPrice: number;
   logo: string;
@@ -30,6 +31,7 @@ const formatStocksData = (data: Object[]): StockData[] =>
       todaysChange: Number(ticker.regularMarketChange?.toFixed(4)),
       todaysChangePerc: Number(ticker.regularMarketChangePercent?.toFixed(4)),
       isMarketClosed,
+      marketState: ticker.marketState,
       logo: ticker.logoUrl,
       exchange: ticker.fullExchangeName,
       company: ticker.longName,

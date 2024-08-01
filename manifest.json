@@ -6,6 +6,15 @@
   "background": {
     "service_worker": "background.js"
   },
+  "commands": {
+    "reload-e": {
+      "suggested_key": {
+        "default": "Ctrl+E",
+        "mac": "Command+E"
+      },
+      "description": "Reloads extension package in the browser, helpful in development"
+    }
+  },
   "action": {
     "default_title": "Popup",
     "default_popup": "index.html#popup",

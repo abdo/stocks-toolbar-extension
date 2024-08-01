@@ -1,13 +1,6 @@
 import Box from "../../../components/Box";
 import { defaultCompanies } from "../../../data/static/companies";
-import {
-  DataItem,
-  Ticker,
-  TickersWrap,
-  Tickers,
-  BarIcon,
-  AnimatedTickers,
-} from "./style";
+import { TickersWrap, Tickers, BarIcon, AnimatedTickers } from "./style";
 import world from "../../../assets/world.svg";
 import getMediaUrl from "../../../utils/helpers/getMediaUrl";
 import { useEffect, useState } from "react";
@@ -23,6 +16,7 @@ import formatStocksData, {
 } from "../../../utils/helpers/formatStocksData";
 import getStocksGainers from "../../../utils/requests/getStocksGainers";
 import getQuoteTypeIndicator from "../../../utils/helpers/getQuoteTypeIndicator";
+import Ticker from "../Ticker";
 
 let refreshInterval: NodeJS.Timer;
 
@@ -148,17 +142,6 @@ const BarInfo = ({
     };
   }, [financeApiCrumb, financeApiCookie]);
 
-  const isPositive = (value: number) => {
-    const positive = value > 0;
-    return switchIndicationColors ? !positive : positive;
-  };
-  const isNegative = (value: number) => {
-    const negative = value < 0;
-    return switchIndicationColors ? !negative : negative;
-  };
-
-  const onClickTicker = (ticker: string) => goToStockPage({ ticker });
-
   const stocksDataSorted = stocksData.sort(
     (stock1, stock2) =>
       chosenSymbolsList.indexOf(stock1.name) -
@@ -214,102 +197,17 @@ const BarInfo = ({
 
               return (
                 <Ticker
-                  onClick={() => onClickTicker(stockData.name)}
-                  key={i}
-                  $highToolbarTop={numberOfBars > 1 && !isGainersBar}
-                  $barHeight={barHeight}
-                  onMouseOver={(e) => handleTickerMouseOver(e, i)}
-                  $tickerLeftPosition={tickersPositions[i]}
-                  $isStaticBar={isStaticBar}
-                  $toolbarPosition={toolbarPosition}
-                >
-                  <DataItem>{stockData.name}</DataItem>
-                  <DataItem title="Current price">{stockData?.price}</DataItem>
-                  <DataItem
-                    title="Today's change"
-                    $isPositive={isPositive(stockData?.todaysChange)}
-                    $isNegative={isNegative(stockData?.todaysChange)}
-                    $hidden={!stockData?.todaysChange}
-                  >
-                    {stockData?.todaysChange}
-                  </DataItem>
-                  <DataItem
-                    title="Today's change percentage"
-                    $isPositive={isPositive(stockData?.todaysChangePerc)}
-                    $isNegative={isNegative(stockData?.todaysChangePerc)}
-                    $hidden={!stockData?.todaysChangePerc}
-                  >
-                    ({stockData?.todaysChangePerc}%)
-                  </DataItem>
-                  <div className="tooltipWrapper">
-                    <div
-                      className="tickinfo-tooltip"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {
-                        <>
-                          {stockData.isMarketClosed ? (
-                            <>
-                              <b className="special-info">
-                                Market is now closed
-                              </b>
-                              <small
-                                title="Market is now closed"
-                                style={{ verticalAlign: "text-bottom" }}
-                              >
-                                🔒
-                              </small>
-                              <br />
-                              <br />
-                            </>
-                          ) : null}
-                          <Box
-                            display="flex"
-                            flexDirection="column"
-                            alignItems="center"
-                            justifyContent="center"
-                          >
-                            <Box
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="center"
-                              gap="10px"
-                              m="0 0 5px 0"
-                            >
-                              <Box hidden={!stockData.logo}>
-                                <img
-                                  src={stockData.logo}
-                                  className="stock-logo"
-                                />
-                              </Box>
-                              {getQuoteTypeIndicator(stockData)}
-                            </Box>
-                            {stockData.company}
-                            <br />
-                          </Box>
-                          <Box hidden={!stockData.exchange}>
-                            <b className="special-info">Exchange:</b>{" "}
-                            {stockData.exchange}
-                          </Box>
-                          <Box
-                            className="box"
-                            hidden={!stockData.askPrice || !stockData.bidPrice}
-                          >
-                            <Box hidden={!stockData.askPrice}>
-                              <b className="special-info">ASK price:</b>{" "}
-                              {stockData.askPrice}
-                            </Box>
-                            <Box hidden={!stockData.bidPrice}>
-                              <b className="special-info">BID price:</b>{" "}
-                              {stockData.bidPrice}
-                              <br />
-                            </Box>
-                          </Box>
-                        </>
-                      }
-                    </div>
-                  </div>
-                </Ticker>
+                  stockData={stockData}
+                  numberOfBars={numberOfBars}
+                  isGainersBar={isGainersBar}
+                  barHeight={barHeight}
+                  tickersPositions={tickersPositions}
+                  isStaticBar={isStaticBar}
+                  toolbarPosition={toolbarPosition}
+                  handleTickerMouseOver={handleTickerMouseOver}
+                  getQuoteTypeIndicator={getQuoteTypeIndicator}
+                  switchIndicationColors={switchIndicationColors}
+                />
               );
             })}
           </TickersComponent>

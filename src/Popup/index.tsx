@@ -15,6 +15,7 @@ import UnpaidContent from "./components/UnpaidContent";
 import getSubscriptionStatus from "../utils/requests/getSubscriptionStatus";
 import getHoursDiff from "../utils/helpers/getHoursDiff";
 import { Skeleton } from "antd";
+import theme from "../style/theme";
 
 function App() {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
@@ -119,13 +120,16 @@ function App() {
         <MainLogo />
         {children}
       </Box>
-      <Box>
-        <a
-          href="mailto: contact@tastola.com"
-          title="For any enquiry, suggestion or feedback."
-        >
-          Contact us
-        </a>
+      <Box
+        w="fit-content"
+        onClick={() =>
+          chrome.tabs.create({ url: "mailto: contact@tastola.com" })
+        }
+        color={theme.colors.secondary}
+        pointer
+        fz="14px"
+      >
+        Contact us
       </Box>
     </AppStyled>
   );
