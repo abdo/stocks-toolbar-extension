@@ -21,6 +21,8 @@ import {
 } from "../../../utils/requests/getQuotesByType";
 import getQuoteTypeIndicator from "../../../utils/helpers/getQuoteTypeIndicator";
 import Ticker from "../Ticker";
+import getIndicesInfo from "../../../utils/requests/getIndicesInfo";
+import getCryptoInfo from "../../../utils/requests/getCryptoInfo";
 
 let refreshInterval: NodeJS.Timer;
 let secondaryRefreshInterval: NodeJS.Timer;
@@ -128,6 +130,8 @@ const BarInfo = ({
         cookie?: string;
       }) => Promise<any>;
     } = {
+      [SecondaryBarTypeOptions.INDEX_FUNDS]: getIndicesInfo,
+      [SecondaryBarTypeOptions.CRYPTO]: getCryptoInfo,
       [SecondaryBarTypeOptions.TOP_GAINERS]: getQuotesGainers,
       [SecondaryBarTypeOptions.TOP_LOSERS]: getQuotesLosers,
       [SecondaryBarTypeOptions.MOST_ACTIVE]: getQuotesMostActive,

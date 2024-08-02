@@ -10,10 +10,9 @@ const getQuotesByType = ({
   crumb?: string;
   cookie?: string;
 }) => {
-  const requestInfo = `info/v1/finance/screener/predefined/saved?scrIds=${type}&count=20&&fields=regularMarketPrice,regularMarketPreviousClose,regularMarketChange,regularMarketChangePercent,logoUrl,longName,fullExchangeName,ask,bid`;
+  const requestInfo = `/info/v1/finance/screener/predefined/saved?scrIds=${type}&count=20&&fields=regularMarketPrice,regularMarketPreviousClose,regularMarketChange,regularMarketChangePercent,logoUrl,longName,fullExchangeName,ask,bid`;
 
-  // const encryptedInfo = encryptRequestInfo(requestInfo);
-  const encryptedInfo = requestInfo;
+  const encryptedInfo = encryptRequestInfo(requestInfo);
 
   const areCrumbAndCookieProvided = passedCrumb && passedCookie;
 

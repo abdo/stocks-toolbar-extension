@@ -11,18 +11,18 @@ type Props = {
 };
 
 const secondaryBarOptions = [
-  // {
-  //   value: SecondaryBarTypeOptions.INDEX_FUNDS,
-  //   label: "Index Funds",
-  // },
+  {
+    value: SecondaryBarTypeOptions.INDEX_FUNDS,
+    label: "Index Funds",
+  },
   {
     value: SecondaryBarTypeOptions.MOST_ACTIVE,
     label: "Most Active",
   },
-  // {
-  //   value: SecondaryBarTypeOptions.CRYPTO,
-  //   label: "Crypto",
-  // },
+  {
+    value: SecondaryBarTypeOptions.CRYPTO,
+    label: "Crypto",
+  },
   {
     value: SecondaryBarTypeOptions.TOP_GAINERS,
     label: "Top Gainers",
