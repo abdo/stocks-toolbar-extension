@@ -12,6 +12,7 @@ import {
 } from "antd";
 import StorageKeys, {
   SecondaryBarTypeOptions,
+  SubscriptionStatusTypeOptions,
   ToolbarMotionTypeOptions,
   ToolbarPositionOptions,
 } from "../../../data/constants/storageKeys";
@@ -28,37 +29,43 @@ import getSearchSuggestions, {
 import useDebounce from "../../../utils/hooks/useDebounce";
 import getQuoteTypeIndicator from "../../../utils/helpers/getQuoteTypeIndicator";
 import SecondBarOption from "./SecondBarOption";
+import PremiumHint from "../../../components/PremiumHint";
+import { freeUserRefreshRateInSeconds } from "../../../data/static/refreshRate";
 
 const { Text } = Typography;
 
 type Props = {
-  chosenSymbolsList: string[];
-  toolbarVisible: boolean;
-  websiteVisibility: WebsiteVisibilityOptions;
-  selectedWebsitesList: string[];
-  showSecondBar: boolean;
-  secondBarType: SecondaryBarTypeOptions;
-  switchIndicationColors: boolean;
-  refreshStockDataInterval: number;
-  toolbarPosition: ToolbarPositionOptions;
-  toolbarMotionType: ToolbarMotionTypeOptions;
+  currentStorageValues: {
+    [key: string]: any;
+  };
 };
 
-const Options = ({
-  chosenSymbolsList,
-  toolbarVisible,
-  websiteVisibility,
-  selectedWebsitesList,
-  showSecondBar,
-  secondBarType,
-  switchIndicationColors,
-  refreshStockDataInterval,
-  toolbarPosition,
-  toolbarMotionType,
-}: Props) => {
+const Options = ({ currentStorageValues }: Props) => {
   const [typedSymbol, setTypesQuery] = useState("");
   const [typedWebsite, setTypedWebsite] = useState("");
   const [suggestedQuotes, setSuggestedQuotes] = useState<SuggestedQuote[]>([]);
+
+  let {
+    [StorageKeys.subscriptionStatus]: subscriptionStatus,
+    [StorageKeys.toolbarVisible]: toolbarVisible,
+    [StorageKeys.chosenSymbolsList]: chosenSymbolsList,
+    [StorageKeys.switchIndicationColors]: switchIndicationColors,
+    [StorageKeys.websiteVisibility]: websiteVisibility,
+    [StorageKeys.toolbarPosition]: toolbarPosition,
+    [StorageKeys.toolbarMotionType]: toolbarMotionType,
+    [StorageKeys.showSecondBar]: showSecondBar,
+    [StorageKeys.secondBarType]: secondBarType,
+    [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
+  } = currentStorageValues;
+
+  const isSubscriptionActive =
+    subscriptionStatus === SubscriptionStatusTypeOptions.active;
+  const isSubscriptionStopped =
+    subscriptionStatus === SubscriptionStatusTypeOptions.stopped;
+
+  if (!isSubscriptionActive) {
+    showSecondBar = false;
+  }
 
   const debouncedTypedQuery = useDebounce(typedSymbol, 200);
 
@@ -94,7 +101,7 @@ const Options = ({
     const canAddWebsite =
       e.code === "Enter" &&
       typedWebsiteAdjusted.includes(".") &&
-      !selectedWebsitesList.includes(typedWebsiteAdjusted);
+      !(selectedWebsitesList as string[]).includes(typedWebsiteAdjusted);
     if (!canAddWebsite) return;
     chrome.storage.sync.set({
       [StorageKeys.selectedWebsitesList]: JSON.stringify([
@@ -108,7 +115,9 @@ const Options = ({
   const onRemoveSelectedWebsite = (removedWebsite: string) => {
     chrome.storage.sync.set({
       [StorageKeys.selectedWebsitesList]: JSON.stringify(
-        selectedWebsitesList.filter((website) => website !== removedWebsite)
+        (selectedWebsitesList as string[]).filter(
+          (website) => website !== removedWebsite
+        )
       ),
     });
   };
@@ -129,14 +138,6 @@ const Options = ({
     chrome.storage.sync.set({
       [StorageKeys.switchIndicationColors]: e.target.checked,
     });
-  };
-
-  const onChangeRefreshStockDataInterval = (value: number | null) => {
-    if (value) {
-      chrome.storage.sync.set({
-        [StorageKeys.refreshStockDataInterval]: value,
-      });
-    }
   };
 
   const onChangeToolbarMotionType = (e: RadioChangeEvent) => {
@@ -194,6 +195,8 @@ const Options = ({
           options={suggestedQuotes.map(({ symbol, ...quote }) => ({
             value: symbol,
             ...quote,
+            disabled:
+              quote.quoteType === "CRYPTOCURRENCY" && !isSubscriptionActive,
           }))}
           optionRender={({
             value,
@@ -207,6 +210,9 @@ const Options = ({
                 quoteType,
                 typeDisp,
               })}
+              {!isSubscriptionActive && quoteType === "CRYPTOCURRENCY" && (
+                <PremiumHint isSubscriptionStopped={isSubscriptionStopped} />
+              )}
             </Box>
           )}
           notFoundContent={null}
@@ -224,7 +230,48 @@ const Options = ({
           onCheckShowSecondBar={onCheckShowSecondBar}
           secondBarType={secondBarType}
           onChangeSecondBarType={onChangeSecondBarType}
+          isSubscriptionActive={isSubscriptionActive}
+          isSubscriptionStopped={isSubscriptionStopped}
         />
+      </Option>
+
+      <Divider />
+
+      <Option>
+        <Space direction="vertical">
+          <Box display="flex" alignItems="center" gap="5px">
+            <b>Data refresh rate:</b>
+            {isSubscriptionActive ? (
+              <span>real time ⚡</span>
+            ) : (
+              <PremiumHint isSubscriptionStopped={isSubscriptionStopped} />
+            )}
+          </Box>
+
+          <Box hidden={isSubscriptionActive}>
+            <InputNumber
+              min={10}
+              max={600}
+              value={freeUserRefreshRateInSeconds}
+              style={{
+                boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
+              }}
+              disabled
+            />
+
+            <Box fz="11px" color={theme.colors.primary}>
+              Quotes prices will refresh every{" "}
+              <Box display="inline-block" fw="bold">
+                {freeUserRefreshRateInSeconds}
+              </Box>{" "}
+              seconds, upgrade to premium for{" "}
+              <Box display="inline-block" fw="bold">
+                real time
+              </Box>{" "}
+              prices
+            </Box>
+          </Box>
+        </Space>
       </Option>
 
       <Divider />
@@ -253,7 +300,7 @@ const Options = ({
                       onKeyDown={onAddSelectedWebsiteByEnter}
                       value={typedWebsite}
                     />
-                    {selectedWebsitesList.map((website) => (
+                    {(selectedWebsitesList as string[]).map((website) => (
                       <Tag
                         key={website}
                         color={theme.colors.secondary}
@@ -298,36 +345,6 @@ const Options = ({
             </Box>{" "}
             colors
           </Checkbox>
-        </Space>
-      </Option>
-
-      <Divider />
-
-      <Option>
-        <Space direction="vertical">
-          <b>Data refresh rate:</b>
-          <InputNumber
-            min={10}
-            max={600}
-            value={refreshStockDataInterval}
-            onChange={onChangeRefreshStockDataInterval}
-            style={{
-              boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
-            }}
-          />
-          <Box fz="11px" fw="bold" color={theme.colors.primary}>
-            Stock market information will refresh every{" "}
-            {refreshStockDataInterval >= 60
-              ? `${Math.floor(refreshStockDataInterval / 60)} ${
-                  Math.floor(refreshStockDataInterval / 60) > 1
-                    ? "minutes"
-                    : "minute"
-                }` +
-                (refreshStockDataInterval % 60
-                  ? ` and ${refreshStockDataInterval % 60} seconds`
-                  : "")
-              : `${refreshStockDataInterval} seconds`}
-          </Box>
         </Space>
       </Option>
 

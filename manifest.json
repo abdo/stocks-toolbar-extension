@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "InvestFellow: Real Time Stocks / Crypto™",
-  "version": "1.4.0",
+  "name": "InvestFellow: Real Time Stock/Crypto Prices™",
+  "version": "1.5.0",
   "permissions": ["storage", "identity", "identity.email"],
   "background": {
     "service_worker": "background.js"
@@ -9,8 +9,8 @@
   "commands": {
     "reload-e": {
       "suggested_key": {
-        "default": "Ctrl+E",
-        "mac": "Command+E"
+        "default": "Ctrl+Q",
+        "mac": "Command+Q"
       },
       "description": "Reloads extension package in the browser, helpful in development"
     }

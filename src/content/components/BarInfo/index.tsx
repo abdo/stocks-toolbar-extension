@@ -8,6 +8,7 @@ import goToStockPage from "../../../utils/helpers/goToStockPage";
 import theme from "../../../style/theme";
 import StorageKeys, {
   SecondaryBarTypeOptions,
+  SubscriptionStatusTypeOptions,
   ToolbarMotionTypeOptions,
 } from "../../../data/constants/storageKeys";
 import getStocksInfo from "../../../utils/requests/getStocksInfo";
@@ -23,6 +24,10 @@ import getQuoteTypeIndicator from "../../../utils/helpers/getQuoteTypeIndicator"
 import Ticker from "../Ticker";
 import getIndicesInfo from "../../../utils/requests/getIndicesInfo";
 import getCryptoInfo from "../../../utils/requests/getCryptoInfo";
+import {
+  freeUserRefreshRateInSeconds,
+  premiumUserRefreshRateInSeconds,
+} from "../../../data/static/refreshRate";
 
 let refreshInterval: NodeJS.Timer;
 let secondaryRefreshInterval: NodeJS.Timer;
@@ -53,15 +58,22 @@ const BarInfo = ({
   const [tickersPositions, setTickersPositions] = useState<any>({});
 
   const {
+    [StorageKeys.subscriptionStatus]: subscriptionStatus,
     [StorageKeys.chosenSymbolsList]: passedChosenSymbolsList,
     [StorageKeys.financeApiCrumb]: financeApiCrumb,
     [StorageKeys.financeApiCookie]: financeApiCookie,
     [StorageKeys.switchIndicationColors]: switchIndicationColors,
     [StorageKeys.toolbarPosition]: toolbarPosition,
-    [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
     [StorageKeys.toolbarMotionType]: toolbarMotionType,
     [StorageKeys.secondBarType]: secondBarType,
   } = currentStorageValues;
+
+  const isSubscriptionActive =
+    subscriptionStatus === SubscriptionStatusTypeOptions.active;
+
+  const refreshStockDataInterval = isSubscriptionActive
+    ? premiumUserRefreshRateInSeconds
+    : freeUserRefreshRateInSeconds;
 
   // Behavior when the passed chosen symbols list changes
   useEffect(() => {

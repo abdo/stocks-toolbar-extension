@@ -11,11 +11,12 @@ import Options from "./components/Options";
 import { AppStyled } from "./style";
 import MainLogo from "../components/MainLogo";
 import Box from "../components/Box";
-import UnpaidContent from "./components/UnpaidContent";
 import getSubscriptionStatus from "../utils/requests/getSubscriptionStatus";
 import getHoursDiff from "../utils/helpers/getHoursDiff";
-import { Skeleton } from "antd";
+import { Skeleton, Typography } from "antd";
 import theme from "../style/theme";
+
+const { Link } = Typography;
 
 function App() {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
@@ -49,20 +50,14 @@ function App() {
 
   const parseAndSetStorageValues = (values: chrome.storage.StorageChange) => {
     const parsedValues = parseStorageValues(values);
-    setCurrentStorageValues((values) => ({ ...values, ...parsedValues }));
+
+    setCurrentStorageValues((values) => ({
+      ...values,
+      ...parsedValues,
+    }));
   };
 
   const {
-    [StorageKeys.chosenSymbolsList]: chosenSymbolsList,
-    [StorageKeys.toolbarVisible]: toolbarVisible,
-    [StorageKeys.websiteVisibility]: websiteVisibility,
-    [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
-    [StorageKeys.switchIndicationColors]: switchIndicationColors,
-    [StorageKeys.refreshStockDataInterval]: refreshStockDataInterval,
-    [StorageKeys.toolbarPosition]: toolbarPosition,
-    [StorageKeys.showSecondBar]: showSecondBar,
-    [StorageKeys.secondBarType]: secondBarType,
-    [StorageKeys.toolbarMotionType]: toolbarMotionType,
     [StorageKeys.isOnline]: isOnline,
     [StorageKeys.userId]: userId,
     [StorageKeys.subscriptionStatus]: subscriptionStatus,
@@ -73,8 +68,6 @@ function App() {
 
   const isSubscriptionActive =
     subscriptionStatus === SubscriptionStatusTypeOptions.active;
-  const isSubscriptionStopped =
-    subscriptionStatus === SubscriptionStatusTypeOptions.stopped;
 
   // Check user subscription status
   useEffect(() => {
@@ -118,7 +111,22 @@ function App() {
   const PopupContainer = ({ children }: { children: React.ReactNode }) => (
     <AppStyled>
       <Box m="0 0 30px -10px">
-        <MainLogo />
+        <Box
+          display="flex"
+          alignItems="flex-start"
+          justifyContent="space-between"
+        >
+          <MainLogo />
+          <Link
+            style={{
+              color: "#0057d1",
+              fontWeight: 500,
+              textDecoration: "underline",
+            }}
+          >
+            {userId}
+          </Link>
+        </Box>
         {children}
       </Box>
       <Box
@@ -159,25 +167,7 @@ function App() {
 
   return (
     <PopupContainer>
-      {isSubscriptionActive ? (
-        <Options
-          chosenSymbolsList={chosenSymbolsList}
-          toolbarVisible={toolbarVisible}
-          websiteVisibility={websiteVisibility}
-          selectedWebsitesList={selectedWebsitesList}
-          showSecondBar={showSecondBar}
-          secondBarType={secondBarType}
-          switchIndicationColors={switchIndicationColors}
-          refreshStockDataInterval={refreshStockDataInterval}
-          toolbarPosition={toolbarPosition}
-          toolbarMotionType={toolbarMotionType}
-        />
-      ) : (
-        <UnpaidContent
-          hasClickedSubscribe={hasClickedSubscribe}
-          isSubscriptionStopped={isSubscriptionStopped}
-        />
-      )}
+      <Options currentStorageValues={currentStorageValues} />
     </PopupContainer>
   );
 }

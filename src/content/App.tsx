@@ -18,23 +18,27 @@ const App = () => {
     [key: string]: any;
   }>(defaultStorageValues);
 
-  const {
+  let {
+    [StorageKeys.subscriptionStatus]: subscriptionStatus,
     [StorageKeys.toolbarVisible]: toolbarVisibleStoredValue,
     [StorageKeys.websiteVisibility]: websiteVisibility,
     [StorageKeys.selectedWebsitesList]: selectedWebsitesList,
     [StorageKeys.toolbarPosition]: toolbarPosition,
     [StorageKeys.showSecondBar]: showSecondBar,
     [StorageKeys.isOnline]: isOnline,
-    [StorageKeys.subscriptionStatus]: subscriptionStatus,
     [StorageKeys.subscriptionId]: subscriptionId,
   } = currentStorageValues;
 
-  const currentUrl = window.location.href;
   const isSubscriptionActive =
     subscriptionStatus === SubscriptionStatusTypeOptions.active;
+
+  if (!isSubscriptionActive) {
+    showSecondBar = false;
+  }
+
+  const currentUrl = window.location.href;
+
   const toolbarVisible =
-    // user subscription is active
-    isSubscriptionActive &&
     // saved value for toolbarVisible is true
     toolbarVisibleStoredValue &&
     // storage values have been extracted
@@ -181,6 +185,7 @@ const App = () => {
 
   const parseAndSetStorageValues = (values: chrome.storage.StorageChange) => {
     const parsedValues = parseStorageValues(values);
+
     setCurrentStorageValues((values) => ({
       ...values,
       ...parsedValues,

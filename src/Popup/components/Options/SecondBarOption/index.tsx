@@ -2,12 +2,16 @@ import { Checkbox, Radio, Space } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { RadioGroup } from "./style";
 import { SecondaryBarTypeOptions } from "../../../../data/constants/storageKeys";
+import Box from "../../../../components/Box";
+import PremiumHint from "../../../../components/PremiumHint";
 
 type Props = {
   showSecondBar: boolean;
   onCheckShowSecondBar: (e: CheckboxChangeEvent) => void;
   secondBarType: SecondaryBarTypeOptions;
   onChangeSecondBarType: (type: SecondaryBarTypeOptions) => void;
+  isSubscriptionActive?: boolean;
+  isSubscriptionStopped?: boolean;
 };
 
 const secondaryBarOptions = [
@@ -38,11 +42,23 @@ const SecondBarOption = ({
   onCheckShowSecondBar,
   secondBarType,
   onChangeSecondBarType,
+  isSubscriptionActive,
+  isSubscriptionStopped,
 }: Props) => {
   return (
     <Space direction="vertical">
-      <b>Secondary toolbar:</b>
-      <Checkbox onChange={onCheckShowSecondBar} checked={showSecondBar}>
+      <Box display="flex" alignItems="center" gap="5px">
+        <b>Secondary toolbar:</b>
+        {!isSubscriptionActive && (
+          <PremiumHint isSubscriptionStopped={isSubscriptionStopped} />
+        )}
+      </Box>
+
+      <Checkbox
+        onChange={onCheckShowSecondBar}
+        checked={showSecondBar}
+        disabled={!isSubscriptionActive}
+      >
         Show the secondary toolbar
       </Checkbox>
       <RadioGroup

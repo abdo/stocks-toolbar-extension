@@ -1,8 +1,10 @@
-import { Button } from 'antd';
-import { useEffect, useState } from 'react';
-import Box from '../../../components/Box';
-import StorageKeys from '../../../data/constants/storageKeys';
-import theme from '../../../style/theme';
+import { Button } from "antd";
+import { useEffect, useState } from "react";
+import Box from "../../../components/Box";
+import StorageKeys from "../../../data/constants/storageKeys";
+import theme from "../../../style/theme";
+
+// This component is not used anymore
 
 type Props = {
   hasClickedSubscribe: boolean;
@@ -13,7 +15,7 @@ const UnpaidContent = ({
   hasClickedSubscribe,
   isSubscriptionStopped,
 }: Props) => {
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState("");
 
   const checkUserEmail = () => {
     chrome.identity.getProfileUserInfo(
@@ -21,7 +23,7 @@ const UnpaidContent = ({
       (userInfo) => {
         const userEmail = userInfo?.email;
         setUserEmail(userEmail);
-      },
+      }
     );
   };
 
@@ -39,26 +41,26 @@ const UnpaidContent = ({
   return (
     <Box>
       {hasClickedSubscribe ? (
-        <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
+        <h3 style={{ color: theme.colors.primary, fontWeight: "bold" }}>
           Have you already subscribed?
           <br />
           It will just take a minute to reflect.
         </h3>
       ) : isSubscriptionStopped ? (
-        <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
+        <h3 style={{ color: theme.colors.primary, fontWeight: "bold" }}>
           It looks like your subscription has stopped or was paused.
           <br />
           Subscribe again to continue using InvestFellow
         </h3>
       ) : (
-        <h3 style={{ color: theme.colors.primary, fontWeight: 'bold' }}>
+        <h3 style={{ color: theme.colors.primary, fontWeight: "bold" }}>
           Thank you for trusting InvestFellow.
         </h3>
       )}
       <br />
       <h4 style={{ color: theme.colors.primary }}>
-        You are now ready to constantly get{' '}
-        <span style={{ fontWeight: 'bold' }}>real time</span> stock market
+        You are now ready to constantly get{" "}
+        <span style={{ fontWeight: "bold" }}>real time</span> stock market
         information about your favorite stocks.. and many more features.
       </h4>
       <br />
@@ -66,36 +68,36 @@ const UnpaidContent = ({
         <>
           <Box hidden={isSubscriptionStopped}>
             <h4 style={{ color: theme.colors.primary }}>
-              Subscription will be automatically associated with your{' '}
-              <span style={{ fontWeight: 'bold' }}>Google account</span>, to
+              Subscription will be automatically associated with your{" "}
+              <span style={{ fontWeight: "bold" }}>Google account</span>, to
               avoid any signup hustle.
             </h4>
           </Box>
           <br />
           <Button
-            type='primary'
-            style={{ fontWeight: 'bold' }}
-            size='large'
-            shape='round'
+            type="primary"
+            style={{ fontWeight: "bold" }}
+            size="large"
+            shape="round"
             onClick={onSubscribe}
           >
-            {isSubscriptionStopped ? 'Subscribe' : 'Try for free'}
+            {isSubscriptionStopped ? "Subscribe" : "Try for free"}
           </Button>
         </>
       ) : (
         <Box>
           <h4 style={{ color: theme.colors.primary }}>
-            It looks like you are not signed up with a chrome{' '}
-            <span style={{ fontWeight: 'bold' }}>Google account</span> (or in
+            It looks like you are not signed up with a chrome{" "}
+            <span style={{ fontWeight: "bold" }}>Google account</span> (or in
             guest mode), please make sure you are signed up with a Google
             account to be able to use InvestFellow.
           </h4>
           <br />
           <Button
-            type='primary'
-            style={{ fontWeight: 'bold' }}
-            size='large'
-            shape='round'
+            type="primary"
+            style={{ fontWeight: "bold" }}
+            size="large"
+            shape="round"
             onClick={checkUserEmail}
           >
             Try again
