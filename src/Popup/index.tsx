@@ -14,7 +14,7 @@ import Box from "../components/Box";
 import getSubscriptionStatus from "../utils/requests/getSubscriptionStatus";
 import getHoursDiff from "../utils/helpers/getHoursDiff";
 import { Skeleton, Typography } from "antd";
-import theme from "../style/theme";
+import useAccountInfoPage from "../utils/hooks/useAccountInfoPage";
 
 const { Link } = Typography;
 
@@ -69,6 +69,9 @@ function App() {
   const isSubscriptionActive =
     subscriptionStatus === SubscriptionStatusTypeOptions.active;
 
+  const { openAccountInfo, contextHolder, renderSubscriptionStatusContent } =
+    useAccountInfoPage({ isSubscriptionActive, userId });
+
   // Check user subscription status
   useEffect(() => {
     const subscriptionLastUpdatedInHours = subscriptionStatusUpdatedAt
@@ -110,35 +113,17 @@ function App() {
 
   const PopupContainer = ({ children }: { children: React.ReactNode }) => (
     <AppStyled>
-      <Box m="0 0 30px -10px">
+      <Box>
         <Box
           display="flex"
           alignItems="flex-start"
           justifyContent="space-between"
         >
           <MainLogo />
-          <Link
-            style={{
-              color: "#0057d1",
-              fontWeight: 500,
-              textDecoration: "underline",
-            }}
-          >
-            {userId}
-          </Link>
+          <Link onClick={openAccountInfo}>{userId}</Link>
         </Box>
+        {contextHolder}
         {children}
-      </Box>
-      <Box
-        w="fit-content"
-        onClick={() =>
-          chrome.tabs.create({ url: "mailto: contact@tastola.com" })
-        }
-        color={theme.colors.secondary}
-        pointer
-        fz="14px"
-      >
-        Contact us
       </Box>
     </AppStyled>
   );
@@ -168,6 +153,11 @@ function App() {
   return (
     <PopupContainer>
       <Options currentStorageValues={currentStorageValues} />
+
+      <br />
+      {renderSubscriptionStatusContent()}
+      <br />
+      <Link onClick={openAccountInfo}>My Account</Link>
     </PopupContainer>
   );
 }

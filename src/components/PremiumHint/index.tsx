@@ -5,13 +5,19 @@ import Box from "../Box";
 
 const { Link } = Typography;
 
+type Props = {
+  message?: string;
+  isSubscriptionStopped?: boolean;
+  isPlain?: boolean;
+  tryText?: string;
+};
+
 const PremiumHint = ({
   message,
   isSubscriptionStopped,
-}: {
-  message?: string;
-  isSubscriptionStopped?: boolean;
-}) => {
+  isPlain,
+  tryText,
+}: Props) => {
   const [userEmail, setUserEmail] = useState("");
 
   const checkUserEmail = () => {
@@ -28,26 +34,26 @@ const PremiumHint = ({
     checkUserEmail();
   }, []);
 
-  const onSubscribe = () => {
-    window.open(
-      `https://tastola.com/investfellowsetup?userId=${userEmail}#pricing`
-    );
-  };
-
-  return (
-    <Tooltip
-      title={
-        <Box display="flex" alignItems="center" gap="5px">
-          <Box>{message || "Premium feature"}</Box>
-          <Link
-            href={`https://tastola.com/investfellowsetup?userId=${userEmail}#pricing`}
-            target="_blank"
-          >
-            {isSubscriptionStopped ? "Subscribe again" : "Try for free"}
-          </Link>
-        </Box>
-      }
+  const tryContent = (
+    <Link
+      href={`https://tastola.com/investfellowsetup?userId=${userEmail}#pricing`}
+      target="_blank"
     >
+      {isSubscriptionStopped ? "Subscribe again" : tryText || "Try for free"}
+    </Link>
+  );
+
+  const motivatorContent = (
+    <Box display="flex" alignItems="center" gap="5px">
+      <Box>{message || "Premium feature"}</Box>
+      {tryContent}
+    </Box>
+  );
+
+  return isPlain ? (
+    tryContent
+  ) : (
+    <Tooltip title={motivatorContent}>
       <CrownFilled
         style={{
           color: "#ceb300",
