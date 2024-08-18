@@ -1,5 +1,5 @@
-const freeUserRefreshRateInSeconds = 60;
+const freeUserRefreshRateInSeconds = 120;
 
-const premiumUserRefreshRateInSeconds = 5;
+const premiumUserRefreshRateInSeconds = 6;
 
 export { freeUserRefreshRateInSeconds, premiumUserRefreshRateInSeconds };
