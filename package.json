@@ -1,5 +1,5 @@
 {
-  "name": "react-content-script",
+  "name": "invest-fellow",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -19,7 +19,7 @@
     "web-vitals": "^3.0.3"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "^1.0.14",
+    "@crxjs/vite-plugin": "^2.0.0-beta.26",
     "@types/chrome": "^0.0.197",
     "@types/crypto-js": "^4.2.2",
     "@types/node": "^18.8.3",
