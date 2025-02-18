@@ -6,7 +6,7 @@ const theme = {
     black: "#111",
     white: "#FFF",
     positive: "rgb(41 160 78)",
-    negative: "#d93025",
+    negative: "rgb(239 68 68)",
     gray: "rgb(187 187 187)",
   },
 };

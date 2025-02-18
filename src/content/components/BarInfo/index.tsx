@@ -219,7 +219,16 @@ const BarInfo = ({
         zIndex={1}
         bgc={theme.colors.black}
         hidden={isSecondaryBar}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        onClick={() => {
+          chrome.runtime.sendMessage({ action: "open-popup" });
+        }}
       >
+        <Box cursor="pointer" title="Settings">
+          ⚙️
+        </Box>
         <BarIcon src={`${getMediaUrl(world)}`} alt="stocks-world" />
       </Box>
       <Box w={isSecondaryBar ? "100%" : "95%"}>

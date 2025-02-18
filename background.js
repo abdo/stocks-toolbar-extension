@@ -42,5 +42,12 @@ chrome.commands.onCommand.addListener((shortcut) => {
   }
 });
 
+// open popup listener
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.action === "open-popup") {
+    chrome.action.openPopup();
+  }
+});
+
 // For clearing storage for testing:
 // chrome.storage.sync.clear();
