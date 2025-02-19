@@ -1,4 +1,4 @@
-import { Divider, Select, Tag, Input, InputNumber, Radio, Space } from "antd";
+import { Divider, Select, Tag, Input, InputNumber, Radio } from "antd";
 import StorageKeys, {
   SecondaryBarTypeOptions,
   SubscriptionStatusTypeOptions,
@@ -224,7 +224,7 @@ const Options = ({ currentStorageValues }: Props) => {
       <Divider />
 
       <Option>
-        <Space direction="vertical">
+        <Box display="flex" flexDirection="column" gap="5px">
           <Box display="flex" alignItems="center" gap="5px">
             <b>Data refresh rate:</b>
             {isSubscriptionActive ? (
@@ -257,19 +257,19 @@ const Options = ({ currentStorageValues }: Props) => {
               prices
             </Box>
           </Box>
-        </Space>
+        </Box>
       </Option>
 
       <Divider />
 
       <Option>
-        <Space direction="vertical">
+        <Box display="flex" flexDirection="column" gap="5px">
           <b>Where is the toolbar shown?:</b>
           <Radio.Group
             onChange={onChangeWebsiteVisibilityOption}
             value={websiteVisibility}
           >
-            <Space direction="vertical">
+            <Box display="flex" flexDirection="column" gap="5px">
               <Radio value={WebsiteVisibilityOptions.All}>
                 Shown on all websites
               </Radio>
@@ -277,7 +277,7 @@ const Options = ({ currentStorageValues }: Props) => {
                 Only shown on selected websites
               </Radio>
               {websiteVisibility === WebsiteVisibilityOptions.Selected ? (
-                <Space direction="vertical">
+                <Box display="flex" flexDirection="column" gap="5px">
                   <>
                     <Input
                       addonBefore="https://www."
@@ -304,11 +304,11 @@ const Options = ({ currentStorageValues }: Props) => {
                       </Tag>
                     ))}
                   </>
-                </Space>
+                </Box>
               ) : null}
-            </Space>
+            </Box>
           </Radio.Group>
-        </Space>
+        </Box>
       </Option>
 
       <Divider />
@@ -336,16 +336,13 @@ const Options = ({ currentStorageValues }: Props) => {
       <Divider />
 
       <Option>
-        <Space direction="vertical">
+        <Box display="flex" flexDirection="column" gap="5px">
           <b>Toolbar type:</b>
 
           <Radio.Group
             buttonStyle="solid"
             onChange={onChangeToolbarMotionType}
             value={toolbarMotionType}
-            style={{
-              boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
-            }}
           >
             <Radio.Button
               value={ToolbarMotionTypeOptions.scrolling}
@@ -366,22 +363,19 @@ const Options = ({ currentStorageValues }: Props) => {
               Static
             </Radio.Button>
           </Radio.Group>
-        </Space>
+        </Box>
       </Option>
 
       <Divider />
 
       <Option>
-        <Space direction="vertical">
+        <Box display="flex" flexDirection="column" gap="5px">
           <b>Toolbar position:</b>
 
           <Radio.Group
             buttonStyle="solid"
             onChange={onChangeToolbarPosition}
             value={toolbarPosition}
-            style={{
-              boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
-            }}
           >
             <Radio.Button
               value={ToolbarPositionOptions.top}
@@ -402,7 +396,7 @@ const Options = ({ currentStorageValues }: Props) => {
               Bottom
             </Radio.Button>
           </Radio.Group>
-        </Space>
+        </Box>
       </Option>
     </>
   );
