@@ -15,7 +15,7 @@ export const SwitchContainer = styled.div`
     justify-content: center;
     position: relative;
     width: 80px;
-    height: 40px;
+    height: 30px;
     background-color: rgb(199, 199, 199);
     border-radius: 20px;
     cursor: pointer;

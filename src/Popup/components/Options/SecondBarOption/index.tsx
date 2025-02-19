@@ -1,13 +1,13 @@
-import { Checkbox, Radio, Space } from "antd";
-import { CheckboxChangeEvent } from "antd/es/checkbox";
+import { Radio } from "antd";
 import { RadioGroup } from "./style";
 import { SecondaryBarTypeOptions } from "../../../../data/constants/storageKeys";
 import Box from "../../../../components/Box";
 import PremiumHint from "../../../../components/PremiumHint";
+import Checkbox from "../../../../components/Checkbox";
 
 type Props = {
   showSecondBar: boolean;
-  onCheckShowSecondBar: (e: CheckboxChangeEvent) => void;
+  onCheckShowSecondBar: (e: React.ChangeEvent<HTMLInputElement>) => void;
   secondBarType: SecondaryBarTypeOptions;
   onChangeSecondBarType: (type: SecondaryBarTypeOptions) => void;
   isSubscriptionActive?: boolean;
@@ -46,7 +46,7 @@ const SecondBarOption = ({
   isSubscriptionStopped,
 }: Props) => {
   return (
-    <Space direction="vertical">
+    <Box display="flex" flexDirection="column" alignItems="flex-start">
       <Box display="flex" alignItems="center" gap="5px">
         <b>Secondary toolbar:</b>
         {!isSubscriptionActive && (
@@ -73,7 +73,7 @@ const SecondBarOption = ({
           </Radio.Button>
         ))}
       </RadioGroup>
-    </Space>
+    </Box>
   );
 };
 

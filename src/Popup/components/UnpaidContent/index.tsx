@@ -1,4 +1,3 @@
-import { Button } from "antd";
 import { useEffect, useState } from "react";
 import Box from "../../../components/Box";
 import StorageKeys from "../../../data/constants/storageKeys";
@@ -74,15 +73,9 @@ const UnpaidContent = ({
             </h4>
           </Box>
           <br />
-          <Button
-            type="primary"
-            style={{ fontWeight: "bold" }}
-            size="large"
-            shape="round"
-            onClick={onSubscribe}
-          >
+          <button style={{ fontWeight: "bold" }} onClick={onSubscribe}>
             {isSubscriptionStopped ? "Subscribe" : "Try for free"}
-          </Button>
+          </button>
         </>
       ) : (
         <Box>
@@ -93,15 +86,9 @@ const UnpaidContent = ({
             account to be able to use InvestFellow.
           </h4>
           <br />
-          <Button
-            type="primary"
-            style={{ fontWeight: "bold" }}
-            size="large"
-            shape="round"
-            onClick={checkUserEmail}
-          >
+          <button style={{ fontWeight: "bold" }} onClick={checkUserEmail}>
             Try again
-          </Button>
+          </button>
         </Box>
       )}
     </Box>

@@ -1,5 +1,4 @@
 import {
-  Checkbox,
   Divider,
   Select,
   Tag,
@@ -20,7 +19,6 @@ import { Option } from "./style";
 import theme from "../../../style/theme";
 import WebsiteVisibilityOptions from "../../../data/constants/websiteVisibilityOptions";
 import type { RadioChangeEvent } from "antd";
-import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import Box from "../../../components/Box";
 import getSearchSuggestions, {
   type SuggestedQuote,
@@ -31,6 +29,7 @@ import SecondBarOption from "./SecondBarOption";
 import PremiumHint from "../../../components/PremiumHint";
 import { freeUserRefreshRateInSeconds } from "../../../data/static/refreshRate";
 import Switch from "../../../components/Switch";
+import Checkbox from "../../../components/Checkbox";
 
 const { Text } = Typography;
 
@@ -122,7 +121,7 @@ const Options = ({ currentStorageValues }: Props) => {
     });
   };
 
-  const onCheckShowSecondBar = (e: CheckboxChangeEvent) => {
+  const onCheckShowSecondBar = (e: React.ChangeEvent<HTMLInputElement>) => {
     chrome.storage.sync.set({
       [StorageKeys.showSecondBar]: e.target.checked,
     });
@@ -134,7 +133,9 @@ const Options = ({ currentStorageValues }: Props) => {
     });
   };
 
-  const onCheckSwitchIndicationColors = (e: CheckboxChangeEvent) => {
+  const onCheckSwitchIndicationColors = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     chrome.storage.sync.set({
       [StorageKeys.switchIndicationColors]: e.target.checked,
     });
@@ -318,24 +319,23 @@ const Options = ({ currentStorageValues }: Props) => {
       <Divider />
 
       <Option>
-        <Space direction="vertical">
+        <Box display="flex" alignItems="center" gap="5px">
           <b>Color indications:</b>
-
-          <Checkbox
-            onChange={onCheckSwitchIndicationColors}
-            checked={switchIndicationColors}
-          >
-            Invert{" "}
-            <Box span color={theme.colors.negative} display="inline-block">
-              red
-            </Box>{" "}
-            /{" "}
-            <Box span color={theme.colors.positive} display="inline-block">
-              green
-            </Box>{" "}
-            colors
-          </Checkbox>
-        </Space>
+        </Box>
+        <Checkbox
+          checked={switchIndicationColors}
+          onChange={onCheckSwitchIndicationColors}
+        >
+          Invert{" "}
+          <Box span color={theme.colors.negative} display="inline-block">
+            red
+          </Box>{" "}
+          /{" "}
+          <Box span color={theme.colors.positive} display="inline-block">
+            green
+          </Box>{" "}
+          colors
+        </Checkbox>
       </Option>
 
       <Divider />
