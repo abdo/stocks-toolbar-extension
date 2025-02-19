@@ -1,9 +1,8 @@
 import { CrownFilled } from "@ant-design/icons";
-import { Tooltip, Typography } from "antd";
+import { Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import Box from "../Box";
-
-const { Link } = Typography;
+import Link from "../Link";
 
 type Props = {
   message?: string;

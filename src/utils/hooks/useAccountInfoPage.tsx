@@ -3,6 +3,7 @@ import ContactUs from "../../components/ContactUs";
 import KeyValue from "../../components/KeyValue";
 import PremiumHint from "../../components/PremiumHint";
 import { notification } from "antd";
+import Link from "../../components/Link";
 
 type Props = {
   isSubscriptionActive: boolean;

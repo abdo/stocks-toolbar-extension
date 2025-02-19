@@ -1,13 +1,4 @@
-import {
-  Divider,
-  Select,
-  Tag,
-  Typography,
-  Input,
-  InputNumber,
-  Radio,
-  Space,
-} from "antd";
+import { Divider, Select, Tag, Input, InputNumber, Radio, Space } from "antd";
 import StorageKeys, {
   SecondaryBarTypeOptions,
   SubscriptionStatusTypeOptions,
@@ -30,8 +21,6 @@ import PremiumHint from "../../../components/PremiumHint";
 import { freeUserRefreshRateInSeconds } from "../../../data/static/refreshRate";
 import Switch from "../../../components/Switch";
 import Checkbox from "../../../components/Checkbox";
-
-const { Text } = Typography;
 
 type Props = {
   currentStorageValues: {
@@ -165,9 +154,15 @@ const Options = ({ currentStorageValues }: Props) => {
       <Option>
         <Box display="flex" alignItems="center" gap="5px">
           <b>Quotes to monitor:</b>
-          <Text type="secondary" style={{ fontSize: 10 }}>
+          <span
+            style={{
+              fontSize: 10,
+              color: "rgba(0, 0, 0, 0.45)",
+              fontWeight: 400,
+            }}
+          >
             Stocks, Indices, Crypto.. etc
-          </Text>
+          </span>
         </Box>
         <Select
           mode="multiple"

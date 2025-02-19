@@ -1,6 +1,4 @@
-import { Typography } from "antd";
-
-const { Link } = Typography;
+import Link from "../Link";
 
 const ContactUs = () => {
   return (

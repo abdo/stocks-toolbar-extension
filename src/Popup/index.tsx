@@ -13,11 +13,9 @@ import MainLogo from "../components/MainLogo";
 import Box from "../components/Box";
 import getSubscriptionStatus from "../utils/requests/getSubscriptionStatus";
 import getHoursDiff from "../utils/helpers/getHoursDiff";
-import { Typography } from "antd";
 import useAccountInfoPage from "../utils/hooks/useAccountInfoPage";
 import Loading from "../components/Loading";
-
-const { Link } = Typography;
+import Link from "../components/Link";
 
 function App() {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
