@@ -2,7 +2,6 @@ import {
   Checkbox,
   Divider,
   Select,
-  Switch,
   Tag,
   Typography,
   Input,
@@ -31,6 +30,7 @@ import getQuoteTypeIndicator from "../../../utils/helpers/getQuoteTypeIndicator"
 import SecondBarOption from "./SecondBarOption";
 import PremiumHint from "../../../components/PremiumHint";
 import { freeUserRefreshRateInSeconds } from "../../../data/static/refreshRate";
+import Switch from "../../../components/Switch";
 
 const { Text } = Typography;
 
@@ -156,17 +156,7 @@ const Options = ({ currentStorageValues }: Props) => {
     <>
       <Option>
         <b>Toolbar visible:</b>
-        <Switch
-          checkedChildren="On"
-          unCheckedChildren="Off"
-          checked={toolbarVisible}
-          onChange={onToolbarVisibleToggle}
-          style={{
-            boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
-            display: "block",
-            margin: "10px 0",
-          }}
-        />
+        <Switch checked={toolbarVisible} onChange={onToolbarVisibleToggle} />
       </Option>
 
       <Divider />
