@@ -13,8 +13,9 @@ import MainLogo from "../components/MainLogo";
 import Box from "../components/Box";
 import getSubscriptionStatus from "../utils/requests/getSubscriptionStatus";
 import getHoursDiff from "../utils/helpers/getHoursDiff";
-import { Skeleton, Typography } from "antd";
+import { Typography } from "antd";
 import useAccountInfoPage from "../utils/hooks/useAccountInfoPage";
+import Loading from "../components/Loading";
 
 const { Link } = Typography;
 
@@ -145,7 +146,7 @@ function App() {
         <br />
         <br />
         <br />
-        <Skeleton active />
+        <Loading />
       </PopupContainer>
     );
   }
