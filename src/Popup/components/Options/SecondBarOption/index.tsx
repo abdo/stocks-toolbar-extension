@@ -1,9 +1,8 @@
-import { Radio } from "antd";
-import { RadioGroup } from "./style";
-import { SecondaryBarTypeOptions } from "../../../../data/constants/storageKeys";
 import Box from "../../../../components/Box";
+import { SecondaryBarTypeOptions } from "../../../../data/constants/storageKeys";
 import PremiumHint from "../../../../components/PremiumHint";
 import Checkbox from "../../../../components/Checkbox";
+import SolidSelect from "../../../../components/SolidSelect";
 
 type Props = {
   showSecondBar: boolean;
@@ -61,18 +60,20 @@ const SecondBarOption = ({
       >
         Show the secondary toolbar
       </Checkbox>
-      <RadioGroup
-        value={showSecondBar && secondBarType}
-        buttonStyle="solid"
-        disabled={!showSecondBar}
-        onChange={({ target: { value } }) => onChangeSecondBarType(value)}
+
+      <Box
+        style={{
+          opacity: !showSecondBar ? 0.5 : 1,
+          pointerEvents: !showSecondBar ? "none" : "auto",
+        }}
       >
-        {secondaryBarOptions.map((option) => (
-          <Radio.Button key={option.value} value={option.value}>
-            {option.label}
-          </Radio.Button>
-        ))}
-      </RadioGroup>
+        <SolidSelect
+          name="secondary-bar-type"
+          value={secondBarType}
+          onChange={onChangeSecondBarType}
+          options={secondaryBarOptions}
+        />
+      </Box>
     </Box>
   );
 };

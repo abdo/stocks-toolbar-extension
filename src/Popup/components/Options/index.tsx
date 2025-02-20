@@ -21,6 +21,7 @@ import PremiumHint from "../../../components/PremiumHint";
 import { freeUserRefreshRateInSeconds } from "../../../data/static/refreshRate";
 import Switch from "../../../components/Switch";
 import Checkbox from "../../../components/Checkbox";
+import SolidSelect from "../../../components/SolidSelect";
 
 type Props = {
   currentStorageValues: {
@@ -336,66 +337,52 @@ const Options = ({ currentStorageValues }: Props) => {
       <Divider />
 
       <Option>
-        <Box display="flex" flexDirection="column" gap="5px">
+        <Box display="flex" flexDirection="column" gap="10px">
           <b>Toolbar type:</b>
-
-          <Radio.Group
-            buttonStyle="solid"
-            onChange={onChangeToolbarMotionType}
+          <SolidSelect
+            name="toolbar-type"
             value={toolbarMotionType}
-          >
-            <Radio.Button
-              value={ToolbarMotionTypeOptions.scrolling}
-              style={{
-                minWidth: "80px",
-                textAlign: "center",
-              }}
-            >
-              Scrolling
-            </Radio.Button>
-            <Radio.Button
-              value={ToolbarMotionTypeOptions.static}
-              style={{
-                minWidth: "80px",
-                textAlign: "center",
-              }}
-            >
-              Static
-            </Radio.Button>
-          </Radio.Group>
+            onChange={(value) =>
+              onChangeToolbarMotionType({
+                target: { value },
+              } as RadioChangeEvent)
+            }
+            options={[
+              {
+                value: ToolbarMotionTypeOptions.scrolling,
+                label: "Scrolling",
+              },
+              {
+                value: ToolbarMotionTypeOptions.static,
+                label: "Static",
+              },
+            ]}
+          />
         </Box>
       </Option>
 
       <Divider />
 
       <Option>
-        <Box display="flex" flexDirection="column" gap="5px">
+        <Box display="flex" flexDirection="column" gap="10px">
           <b>Toolbar position:</b>
-
-          <Radio.Group
-            buttonStyle="solid"
-            onChange={onChangeToolbarPosition}
+          <SolidSelect
+            name="toolbar-position"
             value={toolbarPosition}
-          >
-            <Radio.Button
-              value={ToolbarPositionOptions.top}
-              style={{
-                minWidth: "80px",
-                textAlign: "center",
-              }}
-            >
-              Top
-            </Radio.Button>
-            <Radio.Button
-              value={ToolbarPositionOptions.bottom}
-              style={{
-                minWidth: "80px",
-                textAlign: "center",
-              }}
-            >
-              Bottom
-            </Radio.Button>
-          </Radio.Group>
+            onChange={(value) =>
+              onChangeToolbarPosition({ target: { value } } as RadioChangeEvent)
+            }
+            options={[
+              {
+                value: ToolbarPositionOptions.top,
+                label: "Top",
+              },
+              {
+                value: ToolbarPositionOptions.bottom,
+                label: "Bottom",
+              },
+            ]}
+          />
         </Box>
       </Option>
     </>

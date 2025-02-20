@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckboxWrapper, TermsLabel } from "./style";
+import "./style.css";
 
 interface CheckboxProps {
   checked: boolean;
@@ -17,15 +17,18 @@ const Checkbox: React.FC<CheckboxProps> = ({
   id = `cbx-${Math.random().toString(36).substr(2, 9)}`,
 }) => {
   return (
-    <CheckboxWrapper>
+    <div className="checkbox-wrapper">
       <input
+        id={id}
         type="checkbox"
         checked={checked}
         onChange={onChange}
         disabled={disabled}
-        id={id}
       />
-      <TermsLabel htmlFor={id} $disabled={disabled}>
+      <label
+        className={`terms-label ${disabled ? "disabled" : ""}`}
+        htmlFor={id}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -49,8 +52,8 @@ const Checkbox: React.FC<CheckboxProps> = ({
           ></path>
         </svg>
         {children && <span className="label-text">{children}</span>}
-      </TermsLabel>
-    </CheckboxWrapper>
+      </label>
+    </div>
   );
 };
 
