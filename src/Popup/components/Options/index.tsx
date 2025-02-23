@@ -31,7 +31,7 @@ type Props = {
 };
 
 const Options = ({ currentStorageValues }: Props) => {
-  const [typedSymbol, setTypesQuery] = useState("");
+  const [typedQuery, setTypedQuery] = useState("");
   const [typedWebsite, setTypedWebsite] = useState("");
   const [suggestedQuotes, setSuggestedQuotes] = useState<SuggestedQuote[]>([]);
 
@@ -57,7 +57,7 @@ const Options = ({ currentStorageValues }: Props) => {
     showSecondBar = false;
   }
 
-  const debouncedTypedQuery = useDebounce(typedSymbol, 200);
+  const debouncedTypedQuery = useDebounce(typedQuery, 200);
 
   useEffect(() => {
     const query = debouncedTypedQuery.trim();
@@ -69,7 +69,7 @@ const Options = ({ currentStorageValues }: Props) => {
     chrome.storage.sync.set({
       [StorageKeys.chosenSymbolsList]: JSON.stringify(list),
     });
-    setTypesQuery("");
+    setTypedQuery("");
   };
 
   const onToolbarVisibleToggle = (visible: boolean) => {
@@ -173,8 +173,8 @@ const Options = ({ currentStorageValues }: Props) => {
         <MultiSelect
           placeholder="Select symbols"
           value={chosenSymbolsList}
-          searchValue={typedSymbol}
-          onSearch={(s) => setTypesQuery(s)}
+          searchValue={typedQuery}
+          onSearch={(s) => setTypedQuery(s)}
           onChange={onSymbolsListChange}
           options={suggestedQuotes.map(({ symbol, ...quote }) => ({
             value: symbol,
@@ -196,8 +196,10 @@ const Options = ({ currentStorageValues }: Props) => {
               )}
             </Box>
           )}
-          notFoundContent="No options found"
-          onBlur={() => setTypesQuery("")}
+          notFoundContent={
+            typedQuery ? "No options found" : "Start typing to search"
+          }
+          onBlur={() => setTypedQuery("")}
           filterOption={false}
         />
       </Option>
@@ -235,7 +237,7 @@ const Options = ({ currentStorageValues }: Props) => {
               disabled
             />
 
-            <Box fz="11px" color={theme.colors.primary}>
+            <Box fz="11px" m="5px 0 0" color={theme.colors.primary}>
               Quotes prices will refresh every{" "}
               <Box display="inline-block" fw="bold">
                 {freeUserRefreshRateInSeconds}

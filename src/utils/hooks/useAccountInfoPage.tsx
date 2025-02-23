@@ -3,7 +3,6 @@ import ContactUs from "../../components/ContactUs";
 import KeyValue from "../../components/KeyValue";
 import PremiumHint from "../../components/PremiumHint";
 import { notification } from "antd";
-import Link from "../../components/Link";
 
 type Props = {
   isSubscriptionActive: boolean;
@@ -23,7 +22,7 @@ const useAccountInfoPage = ({ isSubscriptionActive, userId }: Props) => {
           isSubscriptionActive ? (
             <>Active ✅</>
           ) : (
-            <Box display="flex" alignItems="center" gap="5px">
+            <Box display="flex" alignItems="center" gap="5px" m="0 5px 5px">
               <span>Free</span>
               <PremiumHint
                 message="Upgrade to premium"

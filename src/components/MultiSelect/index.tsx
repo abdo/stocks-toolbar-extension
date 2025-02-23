@@ -93,6 +93,13 @@ const MultiSelect: React.FC<Props> = (props) => {
     menu: (base: CSSObjectWithLabel) => ({
       ...base,
     }),
+    option: (
+      base: CSSObjectWithLabel,
+      { isDisabled }: { isDisabled: boolean }
+    ) => ({
+      ...base,
+      ...(isDisabled ? { cursor: "not-allowed" } : {}), // Style for disabled options
+    }),
   };
 
   return (
