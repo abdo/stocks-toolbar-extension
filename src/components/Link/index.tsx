@@ -1,16 +1,15 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { StyledLink } from "./style";
 
 interface LinkProps {
   href?: string;
   target?: string;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-  children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
 }
 
-const Link: React.FC<LinkProps> = ({
+const Link: React.FC<PropsWithChildren<LinkProps>> = ({
   href,
   target,
   onClick,

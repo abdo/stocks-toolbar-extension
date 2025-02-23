@@ -29,8 +29,8 @@ import {
   premiumUserRefreshRateInSeconds,
 } from "../../../data/static/refreshRate";
 
-let refreshInterval: NodeJS.Timer;
-let secondaryRefreshInterval: NodeJS.Timer;
+let refreshInterval: ReturnType<typeof setInterval>;
+let secondaryRefreshInterval: ReturnType<typeof setInterval>;
 
 type Props = {
   currentStorageValues: {

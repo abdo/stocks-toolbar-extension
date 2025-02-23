@@ -62,7 +62,11 @@ export const BarIcon = styled.img`
   animation: ${flicker} 10s infinite linear;
 `;
 
-export const TickersWrap = styled.div<{ $isStaticBar: boolean }>`
+interface TickersWrapProps {
+  $isStaticBar: boolean;
+}
+
+export const TickersWrap = styled.div<TickersWrapProps>`
   width: 100%;
   box-sizing: content-box;
   padding-left: ${({ $isStaticBar }) => !$isStaticBar && "100%"};
@@ -75,21 +79,23 @@ export const TickersWrap = styled.div<{ $isStaticBar: boolean }>`
   }
 `;
 
-const baseTickerStyles = css<{
+interface TickerBaseProps {
   $isStaticBar: boolean;
   $animationDuration?: string;
-}>`
+}
+
+const baseTickerStyles = css<TickerBaseProps>`
   display: inline-block;
   white-space: nowrap;
   padding-right: ${({ $isStaticBar }) => !$isStaticBar && "100%"};
   box-sizing: content-box;
 `;
 
-export const Tickers = styled.div`
+export const Tickers = styled.div<TickerBaseProps>`
   ${baseTickerStyles}
 `;
 
-export const AnimatedTickers = styled.div`
+export const AnimatedTickers = styled.div<TickerBaseProps>`
   ${baseTickerStyles}
   animation-name: ${ticker};
   animation-timing-function: linear;

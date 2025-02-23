@@ -14,21 +14,21 @@
     "crypto-js": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "styled-components": "^5.3.6",
+    "styled-components": "^6.1.15",
     "watch": "^1.0.2",
     "web-vitals": "^3.0.3"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "^2.0.0-beta.26",
+    "@crxjs/vite-plugin": "^1.0.14",
     "@types/chrome": "^0.0.197",
     "@types/crypto-js": "^4.2.2",
-    "@types/node": "^18.8.3",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
+    "@types/node": "20.11.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "@types/styled-components": "^5.1.26",
-    "@vitejs/plugin-react": "^2.1.0",
-    "typescript": "^4.6.4",
-    "vite": "^3.1.0",
-    "vite-plugin-svgr": "^2.2.1"
+    "@vitejs/plugin-react": "4.2.1",
+    "typescript": "^5.7.3",
+    "vite": "4.5.2",
+    "vite-plugin-svgr": "^4.3.0"
   }
 }
