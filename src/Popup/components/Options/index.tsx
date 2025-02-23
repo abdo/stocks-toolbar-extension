@@ -1,4 +1,4 @@
-import { Divider, Tag, Input, InputNumber, Radio } from "antd";
+import { Tag, Input, InputNumber, Radio } from "antd";
 import StorageKeys, {
   SecondaryBarTypeOptions,
   SubscriptionStatusTypeOptions,
@@ -151,8 +151,6 @@ const Options = ({ currentStorageValues }: Props) => {
         <Switch checked={toolbarVisible} onChange={onToolbarVisibleToggle} />
       </Option>
 
-      <Divider />
-
       <Option>
         <Box display="flex" alignItems="center" gap="5px">
           <b>Quotes to monitor:</b>
@@ -192,14 +190,11 @@ const Options = ({ currentStorageValues }: Props) => {
               )}
             </Box>
           )}
-          notFoundContent={null}
-          listHeight={100}
+          notFoundContent="No options found"
           onBlur={() => setTypesQuery("")}
           filterOption={false}
         />
       </Option>
-
-      <Divider />
 
       <Option>
         <SecondBarOption
@@ -211,8 +206,6 @@ const Options = ({ currentStorageValues }: Props) => {
           isSubscriptionStopped={isSubscriptionStopped}
         />
       </Option>
-
-      <Divider />
 
       <Option>
         <Box display="flex" flexDirection="column" gap="5px">
@@ -250,8 +243,6 @@ const Options = ({ currentStorageValues }: Props) => {
           </Box>
         </Box>
       </Option>
-
-      <Divider />
 
       <Option>
         <Box display="flex" flexDirection="column" gap="5px">
@@ -302,8 +293,6 @@ const Options = ({ currentStorageValues }: Props) => {
         </Box>
       </Option>
 
-      <Divider />
-
       <Option>
         <Box display="flex" alignItems="center" gap="5px">
           <b>Color indications:</b>
@@ -323,8 +312,6 @@ const Options = ({ currentStorageValues }: Props) => {
           colors
         </Checkbox>
       </Option>
-
-      <Divider />
 
       <Option>
         <Box display="flex" flexDirection="column" gap="10px">
@@ -350,8 +337,6 @@ const Options = ({ currentStorageValues }: Props) => {
           />
         </Box>
       </Option>
-
-      <Divider />
 
       <Option>
         <Box display="flex" flexDirection="column" gap="10px">

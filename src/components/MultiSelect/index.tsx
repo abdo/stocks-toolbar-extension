@@ -31,8 +31,7 @@ type Props = {
     value: string;
     data: ModifiedOptionType;
   }) => React.ReactNode;
-  notFoundContent: null;
-  listHeight: number;
+  notFoundContent: string | null;
   onBlur: () => void;
   filterOption: boolean;
 };
@@ -58,7 +57,6 @@ const MultiSelect: React.FC<Props> = (props) => {
     options,
     optionRender,
     notFoundContent,
-    listHeight,
     onBlur,
     filterOption,
   } = props;
