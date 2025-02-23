@@ -14,12 +14,13 @@
     "crypto-js": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-select": "^5.10.0",
     "styled-components": "^6.1.15",
     "watch": "^1.0.2",
     "web-vitals": "^3.0.3"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "^1.0.14",
+    "@crxjs/vite-plugin": "^2.0.0-beta.31",
     "@types/chrome": "^0.0.197",
     "@types/crypto-js": "^4.2.2",
     "@types/node": "20.11.0",

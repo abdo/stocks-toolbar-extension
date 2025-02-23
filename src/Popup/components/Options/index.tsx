@@ -1,4 +1,4 @@
-import { Divider, Select, Tag, Input, InputNumber, Radio } from "antd";
+import { Divider, Tag, Input, InputNumber, Radio } from "antd";
 import StorageKeys, {
   SecondaryBarTypeOptions,
   SubscriptionStatusTypeOptions,
@@ -22,6 +22,7 @@ import { freeUserRefreshRateInSeconds } from "../../../data/static/refreshRate";
 import Switch from "../../../components/Switch";
 import Checkbox from "../../../components/Checkbox";
 import SolidSelect from "../../../components/SolidSelect";
+import MultiSelect from "../../../components/MultiSelect";
 
 type Props = {
   currentStorageValues: {
@@ -165,20 +166,12 @@ const Options = ({ currentStorageValues }: Props) => {
             Stocks, Indices, Crypto.. etc
           </span>
         </Box>
-        <Select
-          mode="multiple"
-          style={{
-            width: "100%",
-            boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
-            borderRadius: "25px",
-            margin: "10px 0",
-          }}
+        <MultiSelect
           placeholder="Select symbols"
           value={chosenSymbolsList}
           searchValue={typedSymbol}
           onSearch={(s) => setTypesQuery(s)}
           onChange={onSymbolsListChange}
-          optionLabelProp="label"
           options={suggestedQuotes.map(({ symbol, ...quote }) => ({
             value: symbol,
             ...quote,
@@ -193,10 +186,7 @@ const Options = ({ currentStorageValues }: Props) => {
               <Box>
                 {value} - {shortname} ({exchange})
               </Box>
-              {getQuoteTypeIndicator({
-                quoteType,
-                typeDisp,
-              })}
+              {getQuoteTypeIndicator({ quoteType, typeDisp })}
               {!isSubscriptionActive && quoteType === "CRYPTOCURRENCY" && (
                 <PremiumHint isSubscriptionStopped={isSubscriptionStopped} />
               )}
