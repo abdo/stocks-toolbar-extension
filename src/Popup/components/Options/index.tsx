@@ -1,4 +1,4 @@
-import { Tag, Input, InputNumber, Radio } from "antd";
+import { Tag, Input, InputNumber } from "antd";
 import StorageKeys, {
   SecondaryBarTypeOptions,
   SubscriptionStatusTypeOptions,
@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { Option } from "./style";
 import theme from "../../../style/theme";
 import WebsiteVisibilityOptions from "../../../data/constants/websiteVisibilityOptions";
-import type { RadioChangeEvent } from "antd";
 import Box from "../../../components/Box";
 import getSearchSuggestions, {
   type SuggestedQuote,
@@ -21,8 +20,9 @@ import PremiumHint from "../../../components/PremiumHint";
 import { freeUserRefreshRateInSeconds } from "../../../data/static/refreshRate";
 import Switch from "../../../components/Switch";
 import Checkbox from "../../../components/Checkbox";
-import SolidSelect from "../../../components/SolidSelect";
 import MultiSelect from "../../../components/MultiSelect";
+import RadioGroup from "../../../components/Radio/RadioGroup";
+import SolidSelect from "../../../components/SolidSelect";
 
 type Props = {
   currentStorageValues: {
@@ -78,7 +78,9 @@ const Options = ({ currentStorageValues }: Props) => {
     });
   };
 
-  const onChangeWebsiteVisibilityOption = (e: RadioChangeEvent) => {
+  const onChangeWebsiteVisibilityOption = (e: {
+    target: { value: WebsiteVisibilityOptions };
+  }) => {
     chrome.storage.sync.set({
       [StorageKeys.websiteVisibility]: e.target.value,
     });
@@ -132,13 +134,17 @@ const Options = ({ currentStorageValues }: Props) => {
     });
   };
 
-  const onChangeToolbarMotionType = (e: RadioChangeEvent) => {
+  const onChangeToolbarMotionType = (e: {
+    target: { value: ToolbarMotionTypeOptions };
+  }) => {
     chrome.storage.sync.set({
       [StorageKeys.toolbarMotionType]: e.target.value,
     });
   };
 
-  const onChangeToolbarPosition = (e: RadioChangeEvent) => {
+  const onChangeToolbarPosition = (e: {
+    target: { value: ToolbarPositionOptions };
+  }) => {
     chrome.storage.sync.set({
       [StorageKeys.toolbarPosition]: e.target.value,
     });
@@ -247,49 +253,51 @@ const Options = ({ currentStorageValues }: Props) => {
       <Option>
         <Box display="flex" flexDirection="column" gap="5px">
           <b>Where is the toolbar shown?:</b>
-          <Radio.Group
-            onChange={onChangeWebsiteVisibilityOption}
+          <RadioGroup<WebsiteVisibilityOptions>
+            name="website-visibility"
             value={websiteVisibility}
-          >
+            onChange={onChangeWebsiteVisibilityOption}
+            options={[
+              {
+                value: WebsiteVisibilityOptions.All,
+                label: "Shown on all websites",
+              },
+              {
+                value: WebsiteVisibilityOptions.Selected,
+                label: "Only shown on selected websites",
+              },
+            ]}
+          />
+          {websiteVisibility === WebsiteVisibilityOptions.Selected ? (
             <Box display="flex" flexDirection="column" gap="5px">
-              <Radio value={WebsiteVisibilityOptions.All}>
-                Shown on all websites
-              </Radio>
-              <Radio value={WebsiteVisibilityOptions.Selected}>
-                Only shown on selected websites
-              </Radio>
-              {websiteVisibility === WebsiteVisibilityOptions.Selected ? (
-                <Box display="flex" flexDirection="column" gap="5px">
-                  <>
-                    <Input
-                      addonBefore="https://www."
-                      placeholder="google.com"
-                      onChange={(e) => setTypedWebsite(e.target.value)}
-                      onKeyDown={onAddSelectedWebsiteByEnter}
-                      value={typedWebsite}
-                    />
-                    {(selectedWebsitesList as string[]).map((website) => (
-                      <Tag
-                        key={website}
-                        color={theme.colors.secondary}
-                        closable
-                        onClose={(e) => {
-                          e.preventDefault();
-                          onRemoveSelectedWebsite(website);
-                        }}
-                        style={{
-                          margin: "3px 0 0",
-                          borderRadius: "5px",
-                        }}
-                      >
-                        https://www.{website}
-                      </Tag>
-                    ))}
-                  </>
-                </Box>
-              ) : null}
+              <>
+                <Input
+                  addonBefore="https://www."
+                  placeholder="google.com"
+                  onChange={(e) => setTypedWebsite(e.target.value)}
+                  onKeyDown={onAddSelectedWebsiteByEnter}
+                  value={typedWebsite}
+                />
+                {(selectedWebsitesList as string[]).map((website) => (
+                  <Tag
+                    key={website}
+                    color={theme.colors.secondary}
+                    closable
+                    onClose={(e) => {
+                      e.preventDefault();
+                      onRemoveSelectedWebsite(website);
+                    }}
+                    style={{
+                      margin: "3px 0 0",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    https://www.{website}
+                  </Tag>
+                ))}
+              </>
             </Box>
-          </Radio.Group>
+          ) : null}
         </Box>
       </Option>
 
@@ -322,7 +330,7 @@ const Options = ({ currentStorageValues }: Props) => {
             onChange={(value) =>
               onChangeToolbarMotionType({
                 target: { value },
-              } as RadioChangeEvent)
+              })
             }
             options={[
               {
@@ -344,9 +352,7 @@ const Options = ({ currentStorageValues }: Props) => {
           <SolidSelect
             name="toolbar-position"
             value={toolbarPosition}
-            onChange={(value) =>
-              onChangeToolbarPosition({ target: { value } } as RadioChangeEvent)
-            }
+            onChange={(value) => onChangeToolbarPosition({ target: { value } })}
             options={[
               {
                 value: ToolbarPositionOptions.top,
