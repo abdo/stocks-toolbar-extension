@@ -1,4 +1,4 @@
-import { Input, InputNumber } from "antd";
+import { Input } from "antd";
 import StorageKeys, {
   SecondaryBarTypeOptions,
   SubscriptionStatusTypeOptions,
@@ -228,12 +228,18 @@ const Options = ({ currentStorageValues }: Props) => {
           </Box>
 
           <Box hidden={isSubscriptionActive}>
-            <InputNumber
-              min={10}
-              max={600}
+            <input
+              type="number"
+              min="10"
+              max="600"
               value={freeUserRefreshRateInSeconds}
               style={{
-                boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
+                border: "1px solid #d9d9d9",
+                borderRadius: "4px",
+                padding: "5px",
+                backgroundColor: "rgba(0, 0, 0, 0.04)",
+                cursor: "not-allowed",
+                color: "rgba(0, 0, 0, 0.25)",
               }}
               disabled
             />
