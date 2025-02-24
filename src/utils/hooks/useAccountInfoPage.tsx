@@ -16,6 +16,9 @@ const ToastContent = styled.div`
 `;
 
 const ToastHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-weight: 500;
   font-size: 16px;
   margin-bottom: 8px;
@@ -48,7 +51,15 @@ const useAccountInfoPage = ({ isSubscriptionActive, userId }: Props) => {
 
   const pageContent = (
     <ToastContent>
-      <ToastHeader>My Account</ToastHeader>
+      <ToastHeader>
+        My Account
+        <span
+          onClick={() => toast.dismiss()}
+          style={{ cursor: "pointer", fontWeight: "bold", fontSize: "16px" }}
+        >
+          X
+        </span>
+      </ToastHeader>
       {renderSubscriptionStatusContent({ plainHint: true })}
       <br />
       <KeyValue k="ID" v={userId} />
