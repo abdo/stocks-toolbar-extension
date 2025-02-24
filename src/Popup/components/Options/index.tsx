@@ -1,4 +1,4 @@
-import { Tag, Input, InputNumber } from "antd";
+import { Input, InputNumber } from "antd";
 import StorageKeys, {
   SecondaryBarTypeOptions,
   SubscriptionStatusTypeOptions,
@@ -23,6 +23,7 @@ import Checkbox from "../../../components/Checkbox";
 import MultiSelect from "../../../components/MultiSelect";
 import RadioGroup from "../../../components/Radio/RadioGroup";
 import SolidSelect from "../../../components/SolidSelect";
+import Tag from "../../../components/Tag";
 
 type Props = {
   currentStorageValues: {

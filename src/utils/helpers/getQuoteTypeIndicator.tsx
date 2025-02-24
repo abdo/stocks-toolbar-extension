@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Tag } from "antd";
+import Tag from "../../components/Tag";
 
 const colorPerStockType: Record<string, string> = {
   EQUITY: "#61b03f",
