@@ -12,6 +12,7 @@ import WebsiteVisibilityOptions from "../data/constants/websiteVisibilityOptions
 import parseStorageValues from "../utils/parseStorageValues";
 import BarInfo from "./components/BarInfo";
 import { AppStyled } from "./style";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
@@ -204,11 +205,13 @@ const App = () => {
 
   return (
     <AppStyled $height={contentHeight} $position={toolbarPosition} dir="ltr">
+      <Toaster />
       <BarInfo
         currentStorageValues={currentStorageValues}
         isSecondaryBar={false}
         numberOfBars={numberOfBars}
         barHeight={barHeight}
+        hidden={!toolbarVisible}
       />
       <BarInfo
         currentStorageValues={currentStorageValues}

@@ -2,16 +2,26 @@ import Box from "../../components/Box";
 import ContactUs from "../../components/ContactUs";
 import KeyValue from "../../components/KeyValue";
 import PremiumHint from "../../components/PremiumHint";
-import { notification } from "antd";
+import toast from "react-hot-toast";
+import styled from "styled-components";
 
 type Props = {
   isSubscriptionActive: boolean;
   userId: string;
 };
 
-const useAccountInfoPage = ({ isSubscriptionActive, userId }: Props) => {
-  const [api, contextHolder] = notification.useNotification();
+const ToastContent = styled.div`
+  padding: 8px;
+  min-width: 300px;
+`;
 
+const ToastHeader = styled.div`
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 8px;
+`;
+
+const useAccountInfoPage = ({ isSubscriptionActive, userId }: Props) => {
   const renderSubscriptionStatusContent = (args?: { plainHint?: boolean }) => {
     const plainHint = args?.plainHint;
 
@@ -37,29 +47,32 @@ const useAccountInfoPage = ({ isSubscriptionActive, userId }: Props) => {
   };
 
   const pageContent = (
-    <>
+    <ToastContent>
+      <ToastHeader>My Account</ToastHeader>
       {renderSubscriptionStatusContent({ plainHint: true })}
       <br />
       <KeyValue k="ID" v={userId} />
       <br />
       <ContactUs />
-    </>
+    </ToastContent>
   );
 
   const openAccountInfo = () => {
-    api.open({
-      message: "My Account",
-      description: pageContent,
-      duration: 0,
-      placement: "bottomRight",
+    toast(pageContent, {
+      duration: Infinity,
+      position: "bottom-right",
+      style: {
+        background: "#fff",
+        color: "#000",
+        padding: "0",
+        boxShadow: "0 3px 10px rgb(0 0 0 / 0.2)",
+      },
     });
   };
 
   return {
     openAccountInfo,
     renderSubscriptionStatusContent,
-    // contextHolder needs to be rendered to be able to show the account info notification
-    contextHolder,
   };
 };
 

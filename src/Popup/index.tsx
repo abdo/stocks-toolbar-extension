@@ -16,6 +16,7 @@ import getHoursDiff from "../utils/helpers/getHoursDiff";
 import useAccountInfoPage from "../utils/hooks/useAccountInfoPage";
 import Loading from "../components/Loading";
 import Link from "../components/Link";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [currentStorageValues, setCurrentStorageValues] = useState<{
@@ -68,8 +69,11 @@ function App() {
   const isSubscriptionActive =
     subscriptionStatus === SubscriptionStatusTypeOptions.active;
 
-  const { openAccountInfo, contextHolder, renderSubscriptionStatusContent } =
-    useAccountInfoPage({ isSubscriptionActive, userId });
+  const { openAccountInfo, renderSubscriptionStatusContent } =
+    useAccountInfoPage({
+      isSubscriptionActive,
+      userId,
+    });
 
   // Check user subscription status
   useEffect(() => {
@@ -112,16 +116,20 @@ function App() {
 
   const PopupContainer = ({ children }: { children: React.ReactNode }) => (
     <AppStyled>
-      <Box>
-        <Box
-          display="flex"
-          alignItems="flex-start"
-          justifyContent="space-between"
-        >
+      <Toaster />
+      <Box display="flex" flexDirection="column" gap="20px">
+        <Box display="flex" justifyContent="space-between" alignItems="center">
           <MainLogo />
-          <Link onClick={openAccountInfo}>{userId}</Link>
+          <Box
+            display="flex"
+            alignItems="center"
+            gap="5px"
+            onClick={openAccountInfo}
+            style={{ cursor: "pointer" }}
+          >
+            {renderSubscriptionStatusContent()}
+          </Box>
         </Box>
-        {contextHolder}
         {children}
       </Box>
     </AppStyled>
@@ -152,10 +160,7 @@ function App() {
   return (
     <PopupContainer>
       <Options currentStorageValues={currentStorageValues} />
-
-      <br />
       {renderSubscriptionStatusContent()}
-      <br />
       <Link onClick={openAccountInfo}>My Account</Link>
     </PopupContainer>
   );
