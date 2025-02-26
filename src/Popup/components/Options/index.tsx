@@ -1,4 +1,3 @@
-import { Input } from "antd";
 import StorageKeys, {
   SecondaryBarTypeOptions,
   SubscriptionStatusTypeOptions,
@@ -24,6 +23,7 @@ import MultiSelect from "../../../components/MultiSelect";
 import RadioGroup from "../../../components/Radio/RadioGroup";
 import SolidSelect from "../../../components/SolidSelect";
 import Tag from "../../../components/Tag";
+import WebsiteInput from "../../../components/WebsiteInput";
 
 type Props = {
   currentStorageValues: {
@@ -280,9 +280,7 @@ const Options = ({ currentStorageValues }: Props) => {
           {websiteVisibility === WebsiteVisibilityOptions.Selected ? (
             <Box display="flex" flexDirection="column" gap="5px">
               <>
-                <Input
-                  addonBefore="https://www."
-                  placeholder="google.com"
+                <WebsiteInput
                   onChange={(e) => setTypedWebsite(e.target.value)}
                   onKeyDown={onAddSelectedWebsiteByEnter}
                   value={typedWebsite}
