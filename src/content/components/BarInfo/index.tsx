@@ -40,6 +40,7 @@ type Props = {
   numberOfBars: number;
   barHeight: string;
   hidden?: boolean;
+  isSubscriptionActive: boolean;
 };
 
 const BarInfo = ({
@@ -48,6 +49,7 @@ const BarInfo = ({
   numberOfBars,
   barHeight,
   hidden,
+  isSubscriptionActive,
 }: Props) => {
   if (hidden) return null;
 
@@ -58,7 +60,6 @@ const BarInfo = ({
   const [tickersPositions, setTickersPositions] = useState<any>({});
 
   const {
-    [StorageKeys.subscriptionStatus]: subscriptionStatus,
     [StorageKeys.chosenSymbolsList]: passedChosenSymbolsList,
     [StorageKeys.financeApiCrumb]: financeApiCrumb,
     [StorageKeys.financeApiCookie]: financeApiCookie,
@@ -67,9 +68,6 @@ const BarInfo = ({
     [StorageKeys.toolbarMotionType]: toolbarMotionType,
     [StorageKeys.secondBarType]: secondBarType,
   } = currentStorageValues;
-
-  const isSubscriptionActive =
-    subscriptionStatus === SubscriptionStatusTypeOptions.active;
 
   const refreshStockDataInterval = isSubscriptionActive
     ? premiumUserRefreshRateInSeconds
@@ -244,6 +242,7 @@ const BarInfo = ({
 
               return (
                 <Ticker
+                  key={`${stockData.name}${i}`}
                   stockData={stockData}
                   highToolbarTop={numberOfBars > 1 && !isSecondaryBar}
                   barHeight={barHeight}
@@ -253,6 +252,7 @@ const BarInfo = ({
                   handleTickerMouseOver={handleTickerMouseOver}
                   getQuoteTypeIndicator={getQuoteTypeIndicator}
                   switchIndicationColors={switchIndicationColors}
+                  isSubscriptionActive={isSubscriptionActive}
                 />
               );
             })}

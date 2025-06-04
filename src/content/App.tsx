@@ -212,6 +212,7 @@ const App = () => {
         numberOfBars={numberOfBars}
         barHeight={barHeight}
         hidden={!toolbarVisible}
+        isSubscriptionActive={isSubscriptionActive}
       />
       <BarInfo
         currentStorageValues={currentStorageValues}
@@ -219,6 +220,7 @@ const App = () => {
         numberOfBars={numberOfBars}
         barHeight={barHeight}
         hidden={!showSecondBar}
+        isSubscriptionActive={isSubscriptionActive}
       />
     </AppStyled>
   );

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Box from "../../../components/Box";
 import styled, { keyframes, css } from "styled-components";
-import theme from "../../../style/theme";
 import { StockData } from "../../../utils/helpers/formatStocksData";
 import getAIInsights, {
   AIInsightsData,
@@ -9,6 +8,7 @@ import getAIInsights, {
 
 interface AITooltipProps {
   stockData: StockData;
+  isSubscriptionActive: boolean;
 }
 
 const spin = keyframes`
@@ -81,17 +81,16 @@ const StaticCard = styled.div<{ $isLoading?: boolean }>`
 
   position: relative;
   width: 280px;
-  height: 200px;
+  min-height: 200px;
   display: flex;
-  text-align: center;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
+  padding: 20px;
+  text-align: center;
   cursor: default;
   color: var(--dark-grey);
   opacity: 0.95;
-  padding: 1.2rem;
-  padding-bottom: 0.4rem;
   font-weight: 500;
   background: var(--lightest-grey);
   border-radius: var(--border-radius-main);
@@ -380,7 +379,47 @@ const LoadingText = styled.div`
   font-size: 14px;
 `;
 
-const AITooltip: React.FC<AITooltipProps> = ({ stockData }) => {
+const PremiumPlaceholderTitle = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ai-primary);
+  margin-bottom: 12px;
+`;
+
+const PremiumPlaceholderText = styled.div`
+  font-size: 13px;
+  color: var(--middle-grey);
+  margin-bottom: 20px;
+  line-height: 1.5;
+`;
+
+const PremiumUpgradeButton = styled.button`
+  background: linear-gradient(135deg, var(--ai-primary), var(--ai-secondary));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(138, 43, 226, 0.3);
+
+  &:hover {
+    background: linear-gradient(135deg, var(--ai-secondary), var(--ai-primary));
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.5);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
+const AITooltip: React.FC<AITooltipProps> = ({
+  stockData,
+  isSubscriptionActive,
+}) => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [currentInsight, setCurrentInsight] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -415,56 +454,66 @@ const AITooltip: React.FC<AITooltipProps> = ({ stockData }) => {
   const insightKeys = ["momentum", "liquidity", "timing", "context"] as const;
 
   useEffect(() => {
-    const fetchOnHover = async () => {
+    if (isSubscriptionActive) {
       setIsInitialLoading(true);
       setLoadingError(null);
-      try {
-        const insights = await getAIInsights(stockData);
-        setAiInsights(insights);
-      } catch (error) {
-        console.error("Failed to fetch AI insights:", error);
-        setLoadingError("Failed to load AI insights. Using fallback data.");
-        setAiInsights(null);
-      } finally {
-        setIsInitialLoading(false);
-      }
-    };
+      setAiInsights(null);
 
-    fetchOnHover();
+      const fetchInsightsOnMount = async () => {
+        try {
+          const insights = await getAIInsights(stockData);
+          setAiInsights(insights);
+        } catch (error) {
+          console.error("Failed to fetch AI insights:", error);
+          if (error instanceof Error) {
+            setLoadingError(error.message);
+          } else {
+            setLoadingError(
+              "An unknown error occurred while fetching AI insights."
+            );
+          }
+          setAiInsights(null);
+        } finally {
+          setIsInitialLoading(false);
+        }
+      };
+
+      fetchInsightsOnMount();
+    } else {
+      setIsInitialLoading(false);
+      setAiInsights(null);
+      setLoadingError(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleUpgradeClick = () => {
+    chrome.runtime.sendMessage({ action: "open-popup" });
+  };
+
   const getCurrentInsight = () => {
-    if (!aiInsights && !loadingError) return fallbackInsights[currentInsight];
-    if (aiInsights) {
-      const key = insightKeys[currentInsight];
-      return (
-        aiInsights.object[key]?.simple_insight ||
-        fallbackInsights[currentInsight]
-      );
-    }
-    return "";
+    if (!aiInsights) return fallbackInsights[currentInsight];
+    const key = insightKeys[currentInsight];
+    return (
+      aiInsights.object[key]?.simple_insight || fallbackInsights[currentInsight]
+    );
   };
 
   const getCurrentExpertInsight = () => {
-    if (!aiInsights && !loadingError)
+    if (!aiInsights)
       return "Expert analysis fallback: Detailed data currently unavailable.";
-    if (aiInsights) {
-      const key = insightKeys[currentInsight];
-      return (
-        aiInsights.object[key]?.expert_insight ||
-        "Expert analysis fallback: Detailed data currently unavailable."
-      );
-    }
-    return "";
+    const key = insightKeys[currentInsight];
+    return (
+      aiInsights.object[key]?.expert_insight ||
+      "Expert analysis fallback: Detailed data currently unavailable."
+    );
   };
 
   const nextInsight = () => {
     if (isAnimating) return;
-
     setSlideDirection("right");
     setIsSlideOut(true);
     setIsAnimating(true);
-
     setTimeout(() => {
       setCurrentInsight((prev) => (prev + 1) % insightKeys.length);
       setIsSlideOut(false);
@@ -476,11 +525,9 @@ const AITooltip: React.FC<AITooltipProps> = ({ stockData }) => {
 
   const previousInsight = () => {
     if (isAnimating) return;
-
     setSlideDirection("left");
     setIsSlideOut(true);
     setIsAnimating(true);
-
     setTimeout(() => {
       setCurrentInsight(
         (prev) => (prev - 1 + insightKeys.length) % insightKeys.length
@@ -521,6 +568,20 @@ const AITooltip: React.FC<AITooltipProps> = ({ stockData }) => {
       });
     }
   };
+
+  if (!isSubscriptionActive) {
+    return (
+      <StaticCard>
+        <PremiumPlaceholderTitle>✨ Unlock AI Insights</PremiumPlaceholderTitle>
+        <PremiumPlaceholderText>
+          Get exclusive AI-powered analysis for deeper market understanding.
+        </PremiumPlaceholderText>
+        <PremiumUpgradeButton onClick={handleUpgradeClick}>
+          Try for free
+        </PremiumUpgradeButton>
+      </StaticCard>
+    );
+  }
 
   if (isInitialLoading) {
     return (
@@ -594,7 +655,7 @@ const AITooltip: React.FC<AITooltipProps> = ({ stockData }) => {
             🤔 No Insights Available
           </Box>
           <Box fontSize="12px" opacity={0.8} textAlign="center" color="#666">
-            AI insights could not be loaded for {stockData.name}.
+            AI insights are currently unavailable for {stockData.name}.
           </Box>
         </Box>
       </StaticCard>

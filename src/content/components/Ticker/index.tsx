@@ -18,6 +18,7 @@ type Props = {
   ) => void;
   getQuoteTypeIndicator: (stockData: StockData) => React.ReactNode;
   switchIndicationColors: boolean;
+  isSubscriptionActive: boolean;
 };
 
 const Ticker: React.FC<Props> = ({
@@ -30,6 +31,7 @@ const Ticker: React.FC<Props> = ({
   handleTickerMouseOver,
   getQuoteTypeIndicator,
   switchIndicationColors,
+  isSubscriptionActive,
 }) => {
   const [isAITooltipVisible, setIsAITooltipVisible] = useState(false);
 
@@ -91,7 +93,10 @@ const Ticker: React.FC<Props> = ({
         </span>
         {isAITooltipVisible && (
           <div className="ai-tooltip">
-            <AITooltip stockData={stockData} />
+            <AITooltip
+              stockData={stockData}
+              isSubscriptionActive={isSubscriptionActive}
+            />
           </div>
         )}
       </AITooltipWrapper>
