@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "../../../components/Box";
 import { DataItem, TickerStyle, AITooltipWrapper } from "./style";
 import { type StockData } from "../../../utils/helpers/formatStocksData";
@@ -31,6 +31,8 @@ const Ticker: React.FC<Props> = ({
   getQuoteTypeIndicator,
   switchIndicationColors,
 }) => {
+  const [isAITooltipVisible, setIsAITooltipVisible] = useState(false);
+
   const isPositive = (value: number | undefined) => {
     if (!value) return false;
     const positive = value > 0;
@@ -81,19 +83,17 @@ const Ticker: React.FC<Props> = ({
         $isStaticBar={isStaticBar}
         $toolbarPosition={toolbarPosition}
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
-        onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) =>
-          e.stopPropagation()
-        }
-        onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) =>
-          e.stopPropagation()
-        }
+        onMouseEnter={() => setIsAITooltipVisible(true)}
+        onMouseLeave={() => setIsAITooltipVisible(false)}
       >
         <span className="ai-emoji" title="AI Analysis">
           ✨
         </span>
-        <div className="ai-tooltip">
-          <AITooltip stockSymbol={stockData.name} />
-        </div>
+        {isAITooltipVisible && (
+          <div className="ai-tooltip">
+            <AITooltip stockData={stockData} />
+          </div>
+        )}
       </AITooltipWrapper>
 
       {/* Original tooltip */}

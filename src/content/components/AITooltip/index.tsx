@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import Box from "../../../components/Box";
 import styled, { keyframes, css } from "styled-components";
 import theme from "../../../style/theme";
+import { StockData } from "../../../utils/helpers/formatStocksData";
+import getAIInsights, {
+  AIInsightsData,
+} from "../../../utils/helpers/getAIInsights";
 
 interface AITooltipProps {
-  stockSymbol: string;
+  stockData: StockData;
 }
 
 const spin = keyframes`
@@ -207,6 +211,7 @@ const TextContent = styled.div`
   padding: 0 2rem;
   font-weight: 500;
   letter-spacing: 0.3px;
+  flex-grow: 1;
 `;
 
 const InsightText = styled.div`
@@ -375,58 +380,7 @@ const LoadingText = styled.div`
   font-size: 14px;
 `;
 
-const insights = [
-  "Market sentiment for this stock is currently bullish based on recent trading patterns and volume analysis.",
-  "Technical indicators suggest a potential breakout above resistance levels with strong momentum signals.",
-  "Analyst consensus shows strong buy recommendations with average price target increases of 15-20%.",
-  "Options flow indicates institutional accumulation with significant call activity and positive gamma exposure.",
-];
-
-const insightEmojis = [
-  "⚡", // Momentum insight
-  "💧", // Liquidity insight
-  "🎯", // Technical timing insight
-  "🌍", // Market context insight
-];
-
-const insightTitles = [
-  "Momentum Insight",
-  "Liquidity Insight",
-  "Technical Timing Insight",
-  "Market Context Insight",
-];
-
-const loadingMessages = [
-  "🔮 Doing magic with market data...",
-  "✨ Analyzing quantum patterns...",
-  "🧠 AI neurons firing...",
-  "🚀 Consulting crystal ball...",
-];
-
-const moreInfoData = [
-  {
-    title: "Momentum Analysis",
-    content:
-      "AI detected 73% bullish sentiment from social media, news sentiment, and institutional trading patterns over the last 48 hours.",
-  },
-  {
-    title: "Liquidity Depth",
-    content:
-      "Strong support at $156.20 with 2.3M shares. RSI at 67 indicates potential for continued upward movement.",
-  },
-  {
-    title: "Technical Signals",
-    content:
-      "12 out of 15 analysts upgraded ratings. Average price target: $185 (+18% upside). Next earnings in 3 weeks.",
-  },
-  {
-    title: "Market Context",
-    content:
-      "Unusual options activity: 340% above average call volume. Dark pool data shows institutional accumulation over 5 days.",
-  },
-];
-
-const AITooltip: React.FC<AITooltipProps> = ({ stockSymbol }) => {
+const AITooltip: React.FC<AITooltipProps> = ({ stockData }) => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [currentInsight, setCurrentInsight] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -441,14 +395,68 @@ const AITooltip: React.FC<AITooltipProps> = ({ stockSymbol }) => {
     false,
     false,
   ]);
+  const [aiInsights, setAiInsights] = useState<AIInsightsData | null>(null);
+  const [loadingError, setLoadingError] = useState<string | null>(null);
+
+  const fallbackInsights = [
+    "Market sentiment for this stock is currently bullish based on recent trading patterns and volume analysis.",
+    "Technical indicators suggest a potential breakout above resistance levels with strong momentum signals.",
+    "Analyst consensus shows strong buy recommendations with average price target increases of 15-20%.",
+    "Options flow indicates institutional accumulation with significant call activity and positive gamma exposure.",
+  ];
+
+  const insightTitles = [
+    "Momentum Insight",
+    "Liquidity Insight",
+    "Technical Timing Insight",
+    "Market Context Insight",
+  ];
+
+  const insightKeys = ["momentum", "liquidity", "timing", "context"] as const;
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsInitialLoading(false);
-    }, 2500);
+    const fetchOnHover = async () => {
+      setIsInitialLoading(true);
+      setLoadingError(null);
+      try {
+        const insights = await getAIInsights(stockData);
+        setAiInsights(insights);
+      } catch (error) {
+        console.error("Failed to fetch AI insights:", error);
+        setLoadingError("Failed to load AI insights. Using fallback data.");
+        setAiInsights(null);
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    fetchOnHover();
   }, []);
+
+  const getCurrentInsight = () => {
+    if (!aiInsights && !loadingError) return fallbackInsights[currentInsight];
+    if (aiInsights) {
+      const key = insightKeys[currentInsight];
+      return (
+        aiInsights.object[key]?.simple_insight ||
+        fallbackInsights[currentInsight]
+      );
+    }
+    return "";
+  };
+
+  const getCurrentExpertInsight = () => {
+    if (!aiInsights && !loadingError)
+      return "Expert analysis fallback: Detailed data currently unavailable.";
+    if (aiInsights) {
+      const key = insightKeys[currentInsight];
+      return (
+        aiInsights.object[key]?.expert_insight ||
+        "Expert analysis fallback: Detailed data currently unavailable."
+      );
+    }
+    return "";
+  };
 
   const nextInsight = () => {
     if (isAnimating) return;
@@ -458,7 +466,7 @@ const AITooltip: React.FC<AITooltipProps> = ({ stockSymbol }) => {
     setIsAnimating(true);
 
     setTimeout(() => {
-      setCurrentInsight((prev) => (prev + 1) % insights.length);
+      setCurrentInsight((prev) => (prev + 1) % insightKeys.length);
       setIsSlideOut(false);
       setTimeout(() => {
         setIsAnimating(false);
@@ -475,7 +483,7 @@ const AITooltip: React.FC<AITooltipProps> = ({ stockSymbol }) => {
 
     setTimeout(() => {
       setCurrentInsight(
-        (prev) => (prev - 1 + insights.length) % insights.length
+        (prev) => (prev - 1 + insightKeys.length) % insightKeys.length
       );
       setIsSlideOut(false);
       setTimeout(() => {
@@ -530,10 +538,63 @@ const AITooltip: React.FC<AITooltipProps> = ({ stockSymbol }) => {
           </Box>
           <LoadingSpinner />
           <Box fontSize="12px" opacity={0.8} textAlign="center">
-            <LoadingText>Initializing AI models...</LoadingText>
+            <LoadingText>Making magic happen...</LoadingText>
             <div style={{ marginTop: "4px", color: "#767676" }}>
-              Analyzing {stockSymbol} across multiple dimensions
+              Analyzing {stockData.name} with AI insights
             </div>
+          </Box>
+        </Box>
+      </StaticCard>
+    );
+  }
+
+  if (loadingError) {
+    return (
+      <StaticCard>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          gap="16px"
+          style={{ height: "100%" }}
+        >
+          <Box fontSize="16px" fontWeight="600" color="#ff6b6b">
+            ⚠️ Analysis Error
+          </Box>
+          <Box fontSize="12px" opacity={0.8} textAlign="center" color="#666">
+            {loadingError}
+          </Box>
+          <Box
+            fontSize="10px"
+            opacity={0.6}
+            textAlign="center"
+            color="#888"
+            marginTop="8px"
+          >
+            Please try again shortly.
+          </Box>
+        </Box>
+      </StaticCard>
+    );
+  }
+
+  if (!aiInsights) {
+    return (
+      <StaticCard>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          gap="16px"
+          style={{ height: "100%" }}
+        >
+          <Box fontSize="16px" fontWeight="600" color="#ffcc00">
+            🤔 No Insights Available
+          </Box>
+          <Box fontSize="12px" opacity={0.8} textAlign="center" color="#666">
+            AI insights could not be loaded for {stockData.name}.
           </Box>
         </Box>
       </StaticCard>
@@ -550,15 +611,15 @@ const AITooltip: React.FC<AITooltipProps> = ({ stockSymbol }) => {
             $slideOut={isSlideOut}
           >
             <TextContent>
-              <InsightText>{insights[currentInsight]}</InsightText>
+              <InsightText>{getCurrentInsight()}</InsightText>
               <MoreInfoContainer>
                 <MoreInfoTrigger>ℹ️ More Details</MoreInfoTrigger>
                 <NestedTooltip>
                   <NestedTooltipTitle>
-                    {moreInfoData[currentInsight].title}
+                    {insightTitles[currentInsight]}
                   </NestedTooltipTitle>
                   <NestedTooltipContent>
-                    {moreInfoData[currentInsight].content}
+                    {getCurrentExpertInsight()}
                   </NestedTooltipContent>
                 </NestedTooltip>
               </MoreInfoContainer>
