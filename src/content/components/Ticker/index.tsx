@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Box from "../../../components/Box";
 import { DataItem, TickerStyle, AITooltipWrapper } from "./style";
 import { type StockData } from "../../../utils/helpers/formatStocksData";
@@ -34,6 +34,31 @@ const Ticker: React.FC<Props> = ({
   isSubscriptionActive,
 }) => {
   const [isAITooltipVisible, setIsAITooltipVisible] = useState(false);
+  const hideTooltipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+  useEffect(() => {
+    return () => {
+      if (hideTooltipTimerRef.current) {
+        clearTimeout(hideTooltipTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleAITooltipMouseEnter = () => {
+    if (hideTooltipTimerRef.current) {
+      clearTimeout(hideTooltipTimerRef.current);
+      hideTooltipTimerRef.current = null;
+    }
+    setIsAITooltipVisible(true);
+  };
+
+  const handleAITooltipMouseLeave = () => {
+    hideTooltipTimerRef.current = setTimeout(() => {
+      setIsAITooltipVisible(false);
+    }, 300);
+  };
 
   const isPositive = (value: number | undefined) => {
     if (!value) return false;
@@ -77,7 +102,6 @@ const Ticker: React.FC<Props> = ({
         ({stockData?.todaysChangePerc}%)
       </DataItem>
 
-      {/* AI Magic Emoji with its own tooltip */}
       <AITooltipWrapper
         $highToolbarTop={highToolbarTop}
         $barHeight={barHeight}
@@ -85,8 +109,8 @@ const Ticker: React.FC<Props> = ({
         $isStaticBar={isStaticBar}
         $toolbarPosition={toolbarPosition}
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
-        onMouseEnter={() => setIsAITooltipVisible(true)}
-        onMouseLeave={() => setIsAITooltipVisible(false)}
+        onMouseEnter={handleAITooltipMouseEnter}
+        onMouseLeave={handleAITooltipMouseLeave}
       >
         <span className="ai-emoji" title="AI Analysis">
           ✨
@@ -101,7 +125,6 @@ const Ticker: React.FC<Props> = ({
         )}
       </AITooltipWrapper>
 
-      {/* Original tooltip */}
       <div className="tooltipWrapper">
         <div className="tickinfo-tooltip" onClick={(e) => e.stopPropagation()}>
           <>
