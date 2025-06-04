@@ -21,6 +21,7 @@ const formatStocksData = (data: Object[]): StockData[] =>
     const isMarketClosed = ticker.marketState === "CLOSED";
     const price = ticker.regularMarketPrice;
     const priceBeforeClose = ticker.regularMarketPreviousClose || price;
+    console.log("data :>> ", data);
 
     return {
       name: ticker.symbol,

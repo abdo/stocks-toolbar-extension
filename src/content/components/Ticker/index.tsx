@@ -1,8 +1,9 @@
 import React from "react";
 import Box from "../../../components/Box";
-import { DataItem, TickerStyle } from "./style";
+import { DataItem, TickerStyle, AITooltipWrapper } from "./style";
 import { type StockData } from "../../../utils/helpers/formatStocksData";
 import goToStockPage from "../../../utils/helpers/goToStockPage";
+import AITooltip from "../AITooltip";
 
 type Props = {
   stockData: StockData;
@@ -71,6 +72,31 @@ const Ticker: React.FC<Props> = ({
       >
         ({stockData?.todaysChangePerc}%)
       </DataItem>
+
+      {/* AI Magic Emoji with its own tooltip */}
+      <AITooltipWrapper
+        $highToolbarTop={highToolbarTop}
+        $barHeight={barHeight}
+        $tickerLeftPosition={tickersPositions[0]}
+        $isStaticBar={isStaticBar}
+        $toolbarPosition={toolbarPosition}
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+        onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) =>
+          e.stopPropagation()
+        }
+        onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) =>
+          e.stopPropagation()
+        }
+      >
+        <span className="ai-emoji" title="AI Analysis">
+          ✨
+        </span>
+        <div className="ai-tooltip">
+          <AITooltip stockSymbol={stockData.name} />
+        </div>
+      </AITooltipWrapper>
+
+      {/* Original tooltip */}
       <div className="tooltipWrapper">
         <div className="tickinfo-tooltip" onClick={(e) => e.stopPropagation()}>
           <>

@@ -69,6 +69,63 @@ export const TickerStyle = styled.div<{
   }
 `;
 
+export const AITooltipWrapper = styled.div<{
+  $highToolbarTop: boolean;
+  $barHeight: string;
+  $tickerLeftPosition: number;
+  $isStaticBar: boolean;
+  $toolbarPosition: ToolbarPositionOptions;
+}>`
+  display: inline-block;
+  position: relative;
+  margin-left: 5px;
+
+  & .ai-emoji {
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 1;
+    filter: brightness(1.5) saturate(1.2);
+    transition: all 0.2s;
+
+    &:hover {
+      filter: brightness(1.8) saturate(1.5);
+      transform: scale(1.1);
+    }
+  }
+
+  & .ai-tooltip {
+    visibility: hidden;
+    color: ${theme.colors.background};
+    background: transparent;
+    padding: 0;
+    border: none;
+    position: absolute;
+    top: ${({ $highToolbarTop, $barHeight, $toolbarPosition }) =>
+      $toolbarPosition === ToolbarPositionOptions.bottom
+        ? "-220px"
+        : $highToolbarTop
+        ? "35px"
+        : "25px"};
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all 0s ease 0.2s;
+    cursor: default;
+    white-space: break-spaces;
+    z-index: 10001;
+    box-shadow: none;
+
+    &:hover {
+      transition-delay: 0s;
+      visibility: visible;
+    }
+  }
+
+  &:hover .ai-tooltip {
+    transition-delay: 0s;
+    visibility: visible;
+  }
+`;
+
 export const DataItem = styled.span<{
   $isNegative?: boolean;
   $isPositive?: boolean;
