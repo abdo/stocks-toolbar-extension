@@ -1,420 +1,39 @@
 import React, { useState, useEffect } from "react";
 import Box from "../../../components/Box";
-import styled, { keyframes, css } from "styled-components";
 import { StockData } from "../../../utils/helpers/formatStocksData";
 import getAIInsights, {
   AIInsightsData,
 } from "../../../utils/helpers/getAIInsights";
+import {
+  CarouselContainer,
+  ContentSlider,
+  IconContainer,
+  IconsBox,
+  IconSvg,
+  InsightText,
+  LoadingSpinner,
+  LoadingText,
+  MoreInfoContainer,
+  MoreInfoTrigger,
+  NavigationButton,
+  NestedTooltip,
+  NestedTooltipContent,
+  NestedTooltipTitle,
+  PremiumPlaceholderText,
+  PremiumPlaceholderTitle,
+  PremiumUpgradeButton,
+  SlidingContent,
+  StaticCard,
+  TextContent,
+  DisclaimerContainer,
+  DisclaimerIcon,
+  DisclaimerTooltip,
+} from "./style";
 
 interface AITooltipProps {
   stockData: StockData;
   isSubscriptionActive: boolean;
 }
-
-const spin = keyframes`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-`;
-
-const slideLeft = keyframes`
-  0% { transform: translateX(0); opacity: 1; }
-  100% { transform: translateX(-100%); opacity: 0; }
-`;
-
-const slideRight = keyframes`
-  0% { transform: translateX(0); opacity: 1; }
-  100% { transform: translateX(100%); opacity: 0; }
-`;
-
-const slideInFromRight = keyframes`
-  0% { transform: translateX(100%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
-`;
-
-const slideInFromLeft = keyframes`
-  0% { transform: translateX(-100%); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
-`;
-
-const aiGlow = keyframes`
-  0%, 100% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.3), 0 5px 15px 0 #00000026; }
-  50% { box-shadow: 0 0 30px rgba(138, 43, 226, 0.5), 0 5px 15px 0 #00000026; }
-`;
-
-const shimmer = keyframes`
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-`;
-
-const LoadingSpinner = styled.div`
-  border: 2px solid rgba(138, 43, 226, 0.2);
-  border-top: 2px solid #8a2be2;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: ${spin} 1s linear infinite;
-  margin: 0 auto;
-`;
-
-const CarouselContainer = styled.div<{ $isAnimating: boolean }>`
-  position: relative;
-  overflow: visible;
-  width: 300px;
-  height: 200px;
-`;
-
-const StaticCard = styled.div<{ $isLoading?: boolean }>`
-  --dark-grey: #2d2d2d;
-  --middle-grey: #767676;
-  --ai-primary: #8a2be2;
-  --ai-secondary: #4b0082;
-  --lightest-grey: linear-gradient(
-    135deg,
-    #fafafa 0%,
-    #f0f0f0 50%,
-    #ebebeb 100%
-  );
-  --shadow: 0 5px 15px 0 #00000026;
-  --shadow-active: 0 5px 5px 0 #00000026;
-  --border-radius-main: 12px;
-  --border-radius-icon: 50px;
-
-  position: relative;
-  width: 280px;
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  text-align: center;
-  cursor: default;
-  color: var(--dark-grey);
-  opacity: 0.95;
-  font-weight: 500;
-  background: var(--lightest-grey);
-  border-radius: var(--border-radius-main);
-  border: 1px solid rgba(138, 43, 226, 0.2);
-  box-shadow: var(--shadow);
-  transition: 0.3s ease all;
-
-  ${({ $isLoading }) =>
-    $isLoading &&
-    css`
-      animation: ${aiGlow} 2s ease-in-out infinite;
-    `}
-
-  &:hover {
-    box-shadow: 0 8px 25px rgba(138, 43, 226, 0.15), var(--shadow-active);
-    transform: translateY(-1px);
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--ai-primary),
-      transparent
-    );
-    background-size: 200% 100%;
-    animation: ${shimmer} 3s ease-in-out infinite;
-    border-radius: var(--border-radius-main) var(--border-radius-main) 0 0;
-  }
-`;
-
-const ContentSlider = styled.div<{ $isAnimating: boolean }>`
-  position: relative;
-  width: 100%;
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-`;
-
-const SlidingContent = styled.div<{
-  $isAnimating: boolean;
-  $direction: "left" | "right";
-  $slideOut: boolean;
-}>`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-
-  ${({ $isAnimating, $direction, $slideOut }) =>
-    $isAnimating &&
-    css`
-      animation: ${$slideOut
-          ? $direction === "right"
-            ? slideLeft
-            : slideRight
-          : $direction === "right"
-          ? slideInFromRight
-          : slideInFromLeft}
-        0.3s ease-in-out forwards;
-    `}
-`;
-
-const NavigationButton = styled.button<{ $direction: "left" | "right" }>`
-  position: absolute;
-  top: 50%;
-  ${({ $direction }) => ($direction === "right" ? "right: 5px;" : "left: 5px;")}
-  transform: translateY(-50%);
-  background: linear-gradient(135deg, var(--ai-primary), var(--ai-secondary));
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(138, 43, 226, 0.3);
-
-  &:hover {
-    background: linear-gradient(135deg, var(--ai-secondary), var(--ai-primary));
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.5);
-  }
-
-  &:active {
-    transform: translateY(-50%) scale(0.95);
-  }
-`;
-
-const TextContent = styled.div`
-  font-size: 14px;
-  line-height: 1.6;
-  cursor: default;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 2rem;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-  flex-grow: 1;
-`;
-
-const InsightText = styled.div`
-  font-size: 14px;
-  line-height: 1.6;
-`;
-
-const MoreInfoContainer = styled.div`
-  position: relative;
-  display: inline-block;
-  margin-top: 8px;
-`;
-
-const MoreInfoTrigger = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--ai-primary);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background: rgba(138, 43, 226, 0.1);
-  border: 1px solid rgba(138, 43, 226, 0.2);
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba(138, 43, 226, 0.15);
-    border-color: rgba(138, 43, 226, 0.3);
-    transform: scale(1.02);
-  }
-`;
-
-const NestedTooltip = styled.div`
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
-  color: white;
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 12px;
-  line-height: 1.4;
-  width: 200px;
-  text-align: left;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(138, 43, 226, 0.3);
-  z-index: 10002;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(-50%) translateY(4px);
-  transition: all 0.2s ease;
-
-  &:before {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 6px solid transparent;
-    border-top-color: #2d2d2d;
-  }
-
-  ${MoreInfoContainer}:hover & {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
-  }
-`;
-
-const NestedTooltipTitle = styled.div`
-  font-weight: 700;
-  color: var(--ai-primary);
-  margin-bottom: 6px;
-  font-size: 13px;
-`;
-
-const NestedTooltipContent = styled.div`
-  color: #e0e0e0;
-  font-size: 9px;
-  line-height: 1.3;
-`;
-
-const IconsBox = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin-bottom: 0;
-`;
-
-const IconContainer = styled.div<{ $isChecked: boolean }>`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: ${({ $isChecked }) => ($isChecked ? 1 : 0.6)};
-  cursor: pointer;
-  user-select: none;
-  border: 1px solid
-    ${({ $isChecked }) =>
-      $isChecked ? "var(--ai-primary)" : "var(--middle-grey)"};
-  border-radius: var(--border-radius-icon);
-  transition: 0.2s ease all;
-  padding: 8px 12px;
-  background: ${({ $isChecked }) =>
-    $isChecked ? "rgba(138, 43, 226, 0.1)" : "transparent"};
-
-  &:hover {
-    opacity: 0.9;
-    box-shadow: var(--shadow);
-    border-color: var(--ai-primary);
-  }
-
-  &:active {
-    opacity: 0.9;
-    box-shadow: var(--shadow-active);
-  }
-`;
-
-const rotateIconAnimation = keyframes`
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(3deg);
-  }
-  50% {
-    transform: rotate(-3deg);
-  }
-  75% {
-    transform: rotate(1deg);
-  }
-`;
-
-const IconSvg = styled.svg<{ $isChecked: boolean; $isDislike?: boolean }>`
-  width: 1.1rem;
-  fill: ${({ $isChecked }) => ($isChecked ? "var(--ai-primary)" : "#353535")};
-  transition: 0.2s ease all;
-
-  &:hover {
-    ${({ $isDislike }) =>
-      !$isDislike &&
-      css`
-        animation: ${rotateIconAnimation} 0.7s ease-in-out both;
-      `}
-  }
-`;
-
-const LoadingText = styled.div`
-  background: linear-gradient(
-    90deg,
-    var(--ai-primary),
-    var(--ai-secondary),
-    var(--ai-primary)
-  );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: ${shimmer} 2s ease-in-out infinite;
-  font-weight: 600;
-  font-size: 14px;
-`;
-
-const PremiumPlaceholderTitle = styled.div`
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--ai-primary);
-  margin-bottom: 12px;
-`;
-
-const PremiumPlaceholderText = styled.div`
-  font-size: 13px;
-  color: var(--middle-grey);
-  margin-bottom: 20px;
-  line-height: 1.5;
-`;
-
-const PremiumUpgradeButton = styled.button`
-  background: linear-gradient(135deg, var(--ai-primary), var(--ai-secondary));
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(138, 43, 226, 0.3);
-
-  &:hover {
-    background: linear-gradient(135deg, var(--ai-secondary), var(--ai-primary));
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.5);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-`;
 
 const AITooltip: React.FC<AITooltipProps> = ({
   stockData,
@@ -673,17 +292,34 @@ const AITooltip: React.FC<AITooltipProps> = ({
           >
             <TextContent>
               <InsightText>{getCurrentInsight()}</InsightText>
-              <MoreInfoContainer>
-                <MoreInfoTrigger>ℹ️ More Details</MoreInfoTrigger>
-                <NestedTooltip>
-                  <NestedTooltipTitle>
-                    {insightTitles[currentInsight]}
-                  </NestedTooltipTitle>
-                  <NestedTooltipContent>
-                    {getCurrentExpertInsight()}
-                  </NestedTooltipContent>
-                </NestedTooltip>
-              </MoreInfoContainer>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                gap="8px"
+                mt="16px"
+              >
+                <MoreInfoContainer>
+                  <MoreInfoTrigger>ℹ️ More Details</MoreInfoTrigger>
+                  <NestedTooltip>
+                    <NestedTooltipTitle>
+                      {insightTitles[currentInsight]}
+                    </NestedTooltipTitle>
+                    <NestedTooltipContent>
+                      {getCurrentExpertInsight()}
+                    </NestedTooltipContent>
+                  </NestedTooltip>
+                </MoreInfoContainer>
+                <DisclaimerContainer>
+                  <DisclaimerIcon>i</DisclaimerIcon>
+                  <DisclaimerTooltip>
+                    This content is AI-generated and for informational purposes
+                    only. It is not financial advice. Always conduct your own
+                    research or consult with a qualified professional before
+                    making investment decisions.
+                  </DisclaimerTooltip>
+                </DisclaimerContainer>
+              </Box>
             </TextContent>
           </SlidingContent>
         </ContentSlider>
