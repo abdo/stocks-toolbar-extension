@@ -273,16 +273,9 @@ export const NestedTooltip = styled.div`
   }
 `;
 
-export const NestedTooltipTitle = styled.div`
-  font-weight: 700;
-  color: var(--ai-primary);
-  margin-bottom: 6px;
-  font-size: 13px;
-`;
-
 export const NestedTooltipContent = styled.div`
   color: #e0e0e0;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.3;
 `;
 
@@ -445,9 +438,9 @@ export const DisclaimerTooltip = styled.div`
   color: #f1f1f1;
   padding: 10px 12px;
   border-radius: 6px;
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1.5;
-  width: 240px;
+  width: 180px;
   text-align: left;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   z-index: 10003; /* Ensure it's on top of everything */
