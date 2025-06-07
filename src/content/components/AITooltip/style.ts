@@ -71,10 +71,6 @@ export const StaticCard = styled.div<{ $isLoading?: boolean }>`
   position: relative;
   width: 280px;
   height: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 20px;
   text-align: center;
   cursor: default;
@@ -463,4 +459,27 @@ export const DisclaimerTooltip = styled.div`
     border: 6px solid transparent;
     border-top-color: #3c3c3c;
   }
+`;
+
+export const BlurredContentContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  filter: blur(4px);
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+  /* The content will be placed inside this div */
+`;
+
+export const UnlockMessageOverlay = styled.div`
+  position: absolute;
+  inset: 0; /* Replaces top, left, width, height for better alignment */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  z-index: 20;
+  background: rgba(250, 250, 250, 0.1);
 `;
