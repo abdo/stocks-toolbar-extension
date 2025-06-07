@@ -184,9 +184,12 @@ const AITooltip: React.FC<AITooltipProps> = ({
   if (!isSubscriptionActive) {
     return (
       <StaticCard>
-        <PremiumPlaceholderTitle>✨ Unlock AI Insights</PremiumPlaceholderTitle>
+        <PremiumPlaceholderTitle>
+          ✨ Unlock AI Insights for {stockData.name}
+        </PremiumPlaceholderTitle>
         <PremiumPlaceholderText>
-          Get exclusive AI-powered analysis for deeper market understanding.
+          Get exclusive analysis for deeper market understanding of the stocks
+          you are interested in.
         </PremiumPlaceholderText>
         <PremiumUpgradeButton onClick={handleUpgradeClick}>
           Try for free
