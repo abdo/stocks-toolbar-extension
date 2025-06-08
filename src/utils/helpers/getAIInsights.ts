@@ -59,7 +59,7 @@ const getAIInsights = async (stockData: StockData): Promise<AIInsightsData> => {
   try {
     const token = generateJWT();
     const response = await fetch(
-      "https://primary-production-5b10.up.railway.app/webhook/getInsights",
+      "https://n8n-hfmj.onrender.com/webhook/getInsights",
       {
         method: "POST",
         headers: {

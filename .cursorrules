@@ -58,7 +58,7 @@ src/
 ### Component Structure
 
 1. **Directory per component** with `index.tsx` as main export
-2. **Styled components** in same file or separate `style.ts` for complex styling
+2. **Styled components** in a separate `style.ts` file for complex components (e.g., `AITooltip`), or in the same file for simpler ones.
 3. **TypeScript interfaces** defined at component level
 4. **Generic components** when needed (e.g., `Radio<T>`, `RadioGroup<T>`)
 
@@ -90,6 +90,7 @@ ${({ $isAnimating }) => $isAnimating && css`
 - **Local state**: useState for component-specific state
 - **Chrome storage**: For persistent extension settings
 - **Custom hooks**: For complex state logic and storage interactions
+- **Prop Drilling**: For reactive state that needs to be shared down a component tree in content scripts (e.g., passing `isSubscriptionActive` from `App.tsx` down to `AITooltip.tsx`).
 
 ### Import Organization
 
@@ -201,6 +202,12 @@ import { ToolbarPositionOptions } from "../../../data/constants/storageKeys";
 </StaticCard>
 ```
 
+### Subscription Gating & Upsell
+
+- **Conditional Rendering**: Use the `isSubscriptionActive` prop to determine whether to show AI insights or a premium upsell prompt.
+- **Blurred Teaser**: For non-subscribed users, show a blurred, non-interactive version of the AI UI in the background to act as a compelling "teaser."
+- **Popup Trigger**: The "Upgrade" or "Try for free" button in the upsell prompt should open the main extension popup using `chrome.runtime.sendMessage({ action: "open-popup" });`.
+
 ### Insight Types & Emojis
 
 1. **⚡ Momentum Insight** - Market sentiment and trading patterns
@@ -210,9 +217,14 @@ import { ToolbarPositionOptions } from "../../../data/constants/storageKeys";
 
 ### Loading States
 
-- **Initial load only**: 2.5 seconds with branded spinner
-- **No loading between slides**: Instant navigation with smooth animations
-- **Meaningful messages**: "Initializing AI models...", "Analyzing across multiple dimensions"
+- **Fetch-on-Mount**: API calls for AI insights should be triggered only once when the tooltip is first rendered (i.e., in a `useEffect` with an empty dependency array `[]`).
+- **Initial load only**: A 2.5-second loading animation is shown only on the first view for subscribed users.
+- **No loading between slides**: Navigation between insights should be instant, with smooth animations.
+
+### Dynamic Sizing & Positioning
+
+- **Dynamic Height**: Ensure parent containers (`StaticCard`) use `height: auto` and content containers (`SlidingContent`) use `position: relative` to allow the tooltip to dynamically resize to fit its content, preventing overflow.
+- **Nested Tooltip Clipping**: To prevent nested tooltips from being clipped by the parent's boundary, position them to appear _below_ their trigger element (e.g., `top: 100%`) rather than above.
 
 ## COMMON PITFALLS TO AVOID
 
@@ -223,6 +235,7 @@ import { ToolbarPositionOptions } from "../../../data/constants/storageKeys";
 5. **Don't use inline styles** when styled-components are appropriate
 6. **Don't break existing storage APIs** when adding new features
 7. **Don't add loading states** to arrow navigation (should be instant)
+8. **Don't use fixed heights** on components that hold dynamic content; prefer `height: auto` to prevent clipping.
 
 ## TESTING CONSIDERATIONS
 
